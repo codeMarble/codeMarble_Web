@@ -1,14 +1,15 @@
-# MIT & GPL 3.0 License
+MIT & GPL 3.0 License
 
 Copyright (c) 2017 codeMarble.
 
-This software is licensed under a dual license system (MIT or GPL version 3). If use in public education institution such as middle/high school and university, you can use this software with 'MIT license'.
+This software is licensed under a dual license system (MIT or GPL version 3).
+If use in public education institution such as middle/high school and university, you can use this software with 'MIT license'.
 But, if use in enterprise or individual, you should observe 'GPL version 2 license'.
 
 The license texts of the MIT license and the GPL version 3 are as follows:
 
 
-## MIT License
+MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +30,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## GNU GENERAL PUBLIC LICENSE Version 3, June 2007
+GNU GENERAL PUBLIC LICENSE Version 3, June 2007
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
