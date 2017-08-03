@@ -2,11 +2,11 @@
 
 from sqlalchemy import Column, String, Enum
 from sqlalchemy.dialects.mysql import INTEGER
-from model import Base
+from codeMarbleWeb.model import Base
 
-class DateOfMatch(Base):
+class DataOfMatch(Base):
 
-    __tablename__ = 'DateOfMatch'
+    __tablename__ = 'DataOfMatch'
 
     dataOfMatchIndex = Column(INTEGER(unsigned= True),
                        primary_key= True,

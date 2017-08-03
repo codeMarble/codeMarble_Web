@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.mysql import INTEGER
-from model import Base
+from codeMarbleWeb.model import Base
 
 class Code(Base):
 

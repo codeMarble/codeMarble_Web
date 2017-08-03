@@ -4,11 +4,11 @@ from werkzeug.exceptions import BadRequest
 from flask import session
 from datetime import datetime
 
-from utils import *
-from resource.languageResources import *
-from resource.routeResources import *
-from resource.sessionResources import *
-from resource.setResources import *
+from codeMarbleWeb.utils import *
+from codeMarbleWeb.resource.languageResources import *
+from codeMarbleWeb.resource.routeResources import *
+from codeMarbleWeb.resource.sessionResources import *
+from codeMarbleWeb.resource.setResources import *
 
 def get_is_check_request(form, name, checkOnValue, checkOffValue):
     try:

@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, Boolean
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR
-from model import Base
+from codeMarbleWeb.model import Base
 
 class UserSetting(Base):
 

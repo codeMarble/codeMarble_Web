@@ -1,4 +1,4 @@
-from sqlalchemy import and_, not_, or_
+from sqlalchemy import and_
 
 from codeMarbleWeb.database import dao
 from codeMarbleWeb.model.notice import Notice

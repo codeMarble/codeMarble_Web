@@ -12,10 +12,10 @@ from codeMarbleWeb.database import dao
 def insert_board(userIndex, problemIndex, title, content):
     return Board(userIndex=userIndex, problemIndex=problemIndex, title=title, content=content, likeCount=0)
 
-def update_like_count(boardIndex):
+def update_like_count(boardIndex, value):
     return dao.query(Board).\
                 filter(Board.boardIndex == boardIndex).\
-                update(dict(likeCount = Board.likeCount + 1))
+                update(dict(likeCount = Board.likeCount + value))
 
 def insert_reply(boardIndex, userIndex, content):
     return ReplyOfBoard(boardIndex=boardIndex, userIndex=userIndex, content=content)
@@ -35,4 +35,4 @@ def select_board_article(boardIndex):
     return dao.query(boardSubquery, replySubquery.c.replyOfBoardIndex,
                       replySubquery.c.userIndex.label('replyUserIndex'), replySubquery.c.content.label('replyContent')).\
                 join(boardSubquery,
-                     boardSubquery.c.boardIndex == replySubquery.c.boardIndex)
+                     replySubquery.c.boardIndex == boardSubquery.c.boardIndex)

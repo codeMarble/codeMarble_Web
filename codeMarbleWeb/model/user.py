@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, String, Enum
 from sqlalchemy.dialects.mysql import VARCHAR, INTEGER
-from model import Base
+from codeMarbleWeb.model import Base
 
 class User(Base):
 

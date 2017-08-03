@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, String
 from sqlalchemy.dialects.mysql import VARCHAR, INTEGER
-from model import Base
+from codeMarbleWeb.model import Base
 
 class ScriptOfProblem(Base):
 

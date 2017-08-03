@@ -3,9 +3,9 @@
 from flask import *
 from functools import wraps
 from repoze.lru import lru_cache
-from resource.sessionResources import *
-from resource.routeResources import *
-from codeMarble_blueprint import codeMarble
+from codeMarbleWeb.resource.sessionResources import *
+from codeMarbleWeb.resource.routeResources import *
+from codeMarbleWeb.codeMarble_blueprint import codeMarble
 
 @lru_cache(maxsize=300)
 def login_required(f):
