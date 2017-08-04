@@ -11,10 +11,10 @@ from codeMarbleWeb.database import dao
 def insert_userInformationInProblem(userIndex, problemIndex, score):
     return UserInformationInProblem(userIndex=userIndex, problemIndex=problemIndex, score=score)
 
-def select_userInformationInProblem(userIndex, problemIndex):
+def select_userInformationInProblem(userIndex=None, problemIndex=None):
     return dao.query(UserInformationInProblem).\
-        filter(UserInformationInProblem.userIndex==userIndex,
-               UserInformationInProblem.problemIndex==problemIndex)
+        filter(UserInformationInProblem.userIndex==userIndex if userIndex else UserInformationInProblem.userIndex!=userIndex,
+               UserInformationInProblem.problemIndex==problemIndex if problemIndex else UserInformationInProblem.problemIndex==problemIndex)
 
 def update_userInformationInProblem(userIndex, problemIndex, score):
     return dao.query(UserInformationInProblem).\
