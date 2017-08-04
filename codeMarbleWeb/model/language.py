@@ -8,7 +8,7 @@ class Language(Base):
 
     __tablename__ = 'Language'
 
-    LanguageIndex = Column(INTEGER(unsigned= True),
+    languageIndex = Column(INTEGER(unsigned= True),
                            primary_key= True,
                            autoincrement= True,
                            nullable= False)

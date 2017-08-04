@@ -6,4 +6,9 @@ all = ['checkInvalidAccess',
        'utilBoardQuery',
        'utilNoticeQuery',
        'utilUserQuery',
-       'utilCodeQuery']
+       'utilCodeQuery',
+       'utilDataOfMatch',
+       'utilLanguage',
+       'utilUserSetting',
+       'utilUserInformationInProblem',
+       'utilScriptOfProblem']
