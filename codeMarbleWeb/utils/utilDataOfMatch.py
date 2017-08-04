@@ -9,39 +9,29 @@ from codeMarbleWeb.database import dao
 
 def insert_dataOfMatch(problemIndex, challengerIndex, championIndex, positionData, boardData):
     return DataOfMatch(ProblemIndex=problemIndex, challengerIndex=challengerIndex,championIndex=championIndex,
-                       result = '...ing...', positionData=positionData, boardData=boardData)
+                        result = '...ing...', positionData=positionData, boardData=boardData)
 
+def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=None, dataOfMatchIndex=None):
+    if dataOfMatchIndex:
+        return dao.query(DataOfMatch).\
+                    filter(DataOfMatch.dataOfMatchIndex == dataOfMatchIndex)
 
-def select_dataOfMatch(problemIndex, challengerIndex, championIndex):
     return dao.query(DataOfMatch).\
-                filter(and_(DataOfMatch.problemIndex==problemIndex,
-                            DataOfMatch.challengerIndex==challengerIndex,
-                            DataOfMatch.championIndex==championIndex))
+                filter(and_(DataOfMatch.problemIndex == problemIndex if problemIndex
+                            else DataOfMatch.problemIndex != problemIndex,
+                            DataOfMatch.challengerIndex == challengerIndex if challengerIndex
+                            else DataOfMatch.challengerIndex != challengerIndex,
+                            DataOfMatch.championIndex == championIndex if championIndex
+                            else DataOfMatch.championIndex == championIndex))
 
-def update_dataOfMatch_win(problemIndex, challengerIndex, championIndex):
-    return dao.query(DataOfMatch).\
-                filter(and_(DataOfMatch.problemIndex==problemIndex,
-                            DataOfMatch.challengerIndex==challengerIndex,
-                            DataOfMatch.championIndex==championIndex)).\
-                update(dict(result='win'))
+def update_dataOfMatch_result(problemIndex, challengerIndex, championIndex, result, dataOfMatchIndex=None):
+    if dataOfMatchIndex:
+        return dao.query(DataOfMatch).\
+                    filter(DataOfMatch.dataOfMatchIndex == dataOfMatchIndex).\
+                    update(dict(result=result))
 
-def update_dataOfMatch_lose(problemIndex, challengerIndex, championIndex):
-    return dao.query(DataOfMatch).\
-                filter(and_(DataOfMatch.problemIndex==problemIndex,
-                            DataOfMatch.challengerIndex==challengerIndex,
-                            DataOfMatch.championIndex==championIndex)).\
-                update(dict(result='lose'))
-
-def update_dataOfMatch_draw(problemIndex, challengerIndex, championIndex):
-    return dao.query(DataOfMatch).\
-                filter(and_(DataOfMatch.problemIndex==problemIndex,
-                            DataOfMatch.challengerIndex==challengerIndex,
-                            DataOfMatch.championIndex==championIndex)).\
-                update(dict(result='draw'))
-
-def update_dataOfMatch_serveError(problemIndex, challengerIndex, championIndex):
     return dao.query(DataOfMatch).\
                 filter(and_(DataOfMatch.problemIndex==problemIndex,
                             DataOfMatch.challengerIndex==challengerIndex,
                             DataOfMatch.championIndex==championIndex)).\
-                update(dict(result='server error'))
+                update(dict(result=result))
