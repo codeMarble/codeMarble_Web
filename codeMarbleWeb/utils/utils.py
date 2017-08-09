@@ -12,6 +12,13 @@ from codeMarbleWeb.resource.setResources import *
 
 def get_is_check_request(form, name, checkOnValue, checkOffValue):
     try:
+        form[name]
+        return checkOffValue
+    except BadRequest:
+        return checkOffValue
+
+def get_request_value(form, name):
+    try:
         data = form[name]
 
         if type(data) != int:

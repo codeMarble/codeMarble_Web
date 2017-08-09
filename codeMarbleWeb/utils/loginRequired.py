@@ -5,7 +5,7 @@ from functools import wraps
 from repoze.lru import lru_cache
 from codeMarbleWeb.resource.sessionResources import *
 from codeMarbleWeb.resource.routeResources import *
-from codeMarbleWeb.codeMarble_blueprint import codeMarble
+
 
 @lru_cache(maxsize=300)
 def login_required(f):

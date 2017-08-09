@@ -14,7 +14,10 @@ def select_userSetting(userIndex):
     return dao.query(UserSetting).\
         filter(UserSetting.userIndex==userIndex)
 
-def update_userSetting(userIndex):
+def update_userSetting(userIndex, languageIndex, thema, comment, isOpen):
     return dao.query(UserSetting).\
-        filter(and_(UserSetting.userIndex==userIndex)).\
-        update(dict(isCodeOpen = True))
+        filter(UserSetting.userIndex==userIndex).\
+        update(dict(languageIndex=languageIndex,
+                    thema=thema,
+                    comment=comment,
+                    isOpen=isOpen))

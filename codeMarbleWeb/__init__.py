@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def create_app(config_filepath = "resource/config.cfg"):
 
-    from codeMarble_config import codeMarbleConfig
+    from codeMarble_config import *
     app.config.from_object(codeMarbleConfig)
     app.config.from_pyfile(config_filepath, silent=True)
 

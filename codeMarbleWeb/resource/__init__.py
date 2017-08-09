@@ -5,4 +5,5 @@ __all__ = ['sessionResources',
            'languageResources',
            'setResources',
            'enumResource',
-           'otherResource']
+           'otherResource',
+           'htmlResource']
