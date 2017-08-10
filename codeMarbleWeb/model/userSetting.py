@@ -23,5 +23,5 @@ class UserSetting(Base):
     comment = Column(VARCHAR(80),
                       unique= True)
 
-    isCodeOpen = Column(Boolean,
+    isOpen = Column(Boolean,
                     unique= False)

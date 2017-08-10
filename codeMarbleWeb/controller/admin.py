@@ -49,7 +49,7 @@ def enterSubAdmin(userIndex):
             dao.commit()
 
         except Exception:
-            dao.rollback()
+            dao.rollback() 
 
 @codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
 def deleteSubAdmin(userIndex):

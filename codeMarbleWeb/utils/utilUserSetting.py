@@ -8,7 +8,7 @@ from codeMarbleWeb.database import dao
 
 def insert_userSetting(userIndex, languageIndex, thema, comment):
     return UserSetting(userIndex=userIndex, languageIndex=languageIndex,
-                       thema=thema, comment=comment, isCodeOpen=False)
+                       thema=thema, comment=comment, isOpen=False)
 
 def select_userSetting(userIndex):
     return dao.query(UserSetting).\

@@ -58,8 +58,49 @@ def writeArticle(problemIndex):
         except Exception:
             dao.rollback()
 
+@codeMarble.route('/board/delete<int:boardIndex>', methods=['POST'])
+def deleteArticle(boardIndex):
+    if request.method == 'POST':
+        try:
+            articleIndex = select_board_article(boardIndex=boardIndex).first()
 
-@codeMarble.route('board/writeReply<int:boardIndex>', methods=['POST'])
+        except Exception:
+            articleIndex = None
+
+        update_board_delete(articleIndex, isDelete=True)
+
+    try:
+        dao.commit()
+
+    except Exception:
+        dao.rollback()
+
+@codeMarble.route('/board/modify<int:boardIndex>', methods=['POST'])
+def modifyArticle(boardIndex):
+    if request.method == 'POST':
+        try:
+            problemIndex = get_request_value(form=request.form,
+                                             name='problemIndex')
+            title = get_request_value(form=request.form,
+                                      name='title')
+            content = get_request_value(form=request.form,
+                                        name='content')
+            modifyIndex = select_board_article(boardIndex).first()
+
+        except Exception:
+            modifyIndex = None
+
+        update_board_modify(modifyIndex, problemIndex=problemIndex,
+                            title=title, content=content)
+
+        try:
+            dao.commit()
+
+        except Exception:
+            dao.rollback()
+
+
+@codeMarble.route('/board/writeReply<int:boardIndex>', methods=['POST'])
 def writeReply(boardIndex):
     if request.method == 'POST':
         userIndex = get_request_value(form=request.form,
@@ -78,13 +119,41 @@ def writeReply(boardIndex):
     except Exception:
         dao.rollback()
 
+@codeMarble.route('/board/deleteReply<int:boardIndex>', methods=['POST'])
+def deleteReply(boardIndex):
+    if request.method == 'POST':
+        try:
+            boardReply = select_board_article(boardIndex).first()
 
-# @codeMarble.route('board/deleteReply<int:boardIndex>', methods=['POST'])
-# def deleteReply(boardIndex):
-#     if request.method == 'POST':
-#         try:
-#             boardReply = select_board_article(boardIndex=session['boardIndex'])
+        except Exception:
+            boardReply = None
 
+        update_reply_delete(boardReply, isDelete=True)
+
+    try:
+        dao.commit()
+
+    except Exception:
+        dao.rollback()
+
+@codeMarble.route('/board/modifyReply<int:boardIndex>', methods=['POST'])
+def modifyReply(boardIndex):
+    if request.method == 'POST':
+        try:
+            modifyIndex = select_board_article(boardIndex).first()
+            content = get_request_value(form=request.form,
+                                        name='content')
+
+        except Exception:
+            modifyIndex = None
+
+        update_reply_modify(modifyIndex, content=content)
+
+    try:
+        dao.commit()
+
+    except Exception:
+        dao.rollback()
 
 
 

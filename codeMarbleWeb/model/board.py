@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.mysql import VARCHAR, INTEGER
 from codeMarbleWeb.model import Base
 
@@ -30,3 +30,6 @@ class Board(Base):
     likeCount = Column(INTEGER(unsigned= True),
                        autoincrement= False,
                        nullable= False)
+
+    isDelete = Column(Boolean,
+                      unique=False)
