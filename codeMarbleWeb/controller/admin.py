@@ -28,3 +28,51 @@ def close_db_session(exception = None):
         from codeMarbleWeb.codeMarble_logger import *
         Log.error(str(e))
 
+
+
+@codeMarble.route('/admin/enterSubAdmin<int:userIndex>', methods=['POST'])
+def enterSubAdmin(userIndex):
+    if request.method == 'POST':
+        password = get_request_value(form=request.form,
+                                     name='password')
+
+        nickName = get_request_value(form=request.form,
+                                     name='nickName')
+
+        eMail = get_request_value(form=request.form,
+                                  name='eMail')
+
+        update_user(userIndex, password=password, nickName=nickName,
+                    eMail=eMail, authority='semiAdmin')
+
+        try:
+            dao.commit()
+
+        except Exception:
+            dao.rollback()
+
+@codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
+def deleteSubAdmin(userIndex):
+    if request.method == 'POST':
+        password = get_request_value(form=request.form,
+                                     name='password')
+
+        nickName = get_request_value(form=request.form,
+                                     name='nickName')
+
+        eMail = get_request_value(form=request.form,
+                                  name='eMail')
+
+        update_user(userIndex, password=password, nickName=nickName,
+                    eMail=eMail, authority='user')
+
+        try:
+            dao.commit()
+
+        except Exception:
+            dao.rollback()
+
+
+
+
+
