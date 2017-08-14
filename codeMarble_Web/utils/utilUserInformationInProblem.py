@@ -30,6 +30,9 @@ def get_total_score_each_users(userIndex=None):
                 group_by(UserInformationInProblem.userIndex)
 
 def get_topProblem():
-    return dao.query(UserInformationInProblem.problemIndex,
-                     func.count(UserInformationInProblem.problemIndex)).\
-                group_by(UserInformationInProblem.problemIndex)
+    tempquery = dao.query(UserInformationInProblem.problemIndex,
+                          func.count(UserInformationInProblem.problemIndex).label('submitCount')).\
+                    group_by(UserInformationInProblem.problemIndex).\
+                    subquery()
+
+    return dao.query(tempquery).order_by(tempquery.c.submitCount.desc())

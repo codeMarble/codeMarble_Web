@@ -11,15 +11,9 @@ from codeMarble_Web.codeMarble_py3des import TripleDES
 from werkzeug.security import check_password_hash
 
 from codeMarble_Web.utils.utilUserQuery import *
-from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
 from codeMarble_Web.utils.utilUserSetting import *
-
-from codeMarble_Web.resource.sessionResources import *
-from codeMarble_Web.resource.htmlResource import *
-from codeMarble_Web.resource.setResources import *
-from codeMarble_Web.resource.routeResources import *
 
 
 @codeMarble.teardown_request
@@ -34,8 +28,8 @@ def close_db_session(exception = None):
 
 def check_user(request_form):
     try:
-        userId = get_request_value(form=request.form, name='userId')
-        password = get_request_value(form=request.form, name='password')
+        userId = get_request_value(form=request_form.form, name='userId')
+        password = get_request_value(form=request_form.form, name='password')
 
         user = select_user(userId=userId).first()
 
@@ -71,12 +65,7 @@ def main():
 def login():
     if request.method == 'POST':
         if check_user(request.form) is True:
-            topUsers = get_total_score_each_users().all()
-            topProblems = get_topProblem().all
-
-            return render_template('main.html',
-                                   topUsers=topUsers[:3],
-                                   topProblems=topProblems[:3])
+            return redirect(url_for('.main'))
 
         else:
             return '.....'

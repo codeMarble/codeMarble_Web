@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column
-from sqlalchemy.dialects.mysql import INTEGER, BOOLEAN, TEXT
+from sqlalchemy.dialects.mysql import INTEGER, BOOLEAN, TEXT, DATETIME
 from codeMarble_Web.model import Base
 
 class Code(Base):
@@ -27,6 +27,9 @@ class Code(Base):
 
     code = Column(TEXT,
                   unique=False)
+
+    date = Column(DATETIME,
+                  nullable=False)
 
     isOpen = Column(BOOLEAN,
                     unique= False)

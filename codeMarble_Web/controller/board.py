@@ -14,10 +14,6 @@ from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
 
-from codeMarble_Web.resource.sessionResources import *
-from codeMarble_Web.resource.htmlResource import *
-from codeMarble_Web.resource.setResources import *
-from codeMarble_Web.resource.routeResources import *
 
 @codeMarble.teardown_request
 def close_db_session(exception = None):
@@ -30,29 +26,44 @@ def close_db_session(exception = None):
 
 
 
-# @codeMarble.route('/board', methods=['GET', 'POST'])
-# def board():
-#     if request.method == 'POST':
-#         article =
+@codeMarble.route('/board', methods=['POST'])
+def board():
+    if request.method == 'POST':
+        articleQuery = select_board_article()
+        articleSubquery = articleQuery.subquery()
+
+        article = articleQuery.all()
+        replyCount = dao.query(articleSubquery.c.boardIndex,
+                               func.count(articleSubquery.c.boardIndex)).\
+                         group.by(articleSubquery.c.boardIndex)
+
+        return render_template('',
+                               article=article,
+                               replyCount=replyCount)
+
 
 
 
 @codeMarble.route('/board/write<int:problemIndex>', methods=['POST'])
 def writeArticle(problemIndex):
     if request.method == 'POST':
-        userIndex = get_request_value(form=request.form,
-                                      name='userIndex')
-
-        title = get_request_value(form=request.form,
-                                  name='title')
-
-        content = get_request_value(form=request.form,
-                                    name='content')
-
-        dao.add(insert_board(userIndex=userIndex, problemIndex=problemIndex,
-                             title=title, content=content))
-
         try:
+            userIndex = session['userIndex']
+
+            title = get_request_value(form=request.form,
+                                      name='title')
+
+            content = get_request_value(form=request.form,
+                                        name='content')
+
+            problemIndex = problemIndex
+
+            dao.add(insert_board(userIndex=userIndex,
+                                 problemIndex=problemIndex,
+                                 title=title,
+                                 date = datetime.now(),
+                                 content=content))
+
             dao.commit()
 
         except Exception:
