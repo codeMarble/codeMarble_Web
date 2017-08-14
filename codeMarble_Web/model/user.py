@@ -17,7 +17,7 @@ class User(Base):
                     nullable=False,
                     unique=True)
 
-    password = Column(CHAR(1024),
+    password = Column(CHAR(255),
                       nullable=False,
                       unique=False)
 

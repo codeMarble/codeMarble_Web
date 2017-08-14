@@ -76,7 +76,11 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/login"><i class="fa fa-fw fa-sign-in"></i> 로그인</a>
+                    {%- if session['userIndex'] %}
+                        <a class="nav-link" href="/login"><i class="fa fa-fw fa-sign-in"></i> {{ session['nickName'] }}</a>
+                    {%- else %}
+                        <a class="nav-link" href="/login"><i class="fa fa-fw fa-sign-in"></i> 로그인</a>
+                    {% endif -%}
                 </li>
             </ul>
         </div>
@@ -139,6 +143,8 @@
         <!-- /.container-fluid -->
 
     </div>
+
+    {% endblock -%}
     <!-- /.content-wrapper -->
 
     <a class="scroll-to-top rounded" href="#page-top">
@@ -159,6 +165,5 @@
     <!-- Custom scripts for this template -->
     <script src="../static/bootstrap/js/sb-admin.min.js"></script>
 
-    {% endblock -%}
 </body>
 </html>

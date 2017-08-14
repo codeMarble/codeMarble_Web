@@ -21,6 +21,6 @@ if __name__ == '__main__':
 
     with NullContext():
         http_server.bind(80)
-        http_server.start(6)
+        http_server.start(2)
 
     IOLoop.instance().start()

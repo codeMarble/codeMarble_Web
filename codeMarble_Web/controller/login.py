@@ -42,8 +42,6 @@ def check_user(request_form):
             session['eMail'] = user.eMail
             session['authority'] = user.authority
 
-            print '???????????????????????????'
-
             return True
 
         else:
@@ -79,7 +77,6 @@ def login():
     try:
         if request.method == 'POST':
             if check_user(request.form) is True:
-                print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                 return redirect(url_for('.main'))
 
             else:

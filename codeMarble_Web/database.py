@@ -43,7 +43,7 @@ class DBManager:
             from werkzeug.security import generate_password_hash
             from utils.utilUserSetting import insert_userSetting
 
-
+            print len(generate_password_hash(TripleDES.encrypt(str('user1'))))
             dao.add(insert_user(userId='master', password=generate_password_hash(TripleDES.encrypt(str('master'))),
                                 nickName='master', eMail='aa'))
 
