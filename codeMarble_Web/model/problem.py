@@ -14,6 +14,10 @@ class Problem(Base):
                           autoincrement=True,
                           nullable=False)
 
+    problemName = Column(VARCHAR(5),
+                         unique=True,
+                         nullable=False)
+
     placementRule = Column(INTEGER(unsigned=True),
                            nullable=False)
 

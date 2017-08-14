@@ -5,13 +5,13 @@ from codeMarble_Web.model.user import User
 
 
 def insert_user(userId, password, nickName, eMail, authority='user'):
-    User(userId=userId, password=password, nickName=nickName, eMail=eMail, authority=authority)
-    # data insert example
-    # try:
-    #     dao.add(insert_user(xx, xx, xx, xx, xx))
-    #     dao.commit()
-    # except Exception as e:
-    #     dao.rollback()
+    print userId, password, nickName, eMail, authority
+    return User(userId=userId,
+                password=password,
+                nickName=nickName,
+                eMail=eMail,
+                authority=authority)
+
 
 def select_user(userIndex=None, userId=None, nickName=None):
     if userIndex:
@@ -28,6 +28,7 @@ def select_user(userIndex=None, userId=None, nickName=None):
 
     else:
         dao.query(User)
+
 
 def update_user(userIndex, password=None, nickName=None, eMail=None, authority=None):
     return dao.query(User).\

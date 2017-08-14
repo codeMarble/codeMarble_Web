@@ -10,7 +10,7 @@ class DBManager:
     __session = None
 
     @staticmethod
-    def init(db_url, db_log_flag = False, recycle_time = 3600):
+    def init(db_url, db_log_flag = False, recycle_time=3600):
         DBManager.__engine = create_engine(db_url,
                                            pool_recycle=recycle_time,
                                            echo=db_log_flag)
@@ -38,18 +38,23 @@ class DBManager:
         Base.metadata.create_all(bind=DBManager.__engine)
 
         try:
-            from werkzeug.security import generate_password_hash
-            from utils.querys import insert_problem, insert_user
             from codeMarble_py3des import TripleDES
+            from utils.utilUserQuery import insert_user
+            from werkzeug.security import generate_password_hash
+            from utils.utilUserSetting import insert_userSetting
 
-            dao.add(insert_problem('test1', 0, 2, 1, 1))
-            dao.add(insert_problem('test2', 0, 2, 2, 1))
-            dao.add(insert_problem('test3', 0, 1, 2, 1))
-            dao.add(insert_user('master', 'master', generate_password_hash(TripleDES.encrypt(str('master')))))
+
+            dao.add(insert_user(userId='master', password=generate_password_hash(TripleDES.encrypt(str('master'))),
+                                nickName='master', eMail='aa'))
+
+            dao.add(insert_user(userId='user1', password=generate_password_hash(TripleDES.encrypt(str('user1'))),
+                                nickName='user1', eMail='bb'))
+            dao.add(insert_userSetting(userIndex=2, languageIndex=1, thema='chorme', comment='TT'))
 
             dao.commit()
 
-        except Exception:
+        except Exception as e:
+            print e
             dao.rollback()
 
 dao = None

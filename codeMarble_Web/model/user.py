@@ -1,30 +1,34 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column
-from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, TEXT, ENUM
+from sqlalchemy.dialects.mysql import CHAR, VARCHAR, INTEGER, ENUM
 from codeMarble_Web.model import Base
 
 class User(Base):
 
     __tablename__ = 'User'
 
-    userIndex = Column(INTEGER(unsigned= True),
-                       primary_key= True,
-                       autoincrement= True,
-                       nullable= False)
+    userIndex = Column(INTEGER(unsigned=True),
+                       primary_key=True,
+                       autoincrement=True,
+                       nullable=False)
 
-    userId = Column(VARCHAR(30),
-                    nullable= False,
-                    unique= True)
+    userId = Column(VARCHAR(20),
+                    nullable=False,
+                    unique=True)
 
-    password = Column(TEXT,
-                      unique= False)
+    password = Column(CHAR(1024),
+                      nullable=False,
+                      unique=False)
 
-    nickName = Column(VARCHAR(70),
-                      unique= True)
+    nickName = Column(VARCHAR(20),
+                      nullable=False,
+                      unique=True)
 
-    eMail = Column(VARCHAR(70),
-                   unique= False)
+    eMail = Column(VARCHAR(256),
+                   nullable=False,
+                   unique=False)
 
     authority = Column(ENUM('admin', 'semiAdmin', 'user'),
-                       default= 'user')
+                       nullable=False,
+                       default='user')

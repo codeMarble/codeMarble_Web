@@ -28,10 +28,12 @@ def close_db_session(exception = None):
 
 def check_user(request_form):
     try:
-        userId = get_request_value(form=request_form.form, name='userId')
-        password = get_request_value(form=request_form.form, name='password')
+        userId = get_request_value(form=request_form, name='userId')
+        password = get_request_value(form=request_form, name='password')
 
         user = select_user(userId=userId).first()
+
+        print user.password
 
         if check_password_hash(user.password, TripleDES.encrypt(str(password))):
             session['userIndex'] = user.userIndex
@@ -39,6 +41,8 @@ def check_user(request_form):
             session['nickName'] = user.nickName
             session['eMail'] = user.eMail
             session['authority'] = user.authority
+
+            print '???????????????????????????'
 
             return True
 
@@ -56,22 +60,35 @@ def main():
     topUsers = get_total_score_each_users().all()
     topProblems = get_topProblem().all()
 
-    return render_template('main.html',
-                           topUsers=topUsers[:3] if len(topUsers) < 3 else topUsers,
-                           topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems)
+    try:
+        user = select_user(userIndex=session['userIndex'])
+        return render_template('main.html',
+                               topUsers=topUsers[:3] if len(topUsers) < 3 else topUsers,
+                               topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
+                               user=user)
+
+    except Exception as e:
+        return render_template('main.html',
+                               topUsers=topUsers[:3] if len(topUsers) < 3 else topUsers,
+                               topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
+                               user=None)
 
 
 @codeMarble.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        if check_user(request.form) is True:
-            return redirect(url_for('.main'))
+    try:
+        if request.method == 'POST':
+            if check_user(request.form) is True:
+                print '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+                return redirect(url_for('.main'))
+
+            else:
+                return '.....'
 
         else:
-            return '.....'
-
-    else:
-        return render_template('login.html')
+            return render_template('login.html')
+    except Exception as e:
+        print e
 
 
 @codeMarble.route('/signup', methods=['GET', 'POST'])

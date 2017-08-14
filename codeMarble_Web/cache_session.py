@@ -28,7 +28,7 @@ class CacheSessionInterface(SessionInterface):
         return str(uuid4())
 
     def get_cache_expiration_time(self, app, session):
-        if session.permanet:
+        if session.permanent:
             return app.permanent_session_lifetime
         return timedelta(hours = 1)
 
@@ -39,7 +39,7 @@ class CacheSessionInterface(SessionInterface):
             sid = self.generate_sid()
             return self.session_class(sid=sid, new=True)
 
-        val = self.cache.get(self.prifix + sid)
+        val = self.cache.get(self.prefix + sid)
 
         if val is not None:
             return self.session_class(val, sid=sid)
