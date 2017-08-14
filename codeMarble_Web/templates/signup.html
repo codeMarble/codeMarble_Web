@@ -5,22 +5,22 @@
 
     function checkId() {
         if(signup_form.idCheckBtn.value == '변경') {
-            $("#id").attr('readonly', false);
+            $("#userId").attr('readonly', false);
             $("#idCheckBtn").attr('value', '중복확인');
         }
 
-        else if(signup_form.id.value == '')
+        else if(signup_form.userId.value == '')
             alert('아이디를 입력하세요.') ;
 
         else {
             $.ajax({
                 type : "POST",
                 url : "/idCheck",
-                data : {'id': signup_form.id.value},
+                data : {'id': signup_form.userId.value},
                 dataType : "text",
                 success : function(data){
                     if(data == 'P'){
-                        $("#id").attr('readonly', true);
+                        $("#userId").attr('readonly', true);
                         $("#idCheckBtn").attr('value', '변경');
                     }
                     else
@@ -58,10 +58,10 @@
     };
 
     function checkPassword() {
-        if(signup_form.pw.value == signup_form.pwCheck.value){
-            if(signup_form.pw.value.length < 5) {
+        if(signup_form.password.value == signup_form.passwordCheck.value){
+            if(signup_form.password.value.length < 5) {
                 alert('패스워드가 규칙에 맞지 않습니다.');
-                setting_form.pw.onfocus();
+                setting_form.password.onfocus();
             }
             else {
                 if(signup_form.idCheckBtn.value == '중복확인' || signup_form.nickCheckBtn.value == '중복확인')
@@ -75,7 +75,7 @@
 
         else {
             alert('패스워드가 일치하지 않습니다.');
-            setting_form.pw.onfocus();
+            setting_form.password.onfocus();
         }
     }
 
@@ -86,7 +86,7 @@
         <h3><strong>회원가입</strong></h3><h10>(*)는 필수입력 사항입니다.</h10><br><br><br>
         <div>
         <label><strong>아 이 디 (*)</strong></label>
-        <input id="id" name="id" class="setting-form">
+        <input id="userId" name="userId" class="setting-form">
         &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="idCheckBtn" name="idCheckBtn" class="btn btn-info" onclick="checkId()" value="중복확인">
         <br><br>
         </div>
@@ -97,11 +97,11 @@
         <br><br>
 
         <label><strong>비밀번호 (*)</strong></label>
-        <input id="pw" name="pw" class="setting-form" type="password" placeholder="5자 이상">
+        <input id="password" name="password" class="setting-form" type="password" placeholder="5자 이상">
         <br><br>
 
         <label><strong>비밀번호 확인 (*)</strong></label>
-        <input id="pwCheck" class="setting-form" type="password">
+        <input id="passwordCheck" class="setting-form" type="password">
         <br><br>
 
         <label><strong>이메일</strong></label>
