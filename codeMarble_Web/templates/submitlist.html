@@ -14,14 +14,27 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom fonts for this templates -->
+    <!-- Custom fonts for this template -->
     <link href="../static/bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- Plugin CSS -->
     <link href="../static/bootstrap/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
-    <!-- Custom styles for this templates -->
+    <!-- Custom styles for this template -->
     <link href="../static/bootstrap/css/sb-admin.css" rel="stylesheet">
+
+    <script>
+      function display1_1()
+      {
+        div1.style.display="";
+        div3.style.display="none";
+      }
+      function display3_1()
+      {
+        div1.style.display="none";
+        div3.style.display="";
+      }
+    </script>
 
 </head>
 
@@ -32,29 +45,29 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarExample" aria-controls="navbarExample" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="/main.html">CodeMarble</a>
+        <a class="navbar-brand" href="../template/main.html">CodeMarble</a>
         <div class="collapse navbar-collapse" id="navbarExample">
 
             <ul class="sidebar-nav navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/main.html"><i class="fa fa-fw fa-home"></i> Home</a>
+                    <a class="nav-link" href="../template/main.html"><i class="fa fa-fw fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/about.html"><i class="fa fa-fw fa-info"></i> About</a>
-                </li>            
+                    <a class="nav-link" href="../template/about.html"><i class="fa fa-fw fa-info"></i> About</a>
+                </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/list.html"><i class="fa fa-fw fa-list-ul"></i> 문제</a>
-                </li>                           
+                    <a class="nav-link" href="../template/list.html"><i class="fa fa-fw fa-list-ul"></i> 문제</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"><i class="fa fa-fw fa-recycle"></i> 리플레이
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>
                     </a>
                     <ul class="sidebar-second-level collapse" id="collapseComponents">
                         <li>
-                            <a href="/replaymylist.html">내가푼문제만</a>
+                            <a href="../template/replaymylist.html">내가푼문제만</a>
                         </li>
                         <li>
-                            <a href="/replaylist.html">전체회원</a>
+                            <a href="../template/replaylist.html">전체회원</a>
                         </li>
                         <li>
                             <a href="#">..</a>
@@ -62,8 +75,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/setting.html"><i class="fa fa-fw fa-cog"></i> Setting</a>
-                </li>                
+                    <a class="nav-link" href="../template/setting.html"><i class="fa fa-fw fa-cog"></i> Setting</a>
+                </li>
+
             </ul>
 
             <ul class="navbar-nav ml-auto">
@@ -85,9 +99,9 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login.html#"><i class="fa fa-fw fa-sign-out"></i> 로그아웃</a>
+                    <a class="nav-link" href="../template/login.html#"><i class="fa fa-fw fa-sign-out"></i> 로그아웃</a>
                 </li>
-            </ul>   
+            </ul>
         </div>
     </nav>
 
@@ -95,11 +109,9 @@
 
         <div id="subNav">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/gagagaga.html">문제가가가가가</a>
+            <a href="../template/gagagaga.html">문제가가가가가</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/submit.html">코드 제출</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;     
-            <a href="/submitlist.html"><strong>이 문제를 푼 사람</strong></a>
+            <a href="../template/submitlist.html"><strong>이 문제를 푼 사람</strong></a>
         </div>
 
             <!-- Example Tables Card -->
@@ -118,7 +130,15 @@
                                 <tr>
                                     <td>1</td>
                                     <td>황석진</td>
-                                    <td><button type="button" class="btn btn-sm btn-default">대전하기</button></td>
+                                    <td>
+                                    <span id="div1" onclick="display3_1()">
+                                        <input type="button" class="btn btn-sm btn-primary" value="대전하기" onclick="document.getElementById('vd').pause(); document.getElementById('vd').hidden = true;"/>
+                                    </span>
+
+                                    <span id="div3" style="display: none;">
+                                        <input type="button" class="btn btn-sm btn-warning" disabled="disabled" value="대전중...!"/>
+                                    </span>
+                                    </td>
                                     <td> </td>
                                 </tr>
                                 <tr>
@@ -126,17 +146,19 @@
                                     <td>류동기</td>
                                     <td><button type="button" class="btn btn-sm btn-warning">대전중...!</button></td>
                                     <td> </td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>남규현</td>
                                     <td><button type="button" disabled="disabled" class="btn btn-sm btn-default">대전완료</button></td>
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/replay.html'">리플레이</button></td>
-                                </tr>                                         
+                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='../template/replay.html'">리플레이</button></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+
 
                 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
@@ -160,7 +182,7 @@
     <script src="../static/bootstrap/vendor/datatables/jquery.dataTables.js"></script>
     <script src="../static/bootstrap/vendor/datatables/dataTables.bootstrap4.js"></script>
 
-    <!-- Custom scripts for this templates -->
+    <!-- Custom scripts for this template -->
     <script src="../static/bootstrap/js/sb-admin.min.js"></script>
 
 </body>
