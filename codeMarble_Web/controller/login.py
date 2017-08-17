@@ -8,12 +8,13 @@ from codeMarble_Web.database import dao
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.codeMarble_py3des import TripleDES
 
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
-from codeMarble_Web.utils.utilUserSetting import *
+from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
+from codeMarble_Web.utils.utilLanguageQuery import select_language
 
 
 @codeMarble.teardown_request
@@ -97,56 +98,53 @@ def signup():
         return render_template('xxx.html')
 
 
-@codeMarble.route('/setting', methods=['POST'])
+@codeMarble.route('/setting', methods=['GET', 'POST'])
 def setting():
+    thema = ['chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow']
     try:
-        userInformation = select_userSetting(userIndex=session['userIndex']).first()
+        userInformation = get_user_information(session['userIndex']).first()
+        language = select_language().all()
 
-    except Exception:
-        userInformation = ''
-
+    except Exception as e:
+        print e
+        userInformation = []
+        language = []
 
     return render_template('setting.html',
-                           userInformation=userInformation)
+                           userInformation=userInformation,
+                           language=language,
+                           thema=thema)
 
 
 @codeMarble.route('/saveSetting', methods=['POST'])
 def saveSetting():
-    if request.method == 'POST':
-        # nickName = get_request_value(form=request.form,
-        #                              name='nickName')
+    nickName = get_request_value(request.form, 'nickName')
+    password = get_request_value(request.form, 'pw')
+    password = generate_password_hash(TripleDES.encrypt(str(password))) if password else None
+    eMail = get_request_value(request.form, 'eMail')
 
-        languageIndex = get_request_value(form=request.form,
-                                          name='languageIndex')
+    comment = get_request_value(request.form, 'comment')
+    isOpen = True if get_request_value(request.form, 'optionsRadios1') else False
+    language = get_request_value(request.form, 'language')
+    thema = get_request_value(request.form, 'thema')
 
-        thema = get_request_value(form=request.form,
-                                  name='thema')
+    languageIndex = select_language(language=language).first().languageIndex
+    print password == None, type(password)
 
-        comment = get_request_value(form=request.form,
-                                    name='comment')
+    try:
+        update_userSetting(userIndex=session['userIndex'], languageIndex=languageIndex, thema=thema,
+                           comment=comment, isOpen=isOpen)
+        update_user(userIndex=session['userIndex'], password=password,
+                    nickName=nickName, eMail=eMail)
 
-        isOpen = get_request_value(form=request.form,
-                                   name='isOpen')
+        dao.commit()
 
+    except Exception as e:
+        print e
+        dao.rollback()
 
-        update_userSetting(select_userSetting(userIndex=session['userIndex']).first(),
-                           languageIndex,
-                           thema,
-                           comment,
-                           isOpen)
+    return redirect(url_for('.main'))
 
-        try:
-            dao.commit()
-
-            return redirect(url_for('.signin'))
-
-        except Exception:
-            dao.rollback()
-            error = 'error'
-
-    return render_template('setting.html',
-                           languageIndex,
-                           thema,
-                           comment,
-                           isOpen,
-                           error)
+@codeMarble.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html')

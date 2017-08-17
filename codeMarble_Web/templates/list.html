@@ -9,59 +9,15 @@
                         <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>문제이름</th>
-                                    <th>난이도</th>
+                                    <th>문제이름</th> <th>난이도</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><a href="/gagagaga">가가가가</a></td>
-                                    <td>★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>나나나</td>
-                                    <td>★</td>
-                                </tr>
-                                <tr>
-                                    <td>다다다다다다다다다</td>
-                                    <td>★★</td>
-                                </tr>
-                                <tr>
-                                    <td>라라라라라라</td>
-                                    <td>★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>마마마마마마마</td>
-                                    <td>★★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>바바바바</td>
-                                    <td>★★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>사사</td>
-                                    <td>★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>아아아아아</td>
-                                    <td>★★</td>
-                                </tr>
-                                <tr>
-                                    <td>자자자자자자자자자</td>
-                                    <td>★★</td>
-                                </tr>
-                                <tr>
-                                    <td>차차차</td>
-                                    <td>★★★★★</td>
-                                </tr>
-                                <tr>
-                                    <td>카카카카카카카</td>
-                                    <td>★</td>
-                                </tr>
-                                <tr>
-                                    <td>타타타타타타타타</td>
-                                    <td>★★</td>
-                                </tr>
+                                {% for problemData in problemList %}
+                                    <tr>
+                                        <td>{{ problemData.problemName }}</td> <td>{% for i in range(problemData.level) %}★{% endfor %}</td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

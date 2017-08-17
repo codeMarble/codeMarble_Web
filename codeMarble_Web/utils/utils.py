@@ -48,29 +48,3 @@ def is_authority(authority):
 
     except Exception:
         return (None, None, None)
-
-# def access_authority_check(userIndex = None, codeIndex = None,
-#                            boardIndex = None, replyOfBoardIndex = None,
-#                            languageIndex = None, userInformationInProblemUserIndex = None,
-#                            userInformationInProblemProblemIndex=None, dataOfMatchIndex = None,
-#                            scriptOfProblemProblemIndex = None, userSettingUserIndex = None,
-#                            noticeIndex = None, isServerAdministrator = None):
-#
-#     try:
-#         if userIndex == 0\
-#             or codeIndex == 0\
-#             or boardIndex == 0\
-#             or replyOfBoardIndex == 0\
-#             or languageIndex == 0\
-#             or userInformationInProblemUserIndex == 0\
-#             or userInformationInProblemProblemIndex == 0\
-#             or dataOfMatchIndex == 0\
-#             or scriptOfProblemProblemIndex == 0\
-#             or userSettingUserIndex == 0\
-#             or noticeIndex == 0:
-#             return  False
-#
-#         authority = is_authority(session[USER_AUTHORITY])
-#
-
-

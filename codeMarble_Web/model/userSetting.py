@@ -17,8 +17,8 @@ class UserSetting(Base):
                        autoincrement= False,
                        nullable= False)
 
-    thema = Column(ENUM('chorme', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow'),
-                       default= 'chorme')
+    thema = Column(ENUM('chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow'),
+                   default= 'chorme')
 
     comment = Column(VARCHAR(80),
                       unique= True)

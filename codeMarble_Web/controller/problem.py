@@ -10,14 +10,12 @@ from codeMarble_Web.codeMarble_py3des import TripleDES
 
 from werkzeug.security import check_password_hash
 
+
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
+from codeMarble_Web.utils.utilProblemQuery import select_problem
 from codeMarble_Web.utils.utils import *
 
-from codeMarble_Web.resource.sessionResources import *
-from codeMarble_Web.resource.htmlResource import *
-from codeMarble_Web.resource.setResources import *
-from codeMarble_Web.resource.routeResources import *
 
 @codeMarble.teardown_request
 def close_db_session(exception = None):
@@ -27,3 +25,12 @@ def close_db_session(exception = None):
     except Exception as e:
         from codeMarble_Web.codeMarble_logger import *
         Log.error(str(e))
+
+
+@codeMarble.route('/problem', methods=['GET', 'POST'])
+def problem():
+    problemList = select_problem().all()
+    print len(problemList), '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
+    return render_template('list.html',
+                           problemList=problemList)

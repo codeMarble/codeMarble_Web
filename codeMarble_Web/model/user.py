@@ -25,7 +25,7 @@ class User(Base):
                       nullable=False,
                       unique=True)
 
-    eMail = Column(VARCHAR(256),
+    eMail = Column(VARCHAR(100),
                    nullable=False,
                    unique=False)
 

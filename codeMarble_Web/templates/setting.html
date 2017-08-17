@@ -4,45 +4,73 @@
     <div class="content-wrapper py-3">
 
         <div class="mymargin">
-            <br>
-            <h3>회원정보</h3><br>
-            <label><strong>아이디</strong></label>
-            <input class="setting-form" disabled="disabled" placeholder="jieeeun">
-            <br><br>
+            <form method="post" name="setting_form">
+                <br>
+                <h3>회원정보</h3><br>
+                <label><strong>아이디</strong></label>
+                <input class="setting-form" disabled="disabled" placeholder="{{ userInformation.userId }}">
+                <br><br>
 
-            <label><strong>닉네임</strong></label>
-            <input class="setting-form" placeholder="지은">
-            <br><br>
+                <label><strong>비밀번호</strong></label>
+                <input class="setting-form" type="password" name="pw" id="pw">
+                <br><br>
 
-            <label><strong>한마디</strong></label>
-            <input class="setting-form" placeholder="한마디를 입력해주세요.">
-            <br><br>
+                <label><strong>비밀번호 확인</strong></label>
+                <input class="setting-form" type="password" name="pwCheck" id="pwCheck">
+                <br><br>
 
-            <label><strong>코드 공개여부 </strong></label> &nbsp;
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>공개 &nbsp;
-                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">비공개       
-            <br><br><br><br>
+                <label><strong>이메일</strong></label>
+                <input class="setting-form" name="eMail" id="eMail" placeholder="{{ userInformation.eMail }}">
+                <br><br>
 
-            <label><strong>주언어 설정</strong></label>
-            <select class="form-control" style="width: 350px;">
-                <option>C</option>
-                <option>C++</option>
-                <option>Python</option>
-            </select>
-            <br>
-            <label><strong>에디터 테마 설정</strong></label>
-            <select class="form-control" style="width: 350px;">
-                <option>테마1</option>
-                <option>테마2</option>
-                <option>테마3</option>
-            </select>
+                <label><strong>닉네임</strong></label>
+                <input class="setting-form" name="nickName" id="nickName" placeholder="{{ userInformation.nickName }}">
+                <br><br>
 
-            <br><br><br>
-            <button type="submit" class="btn btn-default">설정저장</button>
+                <label><strong>한마디</strong></label>
+                    <input class="setting-form" name="comment" id="comment" {% if userInformation.comment %} placeholder="{{ userInformation.comment }}" {% else %} placeholder="한마디를 입력해주세요." {% endif %}>
+                <br><br>
+
+                <label><strong>코드 공개여부 </strong></label>
+                <input type="radio" name="optionsRadios1" id="optionsRadios1" value="option1" {% if userInformation.isOpen %} checked {% endif %}>공개 &nbsp;
+                <input type="radio" name="optionsRadios2" id="optionsRadios2" value="option2" {% if not userInformation.isOpen %} checked {% endif %}>비공개
+                <br><br><br><br>
+
+                <label><strong>주언어 설정</strong></label>
+                <select class="form-control" name="language" id="language" style="width: 350px;">
+                    {% for lang in language %}
+                        <option>{{ lang.language }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label><strong>에디터 테마 설정</strong></label>
+                <select class="form-control" name="thema" id="thema" style="width: 350px;">
+                    {% for th in thema %}
+                        <option>{{ th }}</option>
+                    {% endfor %}
+                </select>
+
+                <br><br><br>
+                <button type="submit" class="btn btn-default" onclick="passwordCheck()">설정저장</button>
+            </form>
         </div>
         <!-- /.container-fluid -->
 
 <br><br><br><br><br><br>
     </div>
     <!-- /.content-wrapper -->
+
+<script>
+    function passwordCheck() {
+        if(setting_form.pw.value == setting_form.pwCheck.value){
+            document.setting_form.action = "/saveSetting"
+        }
+
+        else {
+            alert('패스워드가 일치하지 않습니다.');
+            setting_form.pw.onfocus();
+        }
+    }
+</script>
+
 {% endblock -%}

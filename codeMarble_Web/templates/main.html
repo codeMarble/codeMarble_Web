@@ -62,7 +62,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/setting"><i class="fa fa-fw fa-cog"></i> Setting</a>
+                    {% if session['userIndex'] %}
+                        <a class="nav-link" href="/setting"><i class="fa fa-fw fa-cog"></i> Setting</a>
+                    {% endif %}
                 </li>
             </ul>
 

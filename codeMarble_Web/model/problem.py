@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sqlalchemy import Column
-from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, BOOLEAN, TEXT
+from sqlalchemy.dialects.mysql import CHAR, VARCHAR, INTEGER, BOOLEAN, TEXT
 from codeMarble_Web.model import Base
 
 
@@ -14,7 +14,7 @@ class Problem(Base):
                           autoincrement=True,
                           nullable=False)
 
-    problemName = Column(VARCHAR(5),
+    problemName = Column(VARCHAR(50),
                          unique=True,
                          nullable=False)
 
@@ -27,10 +27,10 @@ class Problem(Base):
     placementOption2 = Column(TEXT,
                               unique= False)
 
-    existRule = Column(VARCHAR(8),
+    existRule = Column(CHAR(8),
                        nullable=False)
 
-    existRuleOption = Column(VARCHAR(8),
+    existOption = Column(CHAR(8),
                              nullable=False)
 
     actionRule = Column(INTEGER(unsigned=True),
@@ -45,8 +45,17 @@ class Problem(Base):
     endingRule = Column(INTEGER(unsigned=True),
                         nullable=False)
 
-    endingOption = Column(VARCHAR(5),
+    endingOption = Column(CHAR(5),
                           nullable=False)
+
+    limitTime = Column(INTEGER(unsigned=True),
+                       nullable=False)
+
+    limitMemory = Column(INTEGER(unsigned=True),
+                         nullable=False)
+
+    level = Column(INTEGER(unsigned=True),
+                   nullable=False)
 
     isDelete = Column(BOOLEAN,
                       unique=False)
