@@ -15,7 +15,8 @@
                             <tbody>
                                 {% for problemData in problemList %}
                                     <tr>
-                                        <td>{{ problemData.problemName }}</td> <td>{% for i in range(problemData.level) %}★{% endfor %}</td>
+                                        <td><a href="{{ url_for('codeMarble_Web.problemInfo', problemIndex=problemData.problemIndex) }}">{{ problemData.problemName }}</a></td>
+                                        <td>{% for i in range(problemData.level) %}★{% endfor %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

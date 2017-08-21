@@ -34,3 +34,12 @@ def problem():
 
     return render_template('list.html',
                            problemList=problemList)
+
+
+@codeMarble.route('/problemInfo<int:problemIndex>', methods=['GET', 'POST'])
+def problemInfo(problemIndex):
+    print request.method
+    problemData = select_problem(problemIndex=problemIndex).first()
+
+    return render_template('gagagaga.html',
+                           problemData=problemData)

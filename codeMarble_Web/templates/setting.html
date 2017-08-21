@@ -46,7 +46,7 @@
                 <label><strong>에디터 테마 설정</strong></label>
                 <select class="form-control" name="thema" id="thema" style="width: 350px;">
                     {% for th in thema %}
-                        <option>{{ th }}</option>
+                        <option {% if th == userInformation.thema %} autofocus {% endif %}>{{ th }}</option>
                     {% endfor %}
                 </select>
 
