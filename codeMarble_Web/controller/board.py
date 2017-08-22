@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
+from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 
 
 @codeMarble.teardown_request
@@ -25,8 +26,8 @@ def close_db_session(exception = None):
         Log.error(str(e))
 
 
-
 @codeMarble.route('/board', methods=['POST'])
+@check_invalid_access
 def board():
     if request.method == 'POST':
         articleQuery = select_board_article()
@@ -42,9 +43,8 @@ def board():
                                replyCount=replyCount)
 
 
-
-
 @codeMarble.route('/board/write<int:problemIndex>', methods=['POST'])
+@check_invalid_access
 def writeArticle(problemIndex):
     if request.method == 'POST':
         try:
@@ -69,7 +69,9 @@ def writeArticle(problemIndex):
         except Exception:
             dao.rollback()
 
+
 @codeMarble.route('/board/delete<int:boardIndex>', methods=['POST'])
+@check_invalid_access
 def deleteArticle(boardIndex):
     if request.method == 'POST':
         try:
@@ -86,7 +88,9 @@ def deleteArticle(boardIndex):
     except Exception:
         dao.rollback()
 
+
 @codeMarble.route('/board/modify<int:boardIndex>', methods=['POST'])
+@check_invalid_access
 def modifyArticle(boardIndex):
     if request.method == 'POST':
         try:
@@ -112,6 +116,7 @@ def modifyArticle(boardIndex):
 
 
 @codeMarble.route('/board/writeReply<int:boardIndex>', methods=['POST'])
+@check_invalid_access
 def writeReply(boardIndex):
     if request.method == 'POST':
         userIndex = get_request_value(form=request.form,
@@ -130,7 +135,9 @@ def writeReply(boardIndex):
     except Exception:
         dao.rollback()
 
+
 @codeMarble.route('/board/deleteReply<int:boardIndex>', methods=['POST'])
+@check_invalid_access
 def deleteReply(boardIndex):
     if request.method == 'POST':
         try:
@@ -147,7 +154,9 @@ def deleteReply(boardIndex):
     except Exception:
         dao.rollback()
 
+
 @codeMarble.route('/board/modifyReply<int:boardIndex>', methods=['POST'])
+@check_invalid_access
 def modifyReply(boardIndex):
     if request.method == 'POST':
         try:

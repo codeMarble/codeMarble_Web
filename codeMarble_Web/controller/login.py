@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import request, redirect, session, url_for, render_template
+from flask import request, redirect, session, url_for, render_template, flash
 from datetime import datetime, date, timedelta
 
 from codeMarble_Web.database import dao
@@ -12,6 +12,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
+from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
 from codeMarble_Web.utils.utilLanguageQuery import select_language
@@ -52,8 +53,6 @@ def check_user(request_form):
         return 'wrong id or password'
 
 
-
-
 @codeMarble.route('/', methods=['GET', 'POST'])
 def main():
     topUsers = get_total_score_each_users().all()
@@ -77,16 +76,22 @@ def main():
 def login():
     try:
         if request.method == 'POST':
-            if check_user(request.form) is True:
+            message = check_user(request.form)
+            if message is True:
                 return redirect(url_for('.main'))
 
             else:
-                return '.....'
+                flash(message)
+                return render_template('login.html')
 
         else:
             return render_template('login.html')
+
     except Exception as e:
         print e
+
+        flash('다시 시도해주세요.')
+        return redirect(url_for('.main'))
 
 
 @codeMarble.route('/signup', methods=['GET', 'POST'])
@@ -99,6 +104,7 @@ def signup():
 
 
 @codeMarble.route('/setting', methods=['GET', 'POST'])
+@check_invalid_access
 def setting():
     thema = ['chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow']
     try:
@@ -107,8 +113,10 @@ def setting():
 
     except Exception as e:
         print e
-        userInformation = []
-        language = []
+
+        flash('다시 시도해주세요.')
+        return redirect(url_for('.main'))
+
 
     return render_template('setting.html',
                            userInformation=userInformation,
@@ -117,6 +125,7 @@ def setting():
 
 
 @codeMarble.route('/saveSetting', methods=['POST'])
+@check_invalid_access
 def saveSetting():
     nickName = get_request_value(request.form, 'nickName')
     password = get_request_value(request.form, 'pw')
@@ -129,7 +138,6 @@ def saveSetting():
     thema = get_request_value(request.form, 'thema')
 
     languageIndex = select_language(language=language).first().languageIndex
-    print password == None, type(password)
 
     try:
         update_userSetting(userIndex=session['userIndex'], languageIndex=languageIndex, thema=thema,
@@ -140,10 +148,14 @@ def saveSetting():
         dao.commit()
 
     except Exception as e:
-        print e
         dao.rollback()
 
+        flash('정보변경에 실패했습니다.')
+        return redirect(url_for('.main'))
+
+    flash('정상적으로 정보가 변경되었습니다.')
     return redirect(url_for('.main'))
+
 
 @codeMarble.route('/about', methods=['GET', 'POST'])
 def about():

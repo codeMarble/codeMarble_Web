@@ -88,6 +88,18 @@
         </div>
     </nav>
 
+    {%- with flashes=get_flashed_messages() %}
+		{%- if flashes %}
+		<div class="container">
+			<div class="alert alert-info">
+				{%- for message in flashes %}
+				{{ message }}
+				{% endfor -%}
+			</div>
+		</div>
+		{% endif -%}
+    {% endwith -%}
+
     {%- block body %}
     <div class="content-wrapper py-3">
 

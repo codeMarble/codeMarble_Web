@@ -2,12 +2,9 @@
 
 from flask import *
 from functools import wraps
-from repoze.lru import lru_cache
 from codeMarble_Web.resource.sessionResources import *
-from codeMarble_Web.resource.routeResources import *
 
 
-@lru_cache(maxsize=300)
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -23,7 +20,7 @@ def login_required(f):
             if not (session.sid == session_key and session.__contains__(USER_ID)):
                 session.clear()
 
-                return redirect(url_for(SIGN_IN_NEWPAGE, inIdx=idx, to=f.__name__, params=kwargs))
+                return redirect(url_for('.login'))
 
             return f(*args, **kwargs)
 

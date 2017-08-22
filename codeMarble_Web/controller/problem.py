@@ -15,6 +15,7 @@ from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utilProblemQuery import select_problem
 from codeMarble_Web.utils.utils import *
+from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 
 
 @codeMarble.teardown_request
@@ -28,6 +29,7 @@ def close_db_session(exception = None):
 
 
 @codeMarble.route('/problem', methods=['GET', 'POST'])
+@check_invalid_access
 def problem():
     problemList = select_problem().all()
     print len(problemList), '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
@@ -37,6 +39,7 @@ def problem():
 
 
 @codeMarble.route('/problemInfo<int:problemIndex>', methods=['GET', 'POST'])
+@check_invalid_access
 def problemInfo(problemIndex):
     print request.method
     problemData = select_problem(problemIndex=problemIndex).first()

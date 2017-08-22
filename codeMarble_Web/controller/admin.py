@@ -13,11 +13,13 @@ from werkzeug.security import check_password_hash
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
+from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 
 from codeMarble_Web.resource.sessionResources import *
 from codeMarble_Web.resource.htmlResource import *
 from codeMarble_Web.resource.setResources import *
 from codeMarble_Web.resource.routeResources import *
+
 
 @codeMarble.teardown_request
 def close_db_session(exception = None):
@@ -29,8 +31,14 @@ def close_db_session(exception = None):
         Log.error(str(e))
 
 
+@codeMarble.route('/admin', methods=['GET', 'POST'])
+@check_invalid_access
+def admin():
+    return 'temp'
+
 
 @codeMarble.route('/admin/enterSubAdmin<int:userIndex>', methods=['POST'])
+@check_invalid_access
 def enterSubAdmin(userIndex):
     if request.method == 'POST':
         password = get_request_value(form=request.form,
@@ -51,7 +59,9 @@ def enterSubAdmin(userIndex):
         except Exception:
             dao.rollback() 
 
+
 @codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
+@check_invalid_access
 def deleteSubAdmin(userIndex):
     if request.method == 'POST':
         password = get_request_value(form=request.form,
