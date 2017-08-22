@@ -24,17 +24,20 @@ def close_db_session(exception = None):
         from codeMarble_Web.codeMarble_logger import *
         Log.error(str(e))
 
-@codeMarble.teardown_request
-def close_db_session(exception = None):
-    try:
-        dao.remove()
 
-    except Exception as e:
-        from codeMarble_Web.codeMarble_logger import *
-        Log.error(str(e))
-
-
-@codeMarble.route()
+@codeMarble.route('/replay/myList<int:isChallenge>', methods=['GET', 'POST'])
 @check_invalid_access
-def temp():
-    pass
+def replayMyList(isChallenge):
+	if isChallenge is 1:
+		userReplayData = select_dataOfMatch(challengerIndex=session['userIndex']).all()
+
+	elif isChallenge is 0:
+		userReplayData = select_dataOfMatch(chapionIndex=session['userIndex']).all()
+
+	else:
+		flash('다시 시도해주세요.')
+		return redirect(url_for('.main'))
+
+	return render_template('xxx.html',
+	                       userReplayData=userReplayData)
+

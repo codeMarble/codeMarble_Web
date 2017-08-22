@@ -11,6 +11,7 @@ def insert_dataOfMatch(problemIndex, challengerIndex, championIndex, positionDat
     return DataOfMatch(ProblemIndex=problemIndex, challengerIndex=challengerIndex,championIndex=championIndex,
                         result = '...ing...', positionData=positionData, boardData=boardData)
 
+
 def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=None, dataOfMatchIndex=None):
     if dataOfMatchIndex:
         return dao.query(DataOfMatch).\
@@ -23,6 +24,7 @@ def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=No
                             else DataOfMatch.challengerIndex != challengerIndex,
                             DataOfMatch.championIndex == championIndex if championIndex
                             else DataOfMatch.championIndex == championIndex))
+
 
 def update_dataOfMatch_result(problemIndex, challengerIndex, championIndex, result, dataOfMatchIndex=None):
     if dataOfMatchIndex:
