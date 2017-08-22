@@ -31,7 +31,6 @@ def select_user(userIndex=None, userId=None, nickName=None):
 
 
 def update_user(userIndex, password=None, nickName=None, eMail=None, authority=None):
-    print password, '###############################'
     return dao.query(User).\
                 filter(User.userIndex == userIndex).\
                 update(dict(password = password if password else User.password,

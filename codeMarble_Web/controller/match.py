@@ -34,7 +34,7 @@ def close_db_session(exception = None):
         Log.error(str(e))
 
 
-@codeMarble.route()
-@check_invalid_access
-def temp():
-    pass
+# @codeMarble.route()
+# @check_invalid_access
+# def temp():
+#     pass

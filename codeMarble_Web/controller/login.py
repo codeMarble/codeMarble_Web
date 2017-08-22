@@ -103,6 +103,14 @@ def signup():
         return render_template('xxx.html')
 
 
+@codeMarble.route('/logout', methods=['GET', 'POST'])
+@check_invalid_access
+def logout():
+    session.clear()
+
+    return redirect(url_for('.main'))
+
+
 @codeMarble.route('/setting', methods=['GET', 'POST'])
 @check_invalid_access
 def setting():
