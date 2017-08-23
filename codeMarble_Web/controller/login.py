@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
+from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
 from codeMarble_Web.utils.utilLanguageQuery import select_language
@@ -104,6 +105,7 @@ def signup():
 
 
 @codeMarble.route('/logout', methods=['GET', 'POST'])
+@login_required
 @check_invalid_access
 def logout():
     session.clear()
@@ -112,6 +114,7 @@ def logout():
 
 
 @codeMarble.route('/setting', methods=['GET', 'POST'])
+@login_required
 @check_invalid_access
 def setting():
     thema = ['chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow']
@@ -133,6 +136,7 @@ def setting():
 
 
 @codeMarble.route('/saveSetting', methods=['POST'])
+@login_required
 @check_invalid_access
 def saveSetting():
     nickName = get_request_value(request.form, 'nickName')

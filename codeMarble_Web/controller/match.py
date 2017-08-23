@@ -24,16 +24,6 @@ def close_db_session(exception = None):
         from codeMarble_Web.codeMarble_logger import *
         Log.error(str(e))
 
-@codeMarble.teardown_request
-def close_db_session(exception = None):
-    try:
-        dao.remove()
-
-    except Exception as e:
-        from codeMarble_Web.codeMarble_logger import *
-        Log.error(str(e))
-
-
 # @codeMarble.route()
 # @check_invalid_access
 # def temp():

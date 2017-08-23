@@ -14,6 +14,7 @@ from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
+from codeMarble_Web.utils.loginRequired import login_required
 
 
 @codeMarble.teardown_request
@@ -27,6 +28,7 @@ def close_db_session(exception = None):
 
 
 @codeMarble.route('/board', methods=['POST'])
+@login_required
 @check_invalid_access
 def board():
     if request.method == 'POST':
@@ -44,6 +46,7 @@ def board():
 
 
 @codeMarble.route('/board/write<int:problemIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def writeArticle(problemIndex):
     if request.method == 'POST':
@@ -71,6 +74,7 @@ def writeArticle(problemIndex):
 
 
 @codeMarble.route('/board/delete<int:boardIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def deleteArticle(boardIndex):
     if request.method == 'POST':
@@ -90,6 +94,7 @@ def deleteArticle(boardIndex):
 
 
 @codeMarble.route('/board/modify<int:boardIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def modifyArticle(boardIndex):
     if request.method == 'POST':
@@ -116,6 +121,7 @@ def modifyArticle(boardIndex):
 
 
 @codeMarble.route('/board/writeReply<int:boardIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def writeReply(boardIndex):
     if request.method == 'POST':
@@ -137,6 +143,7 @@ def writeReply(boardIndex):
 
 
 @codeMarble.route('/board/deleteReply<int:boardIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def deleteReply(boardIndex):
     if request.method == 'POST':
@@ -156,6 +163,7 @@ def deleteReply(boardIndex):
 
 
 @codeMarble.route('/board/modifyReply<int:boardIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def modifyReply(boardIndex):
     if request.method == 'POST':
