@@ -15,6 +15,20 @@ def check_invalid_access(f):
 				flash('접근 권한이 없는 계정입니다.')
 				return redirect(url_for('.main'))
 
+			elif 'about' in request.endpoint:
+				pass
+
+			elif '' and authority != 'semiAdmin': # view code that other user's
+				pass
+
+			else:
+				if request.cookies.get('userIndex') == session['userIndex']:
+					pass
+
+				else:
+					pass # nonononononononono
+
+
 		except Exception as e:
 			pass
 
