@@ -9,6 +9,7 @@ from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
+from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
 from codeMarble_Web.utils.utilLanguageQuery import select_language
@@ -27,6 +28,7 @@ def close_db_session(exception = None):
 
 
 @codeMarble.route('/replay/myList<int:isChallenge>', methods=['GET', 'POST'])
+@login_required
 @check_invalid_access
 def replayMyList(isChallenge):
 	try:
@@ -81,6 +83,7 @@ def replayMyList(isChallenge):
 
 
 @codeMarble.route('/replay/allList', methods=['GET', 'POST'])
+@login_required
 @check_invalid_access
 def allList(isChallenge):
 	try:
@@ -114,6 +117,7 @@ def allList(isChallenge):
 
 
 @codeMarble.route('/replay/playResult<int:dataOfMatchIndex>', methods=['GET', 'POST'])
+@login_required
 @check_invalid_access
 def playResult(dataOfMatchIndex):
 	try:

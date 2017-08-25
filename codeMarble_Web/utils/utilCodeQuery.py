@@ -10,13 +10,13 @@ from codeMarble_Web.model.language import Language
 from codeMarble_Web.database import dao
 
 
-def insert_code(userIndex, problemIndex, languageIndex, date, code):
+def insert_code(userIndex, problemIndex, languageIndex, date, code, isOpen=True):
     return Code(userIndex=userIndex,
                 problemIndex=problemIndex,
                 languageIndex=languageIndex,
                 code=code,
                 date=date,
-                isOpen=False)
+                isOpen=isOpen)
 
 def select_code(userIndex=None, problemIndex=None, languageIndex=None, codeIndex=None):
     if codeIndex:

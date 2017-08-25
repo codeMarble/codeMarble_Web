@@ -14,6 +14,7 @@ from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
+from codeMarble_Web.utils.loginRequired import login_required
 
 from codeMarble_Web.resource.sessionResources import *
 from codeMarble_Web.resource.htmlResource import *
@@ -38,6 +39,7 @@ def admin():
 
 
 @codeMarble.route('/admin/enterSubAdmin<int:userIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def enterSubAdmin(userIndex):
     if request.method == 'POST':
@@ -61,6 +63,7 @@ def enterSubAdmin(userIndex):
 
 
 @codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
+@login_required
 @check_invalid_access
 def deleteSubAdmin(userIndex):
     if request.method == 'POST':
