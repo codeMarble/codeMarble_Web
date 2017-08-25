@@ -1,6 +1,234 @@
 {%- extends "main.html" -%}
 {%- block body %}
 
+    <style type="text/css" media="screen">
+      canvas, img { display:block; margin:1em auto; }
+      canvas { background:url(../static/img/8x8.jpg) }
+    </style>
+
+    <script type="text/javascript" charset="utf-8">
+      var canvas;
+      var ctx;
+      var i = 0;
+      var x = 0;
+      var y = 0;
+      var z = -1;
+
+      var messageArr = new Array(
+        ['null null'],
+        ['1 1'],
+        ['5 5'],
+        ['7 7'],
+        ["time over"]
+      );
+      var arr = new Array(
+        [
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,3,0,0,0],
+          [0,0,0,0,0,0,2,0,0],
+          [0,0,0,0,0,0,0,1,0],
+          [0,0,0,0,0,0,0,0,0]
+        ],
+        [
+          [0,0,0,0,0,0,0,0,0],
+          [0,1,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,3,0,0,0],
+          [0,0,0,0,0,0,2,0,0],
+          [0,0,0,0,0,0,0,1,0],
+          [0,0,0,0,0,0,0,0,0]
+        ],
+        [
+          [0,0,0,0,0,0,0,0,0],
+          [0,1,0,0,0,0,0,0,0],
+          [0,0,-1,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,3,0,0,0],
+          [0,0,0,0,0,0,2,0,0],
+          [0,0,0,0,0,0,0,1,0],
+          [0,0,0,0,0,0,0,0,0]
+        ],
+        [
+          [0,0,0,0,0,0,0,0,0],
+          [0,1,0,0,0,0,0,0,0],
+          [0,0,-1,0,0,0,0,0,0],
+          [0,0,0,1,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,3,0,0,0],
+          [0,0,0,0,0,0,2,0,0],
+          [0,0,0,0,0,0,0,1,0],
+          [0,0,0,0,0,0,0,0,0]
+        ],
+        [
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
+          [-3,-3,-3,-3,-3,-3,-3,-3,-3]
+        ]
+      );
+
+      function showMessage(i) {
+        if(i%2!=0)
+        {
+          document.getElementById("user1").value=messageArr[i];
+          document.getElementById("user2").value=' ';
+        }
+        else
+        {
+          document.getElementById("user1").value=' ';
+          document.getElementById("user2").value=messageArr[i];
+        }
+      }
+
+      function changeNextBoard() {
+        if(z<arr.length-1)
+        {
+          canvas = document.getElementById("canvas");
+          if (canvas == null || canvas.getContext == null) return;
+          ctx = canvas.getContext("2d");
+          clearr();
+          z++;
+          showMessage(z);
+          draw();
+        }
+      }
+
+      function changePrevBoard() {
+        if(z>0)
+        {
+          canvas = document.getElementById("canvas");
+          if (canvas == null || canvas.getContext == null) return;
+          ctx = canvas.getContext("2d");
+          clearr();
+          z--;
+          showMessage(z);
+          draw();
+        }
+        else if(z==0)
+        {
+          clearr();
+          document.getElementById("user1").value="user1";
+          document.getElementById("user2").value="user2";
+        }
+
+      }
+
+      function clearCanvas()
+      {
+        clearr();
+        z = -1;
+        document.getElementById("user1").value="user1";
+        document.getElementById("user2").value="user2";
+      }
+
+      function draw() {
+        var r1 = new Image();
+        var r2 = new Image();
+        var r3 = new Image();
+        var b1 = new Image();
+        var b2 = new Image();
+        var b3 = new Image();
+        var pointEffect = new Image();
+
+        pointEffect.src="../static/img/star.PNG";
+        r1.src="../static/img/red1.PNG";
+        r2.src="../static/img/red2.PNG";
+        r3.src="../static/img/red3.PNG";
+        b1.src="../static/img/blue1.PNG";
+        b2.src="../static/img/blue2.PNG";
+        b3.src="../static/img/blue3.PNG";
+
+        var zz = z;
+
+        pointEffect.onload = function() {
+          calc(messageArr[zz], zz);
+          ctx.drawImage(pointEffect, x*69.5, y*69.5);
+        }
+
+        r1.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='1')
+                  ctx.drawImage(r1, 25+70*j, 25+70*i);
+            }
+          }
+        }
+
+        r2.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='2')
+                  ctx.drawImage(r2, 25+69.5*j, 25+70*i);
+            }
+          }
+        }
+
+        r3.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='3')
+                  ctx.drawImage(r3, 25+69.5*j, 25+70*i);
+            }
+          }
+        }
+
+        b1.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='-1')
+                  ctx.drawImage(b1, 25+70*j, 25+70*i);
+            }
+          }
+        }
+
+        b2.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='-2')
+                  ctx.drawImage(b2, 25+69.5*j, 25+70*i);
+            }
+          }
+        }
+
+        b3.onload = function() {
+          for (var i = 0; i < arr[zz].length; i++) {
+            for (var j = 0; j < arr[zz][i].length; j++) {
+              if(arr[zz][i][j]=='-3')
+                  ctx.drawImage(b3, 25+69.5*j, 25+70*i);
+            }
+          }
+        }
+      }
+
+      function calc(teststr)
+      {
+        var strSplit = teststr[0].split( ' ' );
+        x=strSplit[0]*1;
+        y=strSplit[1]*1;
+        console.log(x + '+' +y);
+      }
+
+      function clearr()
+      {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.beginPath();
+      }
+
+   </script>
+
     <div class="content-wrapper py-3">
 
         <div id="subNav">
@@ -12,52 +240,60 @@
             <a href="/problem/solvingUsers"><strong>이 문제를 푼 사람</strong></a>
         </div>
         <br><br>
-        <img src="../static/img/test.jpg" style="width:550px; display: block; margin-left: auto; margin-right: auto;">
-        <br>
 
-        <div style="width:330px;  margin: auto;">
-            <span id="div1" onclick="display3_1()">
-                <input type="button" class="btn btn btn-danger" value="수동재생으로 바꾸기" onclick="document.getElementById('vd').pause(); document.getElementById('vd').hidden = true;"/>
-            <!--
-                <button type="button" class="btn btn btn-warning" onclick="changeGameBoard(1, {{ positionDatas|length }} -1)">자동재생</button>
-            -->
-            </span>
+                <canvas id="canvas" width="650" height="650" style="position: absolute; top:110px; left: 580px"></canvas>
 
-            <span id="div3" style="display: none;" onclick="display1_1()">
-                <input type="button" class="btn btn btn-success" value="자동재생으로 바꾸기"/>
-            </span>
+        <div class="col-xl-3 col-sm-6 mb-3" style="position: absolute; top: 125px; left: 250px; width: 330px; ">
+            <div class="card card-inverse card-primary o-hidden h-100">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-user-circle-o"></i>
+                    </div>
+                    <div class="mr-5">
+                        도전받은사람<br><strong>남규현</strong>
+                    </div>
+                </div>
+                <span class="card-footer clearfix small z-1">
+                    <span class="float-left"><input type='text' id='user1' value=' ' style="font-size:15px; color: white; border: 0px; background-color: transparent;" ></span>
+                </span>
+            </div>
+        </div>
 
-            <span id="div2" style="display: none;">
-                <input type="button" class="btn btn btn-warning" value="이전"/>
-                <input type="button" class="btn btn btn-warning" value="다음"/>
-            </span>
+        <div class="col-xl-3 col-sm-6 mb-3" style="position: absolute; top: 125px; left: 1235px; width: 330px;">
+            <div class="card card-inverse card-danger o-hidden h-100">
+                <div class="card-block">
+                    <div class="card-block-icon">
+                        <i class="fa fa-fw fa-user-circle-o"></i>
+                    </div>
+                    <div class="mr-5">
+                        도전한사람<br><strong>황석진</strong>
+                    </div>
+                </div>
+                <span class="card-footer clearfix small z-1">
+                    <span class="float-left"><input type='text' id='user2' value=' ' style="font-size:15px; color: white; border: 0px; background-color: transparent;"></span>
+                </span>
+            </div>
         </div>
 
 
-    <script>
-      function display1_1()
-      {
-        div1.style.display="";
-        div3.style.display="none";
-        div2.style.display="none";
-      }
-      function display3_1()
-      {
-        div2.style.display="";
-        div1.style.display="none";
-        div3.style.display="";
-      }
-    </script>
+        <div style="position:absolute; top:780px; left: 710px;">
+
+            <input type="button" class="btn btn btn-default" value="처음으로" onclick='clearCanvas()'/>
+            <span id="AutoPlay">
+                <input type="button" class="btn btn btn-success" value="자동" onclick='changeGameBoard2()'>
+            </span>
+            <span id="Play">
+                <input type="button" class="btn btn btn-success" value="수동" onclick='changeGameBoard2()'>
+                <input type="button" class="btn btn btn-warning" value="이전" onclick='changePrevBoard()'>
+                <input type="button" class="btn btn btn-warning" value="다음" onclick='changeNextBoard()'>
+            </span>
+        </div>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
-
-        <!--
-            <button type="button" class="btn btn btn-success" onclick="changeGameBoard(-1, {{ positionDatas|length }} -1)">이전</button>
-            <button type="button" class="btn btn btn-success" onclick="changeGameBoard(1, {{ positionDatas|length }} -1)">다음</button>
-        -->
         </span>
 
-<br><br><br>
         <!-- /.container-fluid -->
 
     </div>
