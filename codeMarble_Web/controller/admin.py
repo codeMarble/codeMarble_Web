@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import request, redirect, session, url_for, render_template
+from flask import request, redirect, session, url_for, render_template, flash
 from datetime import datetime, date, timedelta
 
 from codeMarble_Web.database import dao
@@ -43,23 +43,24 @@ def admin():
 @check_invalid_access
 def enterSubAdmin(userIndex):
     if request.method == 'POST':
-        password = get_request_value(form=request.form,
-                                     name='password')
-
-        nickName = get_request_value(form=request.form,
-                                     name='nickName')
-
-        eMail = get_request_value(form=request.form,
-                                  name='eMail')
-
-        update_user(userIndex, password=password, nickName=nickName,
-                    eMail=eMail, authority='semiAdmin')
-
         try:
+            nickName = get_request_value(form=request.form,
+                                         name='nickName')
+
+            eMail = get_request_value(form=request.form,
+                                      name='eMail')
+
+            update_user(userIndex, nickName=nickName,
+                        eMail=eMail, authority='semiAdmin')
+
             dao.commit()
 
-        except Exception:
-            dao.rollback() 
+        except Exception as e:
+            print e
+            dao.rollback()
+
+            flash('다시 시도해주세요.')
+            return redirect(url_for('.main'))
 
 
 @codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
@@ -67,23 +68,17 @@ def enterSubAdmin(userIndex):
 @check_invalid_access
 def deleteSubAdmin(userIndex):
     if request.method == 'POST':
-        password = get_request_value(form=request.form,
-                                     name='password')
-
-        nickName = get_request_value(form=request.form,
-                                     name='nickName')
-
-        eMail = get_request_value(form=request.form,
-                                  name='eMail')
-
-        update_user(userIndex, password=password, nickName=nickName,
-                    eMail=eMail, authority='user')
-
         try:
+            update_user(userIndex, authority='user')
+
             dao.commit()
 
-        except Exception:
+        except Exception as e:
+            print e
             dao.rollback()
+
+            flash('다시 시도해주세요.')
+            return redirect(url_for('.main'))
 
 
 

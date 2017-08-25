@@ -13,9 +13,9 @@ class UserInformationInProblem(Base):
                        autoincrement= False,
                        nullable= False)
     problemIndex = Column(INTEGER(unsigned= True),
-                       primary_key= True,
-                       autoincrement= False,
-                       nullable= False)
+                          primary_key= True,
+                          autoincrement= False,
+                          nullable= False)
 
     score = Column(INTEGER(unsigned=True),
                            autoincrement=False,
