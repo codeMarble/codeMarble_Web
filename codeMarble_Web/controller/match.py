@@ -134,7 +134,7 @@ def matchTopList(problemIndex):
 @codeMarble.route('/match/matching<int:problemIndex><int:userIndex>')
 @login_required
 @check_invalid_access
-def matchTopList(problemIndex, userIndex):
+def matching(problemIndex, userIndex):
     try:
         matching.delay(problemIndex, session['userIndex'], userIndex)
 

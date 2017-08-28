@@ -81,6 +81,27 @@ def deleteSubAdmin(userIndex):
             return redirect(url_for('.main'))
 
 
+@codeMarble.route('/admin/addProblem', methods=['POST'])
+@login_required
+@check_invalid_access
+def addProblem():
+    f = request.files['file']
+    f.save() # ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

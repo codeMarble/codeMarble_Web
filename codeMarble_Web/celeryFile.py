@@ -3,8 +3,12 @@ import json
 from celery import Celery
 
 
-dataDir = os.path.join(os.getcwd(), 'problemData')
-os.mkdir(dataDir)
+try:
+	dataDir = os.path.join(os.getcwd(), 'problemData')
+	os.mkdir(dataDir)
+except Exception as e:
+	pass
+
 app = Celery('tasks', broker='redis://localhost:6379')
 
 
