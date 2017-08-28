@@ -4,5 +4,6 @@ __all__ = ['login',
            'board',
            'admin',
            'match',
-           'problem']
+           'problem',
+           'replay']
 

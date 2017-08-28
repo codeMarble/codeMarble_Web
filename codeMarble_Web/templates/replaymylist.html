@@ -5,46 +5,54 @@
 
         <div id="subNav">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/replay/myList"><strong>내가푼문제만</strong></a>
+            <a href="{{ url_for('codeMarble_Web.replayMyList') }}"><strong>내가푼문제</strong></a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="/replay/allList">전체회원</a>
         </div>
 
 
-                <div class="card-block">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>문제이름</th>
-                                    <th>대전상대</th>
-                                    <th>리플레이</th>
-                                    <th>기록</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>나나나나나나나</td>
-                                    <td>황석진</td>
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>마마마마마</td>
-                                    <td>류동기</td>
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr> 
-                                <tr>
-                                    <td>가가가가가가</td>
-                                    <td>남규현</td>
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card-block">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>문제이름</th>
+                                <th>대전상대</th>
+                                <th>리플레이</th>
+                                <th>기록</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in userReplayData %}
+                            <tr>
+                                <td>data.problemName</td>
+                                <td>류동기</td>
+                                <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>나나나나나나나</td>
+                                <td>황석진</td>
+                                <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>마마마마마</td>
+                                <td>류동기</td>
+                                <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>가가가가가가</td>
+                                <td>남규현</td>
+                                <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
                 <br><br><br><br><br><br><br>
         </div>

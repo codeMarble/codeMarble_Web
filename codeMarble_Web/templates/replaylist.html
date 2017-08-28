@@ -23,34 +23,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% for data in userReplayData %}
                                 <tr>
-                                    <td>나나나나나나나</td>
-                                    <td>황석진</td>
-                                    <td>류동기</td>                                    
+                                    <td>{{ data.problemName }}</td>
+                                    <td>{{ data.challengerNickName }}</td>
+                                    <td>{{ data.championNicnName }}</td>
                                     <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
                                     <td></td>
                                 </tr>
-                                <tr>
-                                    <td>마마마마마</td>
-                                    <td>류동기</td>
-                                    <td>정지은</td>                                    
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr> 
-                                <tr>
-                                    <td>가가가가가가</td>
-                                    <td>남규현</td>
-                                    <td>정지은</td>                                    
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>라라라라라라</td>
-                                    <td>남규현</td>
-                                    <td>황석진</td>                                    
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr>                                
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>

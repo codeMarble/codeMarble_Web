@@ -25,7 +25,9 @@ def login_required(f):
 
             return f(*args, **kwargs)
 
-        except Exception:
+        except Exception as e:
+            print e
+
             return "fbehdrl123"
 
 

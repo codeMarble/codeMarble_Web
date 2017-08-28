@@ -43,7 +43,7 @@
                     <a class="nav-link" href="/about"><i class="fa fa-fw fa-info"></i> About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/problem/list"><i class="fa fa-fw fa-list-ul"></i> 문제</a>
+                    <a class="nav-link" href="{{ url_for('codeMarble_Web.problemList') }}"><i class="fa fa-fw fa-list-ul"></i> 문제</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/"><i class="fa fa-fw fa-shield"></i> 대전</a>
@@ -54,13 +54,10 @@
                     </a>
                     <ul class="sidebar-second-level collapse" id="collapseComponents">
                         <li>
-                            <a href="/replay/myList">내가푼문제만</a>
+                            <a href="{{ url_for('codeMarble_Web.replayMyList') }}">내가푼문제</a>
                         </li>
                         <li>
                             <a href="/replay/allList">전체회원</a>
-                        </li>
-                        <li>
-                            <a href="#">..</a>
                         </li>
                     </ul>
                 </li>
@@ -178,6 +175,8 @@
 
     <!-- Custom scripts for this template -->
     <script src="../static/bootstrap/js/sb-admin.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </body>
 </html>
