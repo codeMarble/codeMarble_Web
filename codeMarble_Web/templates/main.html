@@ -46,6 +46,9 @@
                     <a class="nav-link" href="/problem/list"><i class="fa fa-fw fa-list-ul"></i> 문제</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fa fa-fw fa-shield"></i> 대전</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"><i class="fa fa-fw fa-recycle"></i> 리플레이
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>
                     </a>
@@ -69,14 +72,6 @@
             </ul>
 
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <div class="dropdown-menu" aria-labelledby="alertsDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-
                 <li class="nav-item dropdown">
                     {%- if session['userIndex'] %}
                         <a class="nav-link dropdown-toggle mr-lg-2" href="#" id="alertsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
