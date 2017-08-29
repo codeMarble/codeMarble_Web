@@ -1,0 +1,50 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+        <div class="mymargin">
+            <br>
+            <h3>회원가입</h3><br>
+            <label><strong>아 이 디&nbsp;</strong></label>
+            <input class="setting-form" placeholder="영어, 숫자조합 최대 n자리">
+            <br><br>
+
+            <label><strong>비밀번호</strong></label>
+            <input class="setting-form">
+            <br><br>
+
+            <label><strong>닉 네 임&nbsp;</strong></label>
+            <input class="setting-form">
+            <br><br>
+
+            <label><strong>한 마 디&nbsp;</strong></label>
+            <input class="setting-form">
+            <br><br>
+
+            <label><strong>코드 공개여부 </strong></label> &nbsp;
+                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>공개 &nbsp;
+                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">비공개
+            <br><br>
+
+            <label><strong>주언어 설정</strong></label>
+            <select class="form-control" style="width: 350px;">
+                <option>C</option>
+                <option>C++</option>
+                <option>Python</option>
+            </select>
+            <br>
+            <label><strong>에디터 테마 설정</strong></label>
+            <select class="form-control" style="width: 350px;">
+                <option>테마1</option>
+                <option>테마2</option>
+                <option>테마3</option>
+            </select>
+
+            <br><br>
+            <button type="submit" class="btn btn-success">가입하기</button>
+        </div>
+        <!-- /.container-fluid -->
+
+<br><br><br><br><br><br>
+
+    </div>
+{% endblock -%}
