@@ -1,31 +1,68 @@
 {%- extends "main.html" -%}
 {%- block body %}
 
+    <style type="text/css" media="screen">
+        body {
+            overflow: hidden;
+        }
+
+        #editor {
+            margin-top: 100px;
+            margin-left: 15px;
+            height:500px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+
     <div class="content-wrapper py-3">
 
         <div id="subNav">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/problem"><strong>문제가가가가가</strong></a>
+
+            <a href="/gagagaga">문제가가가가가</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/submit/submit">코드 제출</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/problem/solvingUsers">이 문제를 푼 사람</a>
+            <a href="/submitlist">이 문제를 푼 사람</a>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
                 <form role="form">
-                    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;문제보기pdf
+                    <embed src="../test.pdf" style="width: 675px; height: 650px;" type='application/pdf'>
                 </form>
 
             </div>
             <div class="col-lg-6">
                 <form role="form">
-                    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;코드제출
+                    <br>
+                    테마설정
+                        <select class="form-control" style="width:300px;">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                    <pre id="editor">
+function foo(items) {
+    var i;
+}
+                    </pre>
+                    <button type="button" class="btn btn-success" onclick="" style="margin-top: 525px; margin-left: 300px">제출하기</button>
+                    <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                    <script>
+                        var editor = ace.edit("editor");
+                        editor.setTheme("ace/theme/twilight");
+                        editor.session.setMode("ace/mode/javascript");
+                    </script>
                 </form>
+
             </div>
         </div>
 
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <!-- /.container-fluid -->
+
     </div>
+    <!-- /.content-wrapper -->
 {% endblock -%}
