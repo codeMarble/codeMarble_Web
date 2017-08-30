@@ -50,20 +50,25 @@
                     {% endfor %}
                 </select>
 
-                <br><br><br>
-                <button type="submit" class="btn btn-default" onclick="passwordCheck()">설정저장</button>
+                <br><br>
+                <button type="submit" class="btn btn-default" onclick="checkPassword()">설정저장</button>
             </form>
         </div>
         <!-- /.container-fluid -->
 
-<br><br><br><br><br><br>
+<br><br><br><br>
     </div>
     <!-- /.content-wrapper -->
 
 <script>
-    function passwordCheck() {
+    function checkPassword() {
         if(setting_form.pw.value == setting_form.pwCheck.value){
-            document.setting_form.action = "/saveSetting"
+            if(setting_form.pw.value.length < 5) {
+                alert('패스워드가 규칙에 맞지 않습니다.');
+                setting_form.pw.onfocus();
+            }
+            else
+                document.setting_form.action = "/saveSetting"
         }
 
         else {

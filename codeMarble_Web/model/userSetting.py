@@ -21,7 +21,7 @@ class UserSetting(Base):
                    default= 'chorme')
 
     comment = Column(VARCHAR(80),
-                      unique= True)
+                      unique= False)
 
     isOpen = Column(BOOLEAN,
                     unique= False)

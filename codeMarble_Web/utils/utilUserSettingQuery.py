@@ -6,7 +6,7 @@ from codeMarble_Web.model.user import User
 from codeMarble_Web.model.userSetting import UserSetting
 from codeMarble_Web.database import dao
 
-def insert_userSetting(userIndex, languageIndex, thema, comment):
+def insert_userSetting(userIndex, languageIndex=1, thema='chrome', comment=''):
     return UserSetting(userIndex=userIndex,
                        languageIndex=languageIndex,
                        thema=thema,

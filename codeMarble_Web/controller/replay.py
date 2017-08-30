@@ -27,67 +27,68 @@ def close_db_session(exception = None):
         Log.error(str(e))
 
 
-@codeMarble.route('/replay/myList', methods=['GET', 'POST'])
+@codeMarble.route('/replay/myList<int:isChallenge>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def replayMyList():
+def replayMyList(isChallenge):
 	try:
 		user = select_user(userIndex=session['userIndex']).subquery()
 		problem = select_problem().subquery()
 		totalUser = select_user().subquery()
 
-		try:
+		if isChallenge is 1:
 			# if user is challenger
-			replayData_challenge = select_dataOfMatch(challengerIndex=session['userIndex']).subquery()
-			joinedquery_challenge = dao.query(user.c.nickName.label('challengerNickName'), user.c.userId.label('challengerId'),
-			                        replayData_challenge.c.dataOfMatchIndex, replayData_challenge.c.problemIndex,
-			                        replayData_challenge.c.challengerIndex, replayData_challenge.c.championIndex,
-			                        replayData_challenge.c.result).\
-								join(replayData_challenge,
-			                         replayData_challenge.c.challengerIndex == user.c.userIndex).\
+			replayData = select_dataOfMatch(challengerIndex=session['userIndex']).subquery()
+			joinedquery = dao.query(user.c.nickName.label('challengerNickName'), user.c.userId.label('challengerId'),
+			                        replayData.c.dataOfMatchIndex, replayData.c.problemIndex,
+			                        replayData.c.challengerIndex, replayData.c.championIndex,
+			                        replayData.c.result).\
+							join(replayData,
+			                     replayData.c.challengerIndex == user.c.userIndex).\
+							subquery()
+
+			userReplayData = dao.query(totalUser.c.nickName.label('championNickName'),
+			                           totalUser.c.userId.label('championId'),
+			                           joinedquery).\
+								join(joinedquery,
+			                         joinedquery.c.championIndex == totalUser.c.userIndex).\
 								subquery()
 
-			userReplayData_challenge = dao.query(totalUser.c.nickName.label('championNickName'),
-			                                     totalUser.c.userId.label('championId'),
-			                                     joinedquery_challenge).\
-											join(joinedquery_challenge,
-			                                     joinedquery_challenge.c.championIndex == totalUser.c.userIndex).\
-											subquery()
-
-		except AttributeError as e:
-			userReplayData_challenge = []
-
-		try:
+		else:
 			# if user is champion
-			replayData_champ = select_dataOfMatch(chapionIndex=session['userIndex']).subquery()
-			joinedquery_champ = dao.query(user.c.nickName.label('championNickName'), user.c.userId.label('championId'),
-			                              replayData_champ.c.dataOfMatchIndex, replayData_champ.c.problemIndex,
-			                              replayData_champ.c.challengerIndex, replayData_champ.c.championIndex, replayData_champ.c.result). \
-									join(replayData_champ,
-			                             replayData_champ.c.championIndex == user.c.userIndex).\
-									subquery()
+			replayData = select_dataOfMatch(chapionIndex=session['userIndex']).subquery()
+			joinedquery = dao.query(user.c.nickName.label('championNickName'), user.c.userId.label('championId'),
+			                        replayData.c.dataOfMatchIndex, replayData.c.problemIndex,
+			                        replayData.c.challengerIndex, replayData.c.championIndex, replayData.c.result). \
+							join(replayData,
+			                     replayData.c.championIndex == user.c.userIndex).\
+							subquery()
 
-			userReplayData_champ = dao.query(totalUser.c.nickName.label('challengerNickName'),
-			                           totalUser.c.userId.label('challengerId'), joinedquery_champ).\
-								join(joinedquery_champ,
-			                         joinedquery_champ.c.championIndex == totalUser.c.userIndex).\
+			userReplayData = dao.query(totalUser.c.nickName.label('challengerNickName'),
+			                           totalUser.c.userId.label('challengerId'), joinedquery).\
+								join(joinedquery,
+			                         joinedquery.c.championIndex == totalUser.c.userIndex).\
 								subquery()
 
-		except AttributeError as e:
-			userReplayData_champ = []
 
+		userReplayData = dao.query(problem.c.problemName, userReplayData).\
+							join(userReplayData,
+		                         userReplayData.c.problemIndex == problem.c.problemIndex).all()
 
-		userReplayData_challenge = dao.query(problem.c.problemName, userReplayData_challenge).\
-										join(userReplayData_challenge,
-		                                     userReplayData_challenge.c.problemIndex == problem.c.problemIndex).all()
-
-		userReplayData_champ = dao.query(problem.c.problemName, userReplayData_champ).\
-									join(userReplayData_champ,
-		                                 userReplayData_champ.c.problemIndex == problem.c.problemIndex).all()
+		userReplayData = dao.query(problem.c.problemName, userReplayData).\
+							join(userReplayData,
+		                         userReplayData.c.problemIndex == problem.c.problemIndex).all()
 
 		return render_template('replaymylist.html',
-		                       userReplayData_challenge=userReplayData_challenge,
-		                       userReplayData_champ=userReplayData_champ)
+		                       userReplayData=userReplayData,
+		                       isChallenge=isChallenge)
+
+	except AttributeError as e:
+		print e
+
+		return render_template('replaymylist.html',
+		                       userReplayData=[],
+		                       isChallenge=isChallenge)
 
 	except Exception as e:
 		print e, type(e)

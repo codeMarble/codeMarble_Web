@@ -2,41 +2,33 @@
 {%- block body %}
 
     <div class="content-wrapper py-3">
-
-        <div id="subNav">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/replay/myList">내가푼문제만</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/replay/allList"><strong>전체회원</strong></a>
+        <div class="card-block">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>문제이름</th>
+                            <th>도전한 유저</th>
+                            <th>도전받은 유저</th>
+                            <th>리플레이</th>
+                            <th>기록</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in userReplayData %}
+                        <tr>
+                            <td>{{ data.problemName }}</td>
+                            <td>{{ data.challengerNickName }}</td>
+                            <td>{{ data.championNicnName }}</td>
+                            <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-                <div class="card-block">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>문제이름</th>
-                                    <th>대전상대1</th>                                    
-                                    <th>대전상대2</th>
-                                    <th>리플레이</th>
-                                    <th>기록</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for data in userReplayData %}
-                                <tr>
-                                    <td>{{ data.problemName }}</td>
-                                    <td>{{ data.challengerNickName }}</td>
-                                    <td>{{ data.championNicnName }}</td>
-                                    <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                    <td></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-        <!-- /.container-fluid -->
+<!-- /.container-fluid -->
 
     </div>
 {% endblock -%}

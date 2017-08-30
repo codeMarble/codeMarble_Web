@@ -18,7 +18,7 @@ from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.utilLanguageQuery import select_language
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
-from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting
+from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, insert_userSetting
 from codeMarble_Web.utils.utilCodeQuery import insert_code
 
 
@@ -57,7 +57,17 @@ def problem(problemIndex):
     try:
         userIndex = session['userIndex']
         problemData = select_problem(problemIndex=problemIndex).first()
-        userInfo = select_userSetting(userIndex=userIndex)
+        userInfo = select_userSetting(userIndex=userIndex).first()
+
+        if userInfo is None:
+            try:
+                dao.add(insert_userSetting(userIndex=userIndex))
+                dao.commit()
+
+                redirect(url_for('.problem'))
+
+            except Exception as e:
+                redirect(url_for('.problem'))
 
         return render_template('gagagaga.html',
                                problemData=problemData,

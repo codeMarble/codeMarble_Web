@@ -1,50 +1,116 @@
 {%- extends "main.html" -%}
 {%- block body %}
 
-        <div class="mymargin">
-            <br>
-            <h3>회원가입</h3><br>
-            <label><strong>아 이 디&nbsp;</strong></label>
-            <input class="setting-form" placeholder="영어, 숫자조합 최대 n자리">
-            <br><br>
+<script>
 
-            <label><strong>비밀번호</strong></label>
-            <input class="setting-form">
-            <br><br>
+    function checkId() {
+        if(signup_form.idCheckBtn.value == '변경') {
+            $("#id").attr('readonly', false);
+            $("#idCheckBtn").attr('value', '중복확인');
+        }
 
-            <label><strong>닉 네 임&nbsp;</strong></label>
-            <input class="setting-form">
-            <br><br>
+        else if(signup_form.id.value == '')
+            alert('아이디를 입력하세요.') ;
 
-            <label><strong>한 마 디&nbsp;</strong></label>
-            <input class="setting-form">
-            <br><br>
+        else {
+            $.ajax({
+                type : "POST",
+                url : "/idCheck",
+                data : {'id': signup_form.id.value},
+                dataType : "text",
+                success : function(data){
+                    if(data == 'P'){
+                        $("#id").attr('readonly', true);
+                        $("#idCheckBtn").attr('value', '변경');
+                    }
+                    else
+                        alert('이미 존재하는 아이디입니다.') ;
+                }
+            });
+        }
+    };
 
-            <label><strong>코드 공개여부 </strong></label> &nbsp;
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>공개 &nbsp;
-                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">비공개
-            <br><br>
+    function checkNick() {
+        if(signup_form.nickCheckBtn.value == '변경') {
+            $("#nickName").attr('readonly', false);
+            $("#nickCheckBtn").attr('value', '중복확인');
+        }
 
-            <label><strong>주언어 설정</strong></label>
-            <select class="form-control" style="width: 350px;">
-                <option>C</option>
-                <option>C++</option>
-                <option>Python</option>
-            </select>
-            <br>
-            <label><strong>에디터 테마 설정</strong></label>
-            <select class="form-control" style="width: 350px;">
-                <option>테마1</option>
-                <option>테마2</option>
-                <option>테마3</option>
-            </select>
+        else if(signup_form.nickName.value == '')
+            alert('닉네임을 입력하세요.') ;
 
-            <br><br>
-            <button type="submit" class="btn btn-success">가입하기</button>
+        else {
+            $.ajax({
+                type : "POST",
+                url : "/nickCheck",
+                data : {'nick': signup_form.nickName.value},
+                dataType : "text",
+                success : function(data){
+                    if(data == 'P'){
+                        $("#nickName").attr('readonly', true);
+                        $("#nickCheckBtn").attr('value', '변경');
+                    }
+                    else
+                        alert('이미 존재하는 아이디입니다.') ;
+                }
+            });
+        }
+    };
+
+    function checkPassword() {
+        if(signup_form.pw.value == signup_form.pwCheck.value){
+            if(signup_form.pw.value.length < 5) {
+                alert('패스워드가 규칙에 맞지 않습니다.');
+                setting_form.pw.onfocus();
+            }
+            else {
+                if(signup_form.idCheckBtn.value == '중복확인' || signup_form.nickCheckBtn.value == '중복확인')
+                    alert('아이디와 닉네임 중복 확인을 먼저하세요.')
+                else {
+                    $("#signup_form").attr('action', '/signup')
+                    document.signup_form.submit();
+                }
+            }
+        }
+
+        else {
+            alert('패스워드가 일치하지 않습니다.');
+            setting_form.pw.onfocus();
+        }
+    }
+
+</script>
+
+<div class="content-wrapper py-3">
+    <form id="signup_form" name="signup_form" style="margin-left: 25px" method="post">
+        <h3><strong>회원가입</strong></h3><h10>(*)는 필수입력 사항입니다.</h10><br><br><br>
+        <div>
+        <label><strong>아 이 디 (*)</strong></label>
+        <input id="id" name="id" class="setting-form">
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="idCheckBtn" name="idCheckBtn" class="btn btn-info" onclick="checkId()" value="중복확인">
+        <br><br>
         </div>
-        <!-- /.container-fluid -->
 
-<br><br><br><br><br><br>
+        <label><strong>닉 네 임 (*)</strong></label>
+        <input id="nickName" name="nickName" class="setting-form">
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="nickCheckBtn" name="nickCheckBtn" class="btn btn-info" onclick="checkNick()" value="중복확인">
+        <br><br>
 
-    </div>
+        <label><strong>비밀번호 (*)</strong></label>
+        <input id="pw" name="pw" class="setting-form" type="password" placeholder="5자 이상">
+        <br><br>
+
+        <label><strong>비밀번호 확인 (*)</strong></label>
+        <input id="pwCheck" class="setting-form" type="password">
+        <br><br>
+
+        <label><strong>이메일</strong></label>
+        <input id="eMail" name="eMail" class="setting-form">
+        <br><br>
+        <input type="button" class="btn btn-success" onclick="checkPassword()" value="가입하기">
+    </form>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+<!-- /.container-fluid -->
+
 {% endblock -%}

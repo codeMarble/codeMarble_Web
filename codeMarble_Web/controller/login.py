@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import request, redirect, session, url_for, render_template, flash
+from flask import request, redirect, session, url_for, render_template, flash, jsonify, json
 from datetime import datetime, date, timedelta
 
 from codeMarble_Web.database import dao
@@ -15,7 +15,7 @@ from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
-from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
+from codeMarble_Web.utils.utilUserSettingQuery import insert_userSetting, select_userSetting, get_user_information, update_userSetting
 from codeMarble_Web.utils.utilLanguageQuery import select_language
 
 
@@ -35,8 +35,6 @@ def check_user(request_form):
         password = get_request_value(form=request_form, name='password')
 
         user = select_user(userId=userId).first()
-
-        print user.password
 
         if check_password_hash(user.password, TripleDES.encrypt(str(password))):
             session['userIndex'] = user.userIndex
@@ -98,10 +96,39 @@ def login():
 @codeMarble.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        pass
+        try:
+            dao.add(insert_user(userId=request.form['id'],
+                                password=generate_password_hash(TripleDES.encrypt(str(request.form['pw']))),
+                                nickName=request.form['nickName'], eMail=request.form['eMail']))
+
+            dao.commit()
+
+        except Exception as e:
+            print e
+
+            dao.rollback()
+            flash('다시 시도해주세요.')
+            return redirect(url_for('.main'))
+
+        user = select_user(userId=request.form['id']).first()
+
+        try:
+            dao.add(insert_userSetting(userIndex=user.userIndex))
+            dao.commit()
+
+        except Exception as e:
+            pass
+
+        session['userIndex'] = user.userIndex
+        session['userId'] = user.userId
+        session['nickName'] = user.nickName
+        session['eMail'] = user.eMail
+        session['authority'] = user.authority
+
+        return redirect(url_for('.main'))
 
     else:
-        return render_template('xxx.html')
+        return render_template('signup.html')
 
 
 @codeMarble.route('/logout', methods=['GET', 'POST'])
@@ -128,6 +155,18 @@ def setting():
         flash('다시 시도해주세요.')
         return redirect(url_for('.main'))
 
+    if userInformation is None:
+        try:
+            dao.add(insert_userSetting(userIndex=session['userIndex']))
+            dao.commit()
+
+            redirect(url_for('.setting'))
+
+        except Exception as e:
+            print e
+
+            dao.rollback()
+            redirect(url_for('.setting'))
 
     return render_template('setting.html',
                            userInformation=userInformation,
@@ -167,6 +206,36 @@ def saveSetting():
 
     flash('정상적으로 정보가 변경되었습니다.')
     return redirect(url_for('.main'))
+
+
+@codeMarble.route('/idCheck', methods=['POST'])
+def idCheck():
+    try:
+        if select_user(userId=request.form['id']).count():
+            return 'N'
+        else:
+            return 'P'
+
+    except Exception as e:
+        print e, type(e)
+
+        flash('다시 시도해주세요.')
+        return redirect(url_for('.main'))
+
+
+@codeMarble.route('/nickCheck', methods=['POST'])
+def nickCheck():
+    try:
+        if select_user(nickName=request.form['nick']).count():
+            return 'N'
+        else:
+            return 'P'
+
+    except Exception as e:
+        print e
+
+        flash('다시 시도해주세요.')
+        return redirect(url_for('.main'))
 
 
 @codeMarble.route('/about', methods=['GET', 'POST'])
