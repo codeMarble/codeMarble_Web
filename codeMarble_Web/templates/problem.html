@@ -7,7 +7,9 @@
 
         <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problemData.problemIndex) }}" style="margin-left: 20px"><strong>{{ problemData.problemName }}</strong></a>
         &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="/submitlist">이 문제를 푼 사람</a>
+        <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemData.problemIndex) }}" style="margin-left: 20px">내 코드({{ problemData.problemName }})</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="/problem/submitlist">제출한 사람</a>
     </div>
 
     <div class="row">
@@ -18,20 +20,20 @@
 
         </div>
         <div class="col-lg-6">
-            <form name="codeForm" id="codeForm" role="form" style="margin-left: 0px" method="post", action="{{ url_for('codeMarble_Web.submitProblem', problemIndex=problemData.problemIndex) }}" enctype="multipart/form-data">
+            <form name="codeForm" id="codeForm" role="form" style="margin-left: 0px" method="post", action="{{ url_for('codeMarble_Web.submitProblem', problemIndex=problemData.problemIndex) }}">
                 <br>
                 <div>
                     <div style="float: left; margin-right: 20px">테마
-                        <select class="form-control" style="width:220px;" onchange="selectLanguage(this)">
+                        <select id="thema" name="thema" class="form-control" style="width:220px;" onchange="selectLanguage(this)">
                             {%- for opt in thema %}
-                                <option value="{{ opt }}">{{ opt }}</option>
+                                <option value="{{ opt }}" {%- if opt == userInfo.thema %} selected="selected" {% endif -%}>{{ opt }}</option>
                             {% endfor -%}
                         </select>
                     </div>
                     <div>언어
-                        <select class="form-control" style="width:220px;" onchange="selectLanguage(this)">
+                        <select id="language" name="language" class="form-control" style="width:220px;" onchange="selectLanguage(this)">
                             {%- for opt in language %}
-                                <option {%- if opt.languageIndex == userInfo.languageIndex %} selected="selected" {% endif -%}>{{ opt.language }}</option>
+                                <option value="{{ opt.language }}" {%- if opt.languageIndex == userInfo.languageIndex %} selected="selected" {% endif -%}>{{ opt.language }}</option>
                             {% endfor -%}
                         </select>
                     </div>
@@ -42,10 +44,10 @@
                      <div class="form-group" style="margin-top: 520px">
                         <label>코드공개여부</label>
                         <label class="radio-inline">
-                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked> 공개
+                            <input type="radio" name="open" id="open" value="option1" {%- if userInfo.isOpen %} checked {% endif -%}> 공개
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2"> 비공개
+                            <input type="radio" name="nOpen" id="nOpen" value="option2" {%- if not userInfo.isOpen %} checked {% endif -%}> 비공개
                         </label>
                          &nbsp;&nbsp;&nbsp;&nbsp;
                         <button id="submitCode" name="submitCode" class="btn btn-success" onclick="sendCode()">제출하기</button>
@@ -83,8 +85,14 @@
 
 <script>
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.session.setMode("ace/mode/javascript");
+    editor.setTheme("ace/theme/"+ "{{ userInfo.thema }}");
+
+    if("{{ userInfo.language }}" == "C" || "{{ userInfo.language }}" == "C++")
+        editor.session.setMode("ace/mode/c_cpp");
+    else if("{{ userInfo.language }}" == "PYTHON2.7" || "{{ userInfo.language }}" == "PYTHON3.5")
+        editor.session.setMode("ace/mode/python");
+    else if("{{ userInfo.language }}" == "JAVA")
+        editor.session.setMode("ace/mode/java");
 
     function sendCode() {
         console.log('!!!!!!!!!!!!!!!!!!!!!')

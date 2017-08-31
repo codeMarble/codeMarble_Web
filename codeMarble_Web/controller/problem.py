@@ -19,7 +19,7 @@ from codeMarble_Web.utils.utilLanguageQuery import select_language
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, insert_userSetting
-from codeMarble_Web.utils.utilCodeQuery import insert_code
+from codeMarble_Web.utils.utilCodeQuery import insert_code, select_code
 
 
 @codeMarble.teardown_request
@@ -38,7 +38,6 @@ def close_db_session(exception = None):
 def problemList():
     try:
         problemList = select_problem().all()
-        print len(problemList), '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 
         return render_template('list.html',
                                problemList=problemList)
@@ -57,10 +56,17 @@ def problem(problemIndex):
     thema = ['chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow']
 
     try:
+        langQuery = select_language()
         userIndex = session['userIndex']
         problemData = select_problem(problemIndex=problemIndex).first()
-        userInfo = select_userSetting(userIndex=userIndex).first()
-        language = select_language().all()
+
+        userInfoSub = select_userSetting(userIndex=userIndex).subquery()
+        temp = langQuery.subquery()
+
+        userInfo = dao.query(temp.c.language, userInfoSub).\
+                        join(userInfoSub, userInfoSub.c.languageIndex == temp.c.languageIndex).first()
+
+        language = langQuery.all()
 
         if userInfo is None:
             try:
@@ -90,30 +96,47 @@ def problem(problemIndex):
 @check_invalid_access
 def submitProblem(problemIndex):
     try:
-        # isOpen = request.form['isOpen']
-        # language = request.form['language']
-        # languageIndex = select_language(language=language).first().languageIndex
-
-        code = request.form['getCode'] # .....
         print request.form
-        print code
+        isOpen = True if request.form['open'] else False
+        language = request.form['language']
+        languageIndex = select_language(language=language).first().languageIndex
+        code = request.form['getCode']
 
+        dao.add(insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex, code=code,
+                    date=datetime.now(), isOpen=isOpen))
+        dao.commit()
 
-
-        # insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex, code=code,
-        #             date=datetime.now(), isOpen=isOpen)
-        #
-        # dao.add()
-
+        flash('정상적으로 제출됐습니다.')
         return redirect(url_for('.main'))   # ....
 
     except Exception as e:
-        print e
+        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
 
         dao.rollback()
 
         flash('다시 시도해주세요.')
         return redirect(url_for('.main'))
+
+
+@codeMarble.route('/problem/myCodeInProblem<int:problemIndex>', methods=['GET', 'POST'])
+@login_required
+@check_invalid_access
+def myCodeInProblem(problemIndex):
+    try:
+        codeList = select_code(userIndex=session['userIndex'], problemIndex=problemIndex).all()
+        problemName = select_problem(problemIndex=problemIndex).first().problemName
+
+        return render_template('myCodeList_problem.html',
+                               codeList=codeList,
+                               problemIndex=problemIndex,
+                               problemName=problemName)
+
+    except Exception as e:
+        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
+        dao.rollback()
+
+        flash('다시 시도해주세요.')
 
 
 

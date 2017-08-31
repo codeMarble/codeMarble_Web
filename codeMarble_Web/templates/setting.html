@@ -39,14 +39,14 @@
                 <label><strong>주언어 설정</strong></label>
                 <select class="form-control" name="language" id="language" style="width: 350px;">
                     {% for lang in language %}
-                        <option>{{ lang.language }}</option>
+                        <option {%- if lang.language == userInformation.language %} selected="selected" {% endif -%} >{{ lang.language }}</option>
                     {% endfor %}
                 </select>
                 <br>
                 <label><strong>에디터 테마 설정</strong></label>
                 <select class="form-control" name="thema" id="thema" style="width: 350px;">
                     {% for th in thema %}
-                        <option {% if th == userInformation.thema %} autofocus {% endif %}>{{ th }}</option>
+                        <option {% if th == userInformation.thema %} selected="selected" {% endif %}>{{ th }}</option>
                     {% endfor %}
                 </select>
 
@@ -63,7 +63,7 @@
 <script>
     function checkPassword() {
         if(setting_form.pw.value == setting_form.pwCheck.value){
-            if(setting_form.pw.value.length < 5) {
+            if(setting_form.pw.value.length < 5 && setting_form.pw.value.length > 0) {
                 alert('패스워드가 규칙에 맞지 않습니다.');
                 setting_form.pw.onfocus();
             }

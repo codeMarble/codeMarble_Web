@@ -1,0 +1,38 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+    <div class="content-wrapper py-3">
+        <div id="subNav">
+
+            <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problemIndex) }}" style="margin-left: 20px">{{ problemName }}</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemIndex) }}" style="margin-left: 20px"><strong>내 코드({{ problemName }})</strong></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/problem/submitlist">제출한 사람</a>
+        </div>
+
+            <!-- Example Tables Card -->
+                <div class="card-block">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>번호</th> <th>제출일</th> <th>코드확인</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in range(codeList|length) %}
+                                    <tr>
+                                        <td>{{ i + 1}}</td>
+                                        <td>{{ codeList[i].date }}</a></td>
+                                        <td></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br><br><br><br><br><br>
+        </div>
+        <!-- /.container-fluid -->
+{% endblock -%}
