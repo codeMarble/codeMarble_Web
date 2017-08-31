@@ -54,10 +54,13 @@ def problemList():
 @login_required
 @check_invalid_access
 def problem(problemIndex):
+    thema = ['chrome', 'clouds', 'eclipse', 'github', 'monokai', 'textmate', 'tomorrow']
+
     try:
         userIndex = session['userIndex']
         problemData = select_problem(problemIndex=problemIndex).first()
         userInfo = select_userSetting(userIndex=userIndex).first()
+        language = select_language().all()
 
         if userInfo is None:
             try:
@@ -69,9 +72,11 @@ def problem(problemIndex):
             except Exception as e:
                 redirect(url_for('.problem'))
 
-        return render_template('gagagaga.html',
+        return render_template('problem.html',
                                problemData=problemData,
-                               userInfo=userInfo)
+                               userInfo=userInfo,
+                               thema=thema,
+                               language=language)
 
     except Exception as e:
         print e
@@ -85,18 +90,20 @@ def problem(problemIndex):
 @check_invalid_access
 def submitProblem(problemIndex):
     try:
-        isOpen = request.form['isOpen']
-        language = request.form['language']
-        languageIndex = select_language(language=language).first().languageIndex
+        # isOpen = request.form['isOpen']
+        # language = request.form['language']
+        # languageIndex = select_language(language=language).first().languageIndex
 
-        code = request.form[''] # .....
+        code = request.form['getCode'] # .....
+        print request.form
+        print code
 
 
 
-        insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex, code=code,
-                    date=datetime.now(), isOpen=isOpen)
-
-        dao.add()
+        # insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex, code=code,
+        #             date=datetime.now(), isOpen=isOpen)
+        #
+        # dao.add()
 
         return redirect(url_for('.main'))   # ....
 

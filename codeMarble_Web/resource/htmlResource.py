@@ -3,7 +3,7 @@
 MAIN_PAGE = '/main.html'
 ABOUT_PAGE = '/about.html'
 DIRECTREPLAY_PAGE = '/directreplay.html'
-PROBLEM_PAGE = '/gagagaga.html'
+PROBLEM_PAGE = '/problem.html'
 PROBLEMLIST_PAGE = '/list.html'
 LOGIN_PAGE = '/login.html'
 REPLAY_PAGE = '/replay.html'

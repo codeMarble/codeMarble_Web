@@ -59,7 +59,8 @@ class DBManager:
 
             dao.add(insert_language('C'))
             dao.add(insert_language('C++'))
-            dao.add(insert_language('PYTHON'))
+            dao.add(insert_language('PYTHON2.7'))
+            dao.add(insert_language('PYTHON3.5'))
             dao.add(insert_language('JAVA'))
 
             dao.commit()

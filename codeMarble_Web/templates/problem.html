@@ -1,0 +1,104 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+<div class="content-wrapper py-3">
+
+    <div id="subNav">
+
+        <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problemData.problemIndex) }}" style="margin-left: 20px"><strong>{{ problemData.problemName }}</strong></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="/submitlist">이 문제를 푼 사람</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5">
+            <form role="form">
+                <embed src="../static/pdf/test.pdf" style="width: 650px; height: 650px; margin-left: 20px; margin-top: 20px; margin-right: 50px" type='application/pdf'>
+            </form>
+
+        </div>
+        <div class="col-lg-6">
+            <form name="codeForm" id="codeForm" role="form" style="margin-left: 0px" method="post", action="{{ url_for('codeMarble_Web.submitProblem', problemIndex=problemData.problemIndex) }}" enctype="multipart/form-data">
+                <br>
+                <div>
+                    <div style="float: left; margin-right: 20px">테마
+                        <select class="form-control" style="width:220px;" onchange="selectLanguage(this)">
+                            {%- for opt in thema %}
+                                <option value="{{ opt }}">{{ opt }}</option>
+                            {% endfor -%}
+                        </select>
+                    </div>
+                    <div>언어
+                        <select class="form-control" style="width:220px;" onchange="selectLanguage(this)">
+                            {%- for opt in language %}
+                                <option {%- if opt.languageIndex == userInfo.languageIndex %} selected="selected" {% endif -%}>{{ opt.language }}</option>
+                            {% endfor -%}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <pre id="editor"></pre>
+                    <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                    <button id="submitCode" name="submitCode" class="btn btn-success" style="margin-top: 520px; margin-left: 0px" onclick="sendCode()">제출하기</button>
+                    <textarea name="getCode" id="getCode" style="display:none;"></textarea>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- /.content-wrapper -->
+
+<style type="text/css" media="screen">
+    body {
+        overflow: hidden;
+    }
+
+    #editor {
+        margin-top: 100px;
+        margin-left: 15px;
+        height:500px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>
+
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/javascript");
+
+    function sendCode() {
+        console.log('!!!!!!!!!!!!!!!!!!!!!')
+        var editor = ace.edit("editor");
+        $("#getCode").attr('value', editor.getSession().getValue());
+        document.codeForm.submit();
+    }
+
+    function selectLanguage(selectObj) {
+        var mode;
+        var theme;
+        if(selectObj.value == "C" || selectObj.value == "C++"){ mode = "c_cpp"; }
+        else if(selectObj.value == "JAVA"){ mode = "java"; }
+        else if(selectObj.value == "PYTHON2.7" || selectObj.value == "PYTHON3.5"){ mode = "python"; }
+        else if(selectObj.value == "chrome"){ theme = "chrome"; }
+        else if(selectObj.value == "clouds"){ theme = "clouds"; }
+        else if(selectObj.value == "eclipse"){ theme = "eclipse"; }
+        else if(selectObj.value == "github"){ theme = "github"; }
+        else if(selectObj.value == "monokai"){ theme = "monokai"; }
+        else if(selectObj.value == "textmate"){ theme = "textmate"; }
+        else if(selectObj.value == "tomorrow"){ theme = "tomorrow"; }
+
+        editor.session.setMode("ace/mode/" + mode);
+        editor.setTheme("ace/theme/" + theme);
+    }
+</script>
+{% endblock -%}
