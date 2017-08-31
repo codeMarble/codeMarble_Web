@@ -35,7 +35,11 @@
                             {% endfor -%}
                         </select>
                     </div>
-                    <div class="form-group">
+                </div>
+                <div>
+                    <pre id="editor"></pre>
+                    <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                     <div class="form-group" style="margin-top: 520px">
                         <label>코드공개여부</label>
                         <label class="radio-inline">
                             <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked> 공개
@@ -43,12 +47,9 @@
                         <label class="radio-inline">
                             <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2"> 비공개
                         </label>
+                         &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button id="submitCode" name="submitCode" class="btn btn-success" onclick="sendCode()">제출하기</button>
                     </div>
-                </div>
-                <div>
-                    <pre id="editor"></pre>
-                    <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-                    <button id="submitCode" name="submitCode" class="btn btn-success" style="margin-top: 520px; margin-left: 0px" onclick="sendCode()">제출하기</button>
                     <textarea name="getCode" id="getCode" style="display:none;"></textarea>
                 </div>
             </form>
