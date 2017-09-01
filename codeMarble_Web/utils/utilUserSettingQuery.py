@@ -23,7 +23,7 @@ def update_userSetting(userIndex, languageIndex=None, thema=None, comment=None, 
         update(dict(languageIndex=languageIndex if languageIndex else UserSetting.languageIndex,
                     thema=thema if thema else UserSetting.thema,
                     comment=comment if comment else UserSetting.comment,
-                    isOpen=isOpen if isOpen else UserSetting.isOpen))
+                    isOpen=UserSetting.isOpen if isOpen is None else isOpen))
 
 def get_user_information(userIndex):
     subQ = dao.query(User).filter(User.userIndex == userIndex).subquery()

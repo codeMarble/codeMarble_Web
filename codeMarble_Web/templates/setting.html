@@ -32,14 +32,14 @@
                 <br><br>
 
                 <label><strong>코드 공개여부 </strong></label>
-                <input type="radio" name="optionsRadios1" id="optionsRadios1" value="option1" {% if userInformation.isOpen %} checked {% endif %}>공개 &nbsp;
-                <input type="radio" name="optionsRadios2" id="optionsRadios2" value="option2" {% if not userInformation.isOpen %} checked {% endif %}>비공개
+                <input type="radio" name="isOpen" id="isOpen1" value="t" {% if userInformation.isOpen %} checked {% endif %}>공개 &nbsp;
+                <input type="radio" name="isOpen" id="isOpen2" value="f" {% if not userInformation.isOpen %} checked {% endif %}>비공개
                 <br><br><br><br>
 
                 <label><strong>주언어 설정</strong></label>
                 <select class="form-control" name="language" id="language" style="width: 350px;">
                     {% for lang in language %}
-                        <option {%- if lang.language == userInformation.language %} selected="selected" {% endif -%} >{{ lang.language }}</option>
+                        <option {%- if lang.languageIndex == userInformation.languageIndex %} selected="selected" {% endif -%} >{{ lang.language }}</option>
                     {% endfor %}
                 </select>
                 <br>

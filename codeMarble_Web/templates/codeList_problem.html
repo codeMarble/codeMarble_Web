@@ -6,9 +6,9 @@
 
             <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problemIndex) }}" style="margin-left: 20px">{{ problemName }}</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemIndex) }}" style="margin-left: 20px"><strong>내 코드({{ problemName }})</strong></a>
+            <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemIndex) }}" style="margin-left: 20px">내 코드({{ problemName }})</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="{{ url_for('codeMarble_Web.codeListInProblem', problemIndex=problemIndex) }}">제출한 사람({{ problemName }})</a>
+            <a href="{{ url_for('codeMarble_Web.codeListInProblem', problemIndex=problemIndex) }}"><strong>제출한 사람({{ problemName }})</strong></a>
         </div>
 
             <!-- Example Tables Card -->
@@ -17,14 +17,14 @@
                         <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>번호</th> <th>제출일</th> <th>코드확인</th>
+                                    <th>번호</th> <th>닉네임</th> <th>코드확인</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for i in range(codeList|length) %}
                                     <tr>
                                         <td>{{ i + 1 }}</td>
-                                        <td>{{ codeList[i].date }}</a></td>
+                                        <td>{{ codeList[i].nickName }}{{ codeList[i].date }}</a></td>
                                         <td></td>
                                     </tr>
                                 {% endfor %}

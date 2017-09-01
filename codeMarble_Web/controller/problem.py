@@ -96,8 +96,7 @@ def problem(problemIndex):
 @check_invalid_access
 def submitProblem(problemIndex):
     try:
-        print request.form
-        isOpen = True if request.form['open'] else False
+        isOpen = True if request.form['isOpen'] == 't' else False
         language = request.form['language']
         languageIndex = select_language(language=language).first().languageIndex
         code = request.form['getCode']
@@ -107,10 +106,10 @@ def submitProblem(problemIndex):
         dao.commit()
 
         flash('정상적으로 제출됐습니다.')
-        return redirect(url_for('.main'))   # ....
+        return redirect(url_for('.main'))
 
     except Exception as e:
-        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+        print e
 
         dao.rollback()
 
@@ -138,6 +137,32 @@ def myCodeInProblem(problemIndex):
 
         flash('다시 시도해주세요.')
 
+
+@codeMarble.route('/problem/codeListInProblem<int:problemIndex>', methods=['GET', 'POST'])
+@login_required
+@check_invalid_access
+def codeListInProblem(problemIndex):
+    try:
+        codeListSubquery = select_code(problemIndex=problemIndex).subquery()
+
+        codeListSubquery = dao.query(User.nickName, codeListSubquery).\
+                        join(codeListSubquery,
+                             codeListSubquery.c.userIndex == User.userIndex).\
+                        order_by(codeListSubquery.c.date.desc()).limit(1).subquery()
+        codeList = dao.query(codeListSubquery).group_by(codeListSubquery.c.userIndex).all()
+        problemName = select_problem(problemIndex=problemIndex).first().problemName
+
+        return render_template('codeList_problem.html',
+                               codeList=codeList,
+                               problemIndex=problemIndex,
+                               problemName=problemName)
+
+    except Exception as e:
+        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
+        dao.rollback()
+
+        flash('다시 시도해주세요.')
 
 
 

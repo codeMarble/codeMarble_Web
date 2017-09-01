@@ -184,10 +184,9 @@ def saveSetting():
     eMail = get_request_value(request.form, 'eMail')
 
     comment = get_request_value(request.form, 'comment')
-    isOpen = True if get_request_value(request.form, 'optionsRadios1') else False
+    isOpen = True if get_request_value(request.form, 'isOpen') == 't' else False
     language = get_request_value(request.form, 'language')
     thema = get_request_value(request.form, 'thema')
-
     languageIndex = select_language(language=language).first().languageIndex
 
     try:
