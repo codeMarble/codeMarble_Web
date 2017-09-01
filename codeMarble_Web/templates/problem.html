@@ -47,7 +47,7 @@
                             <input type="radio" name="open" id="open" value="option1" {%- if userInfo.isOpen %} checked {% endif -%}> 공개
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="nOpen" id="nOpen" value="option2" {%- if not userInfo.isOpen %} checked {% endif -%}> 비공개
+                            <input type="radio" name="open" id="nOpen" value="option2" {%- if not userInfo.isOpen %} checked {% endif -%}> 비공개
                         </label>
                          &nbsp;&nbsp;&nbsp;&nbsp;
                         <button id="submitCode" name="submitCode" class="btn btn-success" onclick="sendCode()">제출하기</button>
