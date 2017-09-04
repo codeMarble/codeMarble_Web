@@ -97,8 +97,8 @@ def login():
 def signup():
     if request.method == 'POST':
         try:
-            dao.add(insert_user(userId=request.form['id'],
-                                password=generate_password_hash(TripleDES.encrypt(str(request.form['pw']))),
+            dao.add(insert_user(userId=request.form['userId'],
+                                password=generate_password_hash(TripleDES.encrypt(str(request.form['password']))),
                                 nickName=request.form['nickName'], eMail=request.form['eMail']))
 
             dao.commit()
@@ -110,7 +110,7 @@ def signup():
             flash('다시 시도해주세요.')
             return redirect(url_for('.main'))
 
-        user = select_user(userId=request.form['id']).first()
+        user = select_user(userId=request.form['userId']).first()
 
         try:
             dao.add(insert_userSetting(userIndex=user.userIndex))
@@ -119,13 +119,9 @@ def signup():
         except Exception as e:
             pass
 
-        session['userIndex'] = user.userIndex
-        session['userId'] = user.userId
-        session['nickName'] = user.nickName
-        session['eMail'] = user.eMail
-        session['authority'] = user.authority
-
+        check_user(request.form)
         return redirect(url_for('.main'))
+
 
     else:
         return render_template('signup.html')
@@ -160,13 +156,13 @@ def setting():
             dao.add(insert_userSetting(userIndex=session['userIndex']))
             dao.commit()
 
-            redirect(url_for('.setting'))
+            return redirect(url_for('.setting'))
 
         except Exception as e:
             print e
 
             dao.rollback()
-            redirect(url_for('.setting'))
+            return redirect(url_for('.setting'))
 
     return render_template('setting.html',
                            userInformation=userInformation,
