@@ -17,31 +17,30 @@
             <form role="form">
                 <embed src="../static/pdf/test.pdf" style="width: 650px; height: 650px; margin-left: 20px; margin-top: 20px; margin-right: 50px" type='application/pdf'>
             </form>
-
         </div>
         <div class="col-lg-6">
             <form name="codeForm" id="codeForm" role="form" style="margin-left: 0px" method="post", action="{{ url_for('codeMarble_Web.submitProblem', problemIndex=problemData.problemIndex) }}">
-                <br>
+            <br>
                 <div>
                     <div style="float: left; margin-right: 20px">테마
                         <select id="thema" name="thema" class="form-control" style="width:220px;" onchange="selectLanguage(this)">
-                            {%- for opt in thema %}
+                           {%- for opt in thema %}
                                 <option value="{{ opt }}" {%- if opt == userInfo.thema %} selected="selected" {% endif -%}>{{ opt }}</option>
-                            {% endfor -%}
+                           {% endfor -%}
                         </select>
                     </div>
                     <div>언어
                         <select id="language" name="language" class="form-control" style="width:220px;" onchange="selectLanguage(this)">
-                            {%- for opt in language %}
+                           {%- for opt in language %}
                                 <option value="{{ opt.language }}" {%- if opt.languageIndex == userInfo.languageIndex %} selected="selected" {% endif -%}>{{ opt.language }}</option>
-                            {% endfor -%}
+                           {% endfor -%}
                         </select>
                     </div>
                 </div>
                 <div>
                     <pre id="editor"></pre>
                     <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-                     <div class="form-group" style="margin-top: 520px">
+                    <div class="form-group" style="margin-top: 520px">
                         <label>코드공개여부</label>
                         <label class="radio-inline">
                             <input type="radio" name="isOpen" id="isOpen1" value="t" {%- if userInfo.isOpen %} checked {% endif -%}> 공개
@@ -49,13 +48,12 @@
                         <label class="radio-inline">
                             <input type="radio" name="isOpen" id="isOpen2" value="f" {%- if not userInfo.isOpen %} checked {% endif -%}> 비공개
                         </label>
-                         &nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
                         <button id="submitCode" name="submitCode" class="btn btn-success" onclick="sendCode()">제출하기</button>
                     </div>
                     <textarea name="getCode" id="getCode" style="display:none;"></textarea>
                 </div>
             </form>
-
         </div>
     </div>
 

@@ -36,6 +36,15 @@
                 <input type="radio" name="isOpen" id="isOpen2" value="f" {% if not userInformation.isOpen %} checked {% endif %}>비공개
                 <br><br><br><br>
 
+
+                <label><strong>에디터 테마 설정</strong></label>
+                <select class="form-control" name="thema" id="thema" style="width: 350px;">
+                    {% for th in thema %}
+                        <option {% if th == userInformation.thema %} selected="selected" {% endif %}>{{ th }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+
                 <label><strong>주언어 설정</strong></label>
                 <select class="form-control" name="language" id="language" style="width: 350px;">
                     {% for lang in language %}
@@ -43,14 +52,6 @@
                     {% endfor %}
                 </select>
                 <br>
-                <label><strong>에디터 테마 설정</strong></label>
-                <select class="form-control" name="thema" id="thema" style="width: 350px;">
-                    {% for th in thema %}
-                        <option {% if th == userInformation.thema %} selected="selected" {% endif %}>{{ th }}</option>
-                    {% endfor %}
-                </select>
-
-                <br><br>
                 <button type="submit" class="btn btn-default" onclick="checkPassword()">설정저장</button>
             </form>
         </div>

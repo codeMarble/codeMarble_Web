@@ -89,6 +89,13 @@ def addProblem():
     f.save() # ...
 
 
+@codeMarble.route('/admin/problemRequest', methods=['POST'])
+@login_required
+@check_invalid_access
+def problemRequest():
+    f = request.files['file']
+    f.save() # ...
+
 
 
 

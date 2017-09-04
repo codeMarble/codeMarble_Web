@@ -4,6 +4,13 @@ from flask import Flask, render_template, request, url_for
 app = Flask(__name__)
 
 def create_app(config_filepath = "resource/config.cfg"):
+    try:
+        dataDir = os.path.join(os.getcwd(), 'codeMarble_Web', 'static','problems')
+        print dataDir
+        os.mkdir(dataDir)
+    except Exception as e:
+        print e
+        pass
 
     from codeMarble_config import *
     app.config.from_object(codeMarbleConfig)
