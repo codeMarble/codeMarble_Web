@@ -16,9 +16,10 @@ def insert_code(userIndex, problemIndex, languageIndex, date, code, isOpen=True)
                 languageIndex=languageIndex,
                 code=code,
                 date=date,
+                isCompile=False,
                 isOpen=isOpen)
 
-def select_code(userIndex=None, problemIndex=None, languageIndex=None, codeIndex=None):
+def select_code(userIndex=None, problemIndex=None, languageIndex=None, isCompile=None, codeIndex=None):
     if codeIndex:
         return dao.query(Code).\
                     filter(Code.codeIndex == codeIndex)
@@ -29,4 +30,6 @@ def select_code(userIndex=None, problemIndex=None, languageIndex=None, codeIndex
                             Code.problemIndex == problemIndex if problemIndex
                             else Code.problemIndex != problemIndex,
                             Code.languageIndex == languageIndex if languageIndex
-                            else Code.languageIndex != languageIndex))
+                            else Code.languageIndex != languageIndex,
+                            Code.isCompile == isCompile if isCompile
+                            else Code.isCompile != isCompile))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column
+from sqlalchemy import Column, DATETIME
 from sqlalchemy.dialects.mysql import CHAR, VARCHAR, INTEGER, ENUM
 from codeMarble_Web.model import Base
 
@@ -28,6 +28,10 @@ class User(Base):
     eMail = Column(VARCHAR(100),
                    nullable=False,
                    unique=False)
+
+    lastMatchDate = Column(DATETIME,
+                           default=None,
+                           nullable=True)
 
     authority = Column(ENUM('admin', 'semiAdmin', 'user'),
                        nullable=False,

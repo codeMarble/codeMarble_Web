@@ -1,0 +1,44 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+    <div class="content-wrapper py-3">
+        <div id="subNav">
+
+            <a href="{{ url_for('codeMarble_Web.matchUserList', problemIndex=problem.problemIndex) }}" style="margin-left: 20px"><strong>대전 목록</strong></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('codeMarble_Web.matchRank', problemIndex=problem.problemIndex) }}">랭크({{ problem.problemName }})</a>
+        </div>
+
+            <!-- Example Tables Card -->
+        <h4 style="float: left; margin-top: 10px; margin-left: 20px; margin-right: 10px">{{ problem.problemName }}</h4><h6 style="margin-top: 18px">(내 점수 : {{ score }})</h6>
+            <div class="card-block">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>닉네임</th> <th>점수</th> <th>대전</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in userList_upper %}
+                                <tr>
+                                    <td>{{ user.nickName }}</a></td>
+                                    <td>{{ user.score }}</td>
+                                    <td><a>대전</a></td>
+                                </tr>
+                            {% endfor %}
+                            {% for user in userList_lower %}
+                                <tr>
+                                    <td>{{ user.nickName }}</a></td>
+                                    <td>{{ user.score }}</td>
+                                    <td><a>대전</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br><br><br><br><br><br>
+        </div>
+        <!-- /.container-fluid -->
+{% endblock -%}

@@ -25,10 +25,10 @@ def close_db_session(exception = None):
         Log.error(str(e))
 
 
-@codeMarble.route('/match')
+@codeMarble.route('/match', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def match():
+def matchProblemList():
     try:
         userProblemSubquery = select_code(userIndex=session['userIndex']).group_by('problemIndex').subquery()
         problems = select_problem().subquery()
@@ -37,8 +37,8 @@ def match():
                                 join(userProblemSubquery,
                                      userProblemSubquery.c.problemIndex == problems.c.problemIndex).all()
 
-        render_template('xxx.html',
-                        userProblemList=userProblemList)
+        return render_template('matchProblemList.html',
+                               userProblemList=userProblemList)
 
     except Exception as e:
         print e
@@ -47,10 +47,10 @@ def match():
         return redirect(url_for('.main'))
 
 
-@codeMarble.route('/match/list<int:problemIndex>')
+@codeMarble.route('/match/userList<int:problemIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def matchList(problemIndex):
+def matchUserList(problemIndex):
     try:
         userIndex = session['userIndex']
         userScore = select_userInformationInProblem(userIndex=userIndex, problemIndex=problemIndex).first().score
@@ -90,9 +90,13 @@ def matchList(problemIndex):
 
                 break
 
-        return render_template('xxx.html',
+        problem = select_problem(problemIndex=problemIndex).first()
+
+        return render_template('matchUserList.html',
                                userList_upper=userList_upper,
-                               userList_lower=userList_lower)
+                               userList_lower=userList_lower,
+                               problem=problem,
+                               score=userScore)
 
     except Exception as e:
         print e
@@ -101,10 +105,10 @@ def matchList(problemIndex):
         return redirect(url_for('.main'))
 
 
-@codeMarble.route('/match/topList<int:problemIndex>')
+@codeMarble.route('/match/rank<int:problemIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def matchTopList(problemIndex):
+def matchRank(problemIndex):
     try:
         userListSubquery = select_code(problemIndex=problemIndex).group_by('userIndex').subquery()
         userProblemInfoSubquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
@@ -112,7 +116,7 @@ def matchTopList(problemIndex):
                                 userListSubquery.c.problemIndex, userProblemInfoSubquery.c.score).\
                             join(userProblemInfoSubquery,
                                  userProblemInfoSubquery.c.problemIndex == userListSubquery.c.problemIndex).\
-                            order_by(userListSubquery.c.score.desc())[:3]
+                            order_by(userListSubquery.c.score.desc()).all()
 
         return render_template('xxx.html',
                                topUserList=topUserList)
@@ -124,7 +128,7 @@ def matchTopList(problemIndex):
         return redirect(url_for('.main'))
 
 
-@codeMarble.route('/match/matching<int:problemIndex><int:userIndex>')
+@codeMarble.route('/match/matching<int:problemIndex><int:userIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
 def matching(problemIndex, userIndex):

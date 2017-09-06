@@ -31,5 +31,8 @@ class Code(Base):
     date = Column(DATETIME,
                   nullable=False)
 
+    isCompile = Column(BOOLEAN,
+                       unique= False)
+
     isOpen = Column(BOOLEAN,
                     unique= False)

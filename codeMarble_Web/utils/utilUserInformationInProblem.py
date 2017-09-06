@@ -8,7 +8,7 @@ from codeMarble_Web.model.problem import *
 
 from codeMarble_Web.database import dao
 
-def insert_userInformationInProblem(userIndex, problemIndex, score):
+def insert_userInformationInProblem(userIndex, problemIndex, score=200):
     return UserInformationInProblem(userIndex=userIndex, problemIndex=problemIndex, score=score)
 
 def select_userInformationInProblem(userIndex=None, problemIndex=None):

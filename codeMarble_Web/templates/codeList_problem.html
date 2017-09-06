@@ -6,7 +6,7 @@
 
             <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problemIndex) }}" style="margin-left: 20px">{{ problemName }}</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemIndex) }}" style="margin-left: 20px">내 코드({{ problemName }})</a>
+            <a href="{{ url_for('codeMarble_Web.myCodeInProblem', problemIndex=problemIndex) }}">내 코드({{ problemName }})</a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="{{ url_for('codeMarble_Web.codeListInProblem', problemIndex=problemIndex) }}"><strong>제출한 사람({{ problemName }})</strong></a>
         </div>

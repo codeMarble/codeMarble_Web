@@ -4,6 +4,7 @@ from flask import request, redirect, session, url_for, render_template, flash
 from datetime import datetime, date, timedelta
 
 from codeMarble_Web.database import dao
+from backendCelery.celeryFile import compileCode
 
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.codeMarble_py3des import TripleDES
@@ -19,6 +20,7 @@ from codeMarble_Web.utils.utilLanguageQuery import select_language
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, insert_userSetting
+from codeMarble_Web.utils.utilUserInformationInProblem import select_userInformationInProblem, insert_userInformationInProblem
 from codeMarble_Web.utils.utilCodeQuery import insert_code, select_code
 
 
@@ -101,9 +103,19 @@ def submitProblem(problemIndex):
         languageIndex = select_language(language=language).first().languageIndex
         code = request.form['getCode']
 
-        dao.add(insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex, code=code,
-                    date=datetime.now(), isOpen=isOpen))
+        temp = select_userInformationInProblem(userIndex=session['userIndex'], problemIndex=problemIndex).first()
+        print temp, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+        if temp is None:
+            dao.add_all([insert_code(userIndex=session['userIndex'], problemIndex=problemIndex,
+                                    languageIndex=languageIndex, code=code, date=datetime.now(), isOpen=isOpen),
+                        insert_userInformationInProblem(userIndex=session['userIndex'], problemIndex=problemIndex)])
+        else:
+            dao.add(insert_code(userIndex=session['userIndex'], problemIndex=problemIndex, languageIndex=languageIndex,
+                                code=code, date=datetime.now(), isOpen=isOpen))
+
         dao.commit()
+
+        # compileCode.delay(codeIndex=select_code(userIndex=session['userIndex'], problemIndex=problemIndex).all()[-1].codeIndex)
 
         flash('정상적으로 제출됐습니다.')
         return redirect(url_for('.main'))

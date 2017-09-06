@@ -1,5 +1,7 @@
 import os
 import json
+import random
+import shutil
 from celery import Celery
 
 from codeMarble.gameManager import GameManager
@@ -49,6 +51,7 @@ def compileCode(codeIndex):
 	result = execution.executeProgram(user.compile())
 
 	os.remove(codePath)
+	os.remove(user.executionPath)
 
 	if result is True:
 		pass
@@ -59,11 +62,14 @@ def compileCode(codeIndex):
 
 @app.task(name='task.matching', base=SqlAlchemyTask)
 def matching(problemIndex, challengerIndex, championIndex):
+	temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(10, 99))
+	tempPath = os.path.join(tempDir, temp)
+
 	challengerCodeData = select_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
 	championCodeData = select_code(problemIndex=problemIndex, userIndex=championIndex).first()
 
-	challengerCodePath = os.path.join(tempDir, '%d.txt' % challengerCodeData.codeIndex)
-	championCodePath = os.path.join(tempDir, '%d.txt' % championCodeData.codeIndex)
+	challengerCodePath = os.path.join(tempPath, '{0}.txt'.format(challengerCodeData.codeIndex))
+	championCodePath = os.path.join(tempPath, '{0}.txt'.format(championCodeData.codeIndex))
 
 	challengerLanguage = select_language(languageIndex=challengerCodeData.languageIndex).first().language
 	championLanguage = select_language(languageIndex=championCodeData.languageIndex).first().language
@@ -74,14 +80,20 @@ def matching(problemIndex, challengerIndex, championIndex):
 	with open(championCodePath, 'w') as fp:
 		fp.write(championCodeData.code)
 
-	challenger = UserProgram(language=challengerLanguage, savePath=tempDir, fileName='%d.txt' % challengerCodeData.codeIndex)
-	champion = UserProgram(language=championLanguage, savePath=tempDir, fileName='%d.txt' % championCodeData.codeIndex)
+	with open(os.path.join(dataDir ,'{0}.json')) as fp:
+		data = json.load(fp)
 
-	# gameManager = GameManager(challenger=challenger, champion=champion, )
-	# challenger, champion, placementRule, placementOption, existRule, existOption,
-	# actionRule, actionOption, endingRule, endingOption, gameBoard, dataBoard, scriptPath = None, problemIndex = 'scriptTemplate'
+	challenger = UserProgram(language=challengerLanguage, savePath=tempPath, fileName='%d.txt' % challengerCodeData.codeIndex)
+	champion = UserProgram(language=championLanguage, savePath=tempPath, fileName='%d.txt' % championCodeData.codeIndex)
 
+	gameManager = GameManager(challenger=challenger, champion=champion, placementRule=data['placementRule'],
+	                          placementOption=data['placementOption'], existRule=data['existRule'], existOption=data['existOption'],
+	                          actionRule=data['actionRule'], actionOption=data['actionOption'], endingRule=data['endingRule'],
+	                          endingOption=data['endingOption'], gameBoard=data['gameBoard'], dataBoard=data['dataBoard'])
 
+	result = gameManager.playGame()
+
+	# shutil.rmtree(tempPath)
 
 
 
