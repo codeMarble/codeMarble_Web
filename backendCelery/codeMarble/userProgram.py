@@ -17,7 +17,7 @@ class UserProgram(object):
         # parameter setting
         self.language = language
         self.filePath = os.path.join(savePath, fileName)
-        self.executionPath = os.path.join(savePath, "%s_%s" %(str(random.randint(1, 100)) + str(time.time())[2:5]))
+        self.executionPath = os.path.join(savePath, "%s_%s" %(str(random.randint(10, 99)), str(time.time())[2:5]))
 
 
     def compile(self):
@@ -30,8 +30,8 @@ class UserProgram(object):
 
         else:
             # compile parameter setting
-            compileMessage[self.language].append(self.filePath)
             compileMessage[self.language].append(self.executionPath)
+            compileMessage[self.language].append(self.filePath)
 
             # compile with execution object & return result
             return compileMessage[self.language]

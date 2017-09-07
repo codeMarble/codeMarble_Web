@@ -13,17 +13,20 @@ def insert_userSetting(userIndex, languageIndex=1, thema='chrome', comment=''):
                        comment=comment,
                        isOpen=True)
 
+
 def select_userSetting(userIndex):
     return dao.query(UserSetting).\
         filter(UserSetting.userIndex==userIndex)
 
+
 def update_userSetting(userIndex, languageIndex=None, thema=None, comment=None, isOpen=None):
-    dao.query(UserSetting).\
-        filter(UserSetting.userIndex==userIndex).\
-        update(dict(languageIndex=languageIndex if languageIndex else UserSetting.languageIndex,
-                    thema=thema if thema else UserSetting.thema,
-                    comment=comment if comment else UserSetting.comment,
-                    isOpen=UserSetting.isOpen if isOpen is None else isOpen))
+    return dao.query(UserSetting).\
+                filter(UserSetting.userIndex==userIndex).\
+                update(dict(languageIndex=languageIndex if languageIndex else UserSetting.languageIndex,
+                            thema=thema if thema else UserSetting.thema,
+                            comment=comment if comment else UserSetting.comment,
+                            isOpen=UserSetting.isOpen if isOpen is None else isOpen))
+
 
 def get_user_information(userIndex):
     subQ = dao.query(User).filter(User.userIndex == userIndex).subquery()

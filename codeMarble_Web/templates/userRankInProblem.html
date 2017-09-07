@@ -1,0 +1,38 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+    <div class="content-wrapper py-3">
+        <div id="subNav">
+
+            <a href="{{ url_for('codeMarble_Web.matchUserList', problemIndex=problem.problemIndex) }}" style="margin-left: 20px">대전 목록</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('codeMarble_Web.matchRank', problemIndex=problem.problemIndex) }}"><strong>랭크({{ problem.problemName }})</strong></a>
+        </div>
+
+            <!-- Example Tables Card -->
+        <!--<h4 style="float: left; margin-top: 10px; margin-left: 20px; margin-right: 10px">{{ problem.problemName }}</h4>-->
+        <!--<h6 style="margin-top: 18px">(내 점수 : {{ score }})</h6>-->
+            <div class="card-block">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>닉네임</th> <th>점수</th> <th>대전</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in topUserList %}
+                                <tr>
+                                    <td>{{ data.nickName }}</a></td>
+                                    <td>{{ data.score }}</td>
+                                    <td><a>대전</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br><br><br><br><br><br>
+        </div>
+        <!-- /.container-fluid -->
+{% endblock -%}

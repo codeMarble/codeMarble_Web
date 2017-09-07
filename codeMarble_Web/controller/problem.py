@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import request, redirect, session, url_for, render_template, flash
-from datetime import datetime, date, timedelta
 
 from codeMarble_Web.database import dao
-from backendCelery.celeryFile import compileCode
+from codeMarble_Web.celeryFile import compileCode
 
 from codeMarble_Web.codeMarble_blueprint import *
-from codeMarble_Web.codeMarble_py3des import TripleDES
-
-from werkzeug.security import check_password_hash
 
 
 from codeMarble_Web.utils.utilUserQuery import *
@@ -115,7 +111,7 @@ def submitProblem(problemIndex):
 
         dao.commit()
 
-        # compileCode.delay(codeIndex=select_code(userIndex=session['userIndex'], problemIndex=problemIndex).all()[-1].codeIndex)
+        compileCode.delay(codeIndex=select_code(userIndex=session['userIndex'], problemIndex=problemIndex).all()[-1].codeIndex)
 
         flash('정상적으로 제출됐습니다.')
         return redirect(url_for('.main'))
@@ -155,13 +151,21 @@ def myCodeInProblem(problemIndex):
 @check_invalid_access
 def codeListInProblem(problemIndex):
     try:
-        codeListSubquery = select_code(problemIndex=problemIndex).subquery()
+        codeListSubquery = select_code(problemIndex=problemIndex, isCompile=True).subquery()
 
         codeListSubquery = dao.query(User.nickName, codeListSubquery).\
+                                join(codeListSubquery,
+                                codeListSubquery.c.userIndex == User.userIndex).\
+                                order_by(codeListSubquery.c.date.desc()).limit(1).subquery()
+
+        codeListSubquery = dao.query(codeListSubquery).group_by(codeListSubquery.c.userIndex).subquery()
+        scoreListSuquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
+
+        codeList = dao.query(scoreListSuquery.c.score, codeListSubquery).\
                         join(codeListSubquery,
-                             codeListSubquery.c.userIndex == User.userIndex).\
-                        order_by(codeListSubquery.c.date.desc()).limit(1).subquery()
-        codeList = dao.query(codeListSubquery).group_by(codeListSubquery.c.userIndex).all()
+                             codeListSubquery.c.userIndex == scoreListSuquery.c.userIndex).\
+                        all()
+
         problemName = select_problem(problemIndex=problemIndex).first().problemName
 
         return render_template('codeList_problem.html',

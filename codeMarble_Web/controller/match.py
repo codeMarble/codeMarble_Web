@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import random
+import datetime
 
 from flask import redirect, url_for, render_template, flash
 
-from backendCelery.celeryFile import matching
+from codeMarble_Web.celeryFile import matching
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
@@ -30,7 +31,7 @@ def close_db_session(exception = None):
 @check_invalid_access
 def matchProblemList():
     try:
-        userProblemSubquery = select_code(userIndex=session['userIndex']).group_by('problemIndex').subquery()
+        userProblemSubquery = select_code(userIndex=session['userIndex'], isCompile=True).group_by('problemIndex').subquery()
         problems = select_problem().subquery()
         userProblemList = dao.query(problems.c.problemName, userProblemSubquery.c.codeIndex,
                                     userProblemSubquery.c.problemIndex).\
@@ -55,17 +56,23 @@ def matchUserList(problemIndex):
         userIndex = session['userIndex']
         userScore = select_userInformationInProblem(userIndex=userIndex, problemIndex=problemIndex).first().score
 
-        userListSubquery = select_code(problemIndex=problemIndex).group_by('userIndex').subquery()
+        userListSubquery = select_code(problemIndex=problemIndex, isCompile=True).group_by('userIndex').subquery()
         userProblemInfoSubquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
         userListSubquery = dao.query(userListSubquery.c.codeIndex, userListSubquery.c.userIndex,
                                      userListSubquery.c.problemIndex, userProblemInfoSubquery.c.score).\
                                 join(userProblemInfoSubquery,
-                                     userProblemInfoSubquery.c.problemIndex == userListSubquery.c.problemIndex).subquery()
+                                     userProblemInfoSubquery.c.userIndex == userListSubquery.c.userIndex).subquery()
 
         for i in range(50):
-            userList_upper = dao.query(userListSubquery).filter(and_(userListSubquery.c.score < userScore + i*20,
-                                                                     userListSubquery.c.score > userScore,
-                                                                     userListSubquery.c.userIndex != userIndex)).all()
+            userList_upper_subquery = dao.query(userListSubquery).\
+                                        filter(and_(userListSubquery.c.score < userScore + i*20,
+                                                    userListSubquery.c.score > userScore,
+                                                    userListSubquery.c.userIndex != userIndex)).subquery()
+
+            userList_upper = dao.query(User.nickName, userList_upper_subquery). \
+                                join(userList_upper_subquery,
+                                     userList_upper_subquery.c.userIndex == User.userIndex). \
+                                all()
 
             if len(userList_upper) == 3:
                 break
@@ -77,9 +84,15 @@ def matchUserList(problemIndex):
                 break
 
         for i in range(50):
-            userList_lower = dao.query(userListSubquery).filter(and_(userListSubquery.c.score > userScore - i*20,
-                                                                     userListSubquery.c.score <= userScore,
-                                                                     userListSubquery.c.userIndex != userIndex)).all()
+            userList_lower_subquery = dao.query(userListSubquery).\
+                                        filter(and_(userListSubquery.c.score > userScore - i*20,
+                                                    userListSubquery.c.score <= userScore,
+                                                    userListSubquery.c.userIndex != userIndex)).subquery()
+
+            userList_lower = dao.query(User.nickName, userList_lower_subquery).\
+                                join(userList_lower_subquery,
+                                     userList_lower_subquery.c.userIndex == User.userIndex).\
+                                all()
 
             if len(userList_lower) == 2:
                 break
@@ -110,19 +123,30 @@ def matchUserList(problemIndex):
 @check_invalid_access
 def matchRank(problemIndex):
     try:
-        userListSubquery = select_code(problemIndex=problemIndex).group_by('userIndex').subquery()
+        userListSubquery = select_code(problemIndex=problemIndex, isCompile=True).group_by('userIndex').subquery()
         userProblemInfoSubquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
-        topUserList = dao.query(userListSubquery.c.codeIndex, userListSubquery.c.userIndex,
-                                userListSubquery.c.problemIndex, userProblemInfoSubquery.c.score).\
-                            join(userProblemInfoSubquery,
-                                 userProblemInfoSubquery.c.problemIndex == userListSubquery.c.problemIndex).\
-                            order_by(userListSubquery.c.score.desc()).all()
 
-        return render_template('xxx.html',
-                               topUserList=topUserList)
+        topUserListSubquery = dao.query(userListSubquery.c.codeIndex, userListSubquery.c.userIndex,
+                                        userListSubquery.c.problemIndex, userProblemInfoSubquery.c.score).\
+                                join(userProblemInfoSubquery,
+                                     userProblemInfoSubquery.c.userIndex == userListSubquery.c.userIndex).\
+                                order_by(userProblemInfoSubquery.c.score.desc()).\
+                                subquery()
+
+        topUserList = dao.query(User.nickName, topUserListSubquery).\
+                        join(topUserListSubquery,
+                             topUserListSubquery.c.userIndex == User.userIndex).all()
+
+        problem = select_problem(problemIndex=problemIndex).first()
+
+        topUserList = topUserList if len(topUserList) < 10 else topUserList[:10]
+
+        return render_template('userRankInProblem.html',
+                               topUserList=topUserList,
+                               problem=problem)
 
     except Exception as e:
-        print e
+        print e, '!!!!!!!!!!!!!!!!!'
 
         flash('다시 시도해주세요.')
         return redirect(url_for('.main'))
@@ -134,6 +158,9 @@ def matchRank(problemIndex):
 def matching(problemIndex, userIndex):
     try:
         matching.delay(problemIndex, session['userIndex'], userIndex)
+
+        update_user(lastMatchDate=datetime.datetime.now())
+        dao.commit()
 
     except Exception as e:
         print e

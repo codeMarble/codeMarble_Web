@@ -17,14 +17,15 @@
                         <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>번호</th> <th>닉네임</th> <th>코드확인</th>
+                                    <th>번호</th> <th>닉네임</th> <th>점수</th> <th>코드확인</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for i in range(codeList|length) %}
                                     <tr>
                                         <td>{{ i + 1 }}</td>
-                                        <td>{{ codeList[i].nickName }}{{ codeList[i].date }}</a></td>
+                                        <td>{{ codeList[i].nickName }}</a></td>
+                                        <td>{{ codeList[i].score }}</td>
                                         <td></td>
                                     </tr>
                                 {% endfor %}
