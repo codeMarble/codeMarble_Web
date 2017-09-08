@@ -3,42 +3,73 @@
 
     <div class="content-wrapper py-3">
         <div id="subNav">
-
             <a href="{{ url_for('codeMarble_Web.matchUserList', problemIndex=problem.problemIndex) }}" style="margin-left: 20px"><strong>대전 목록</strong></a>
             &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="{{ url_for('codeMarble_Web.matchRank', problemIndex=problem.problemIndex) }}">랭크({{ problem.problemName }})</a>
         </div>
+        <div id="timer" style="margin-left: 20px"></div>
 
             <!-- Example Tables Card -->
         <h4 style="float: left; margin-top: 10px; margin-left: 20px; margin-right: 10px">{{ problem.problemName }}</h4><h6 style="margin-top: 18px">(내 점수 : {{ score }})</h6>
-            <div class="card-block">
-                <div class="table-responsive">
-                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
-                        <thead>
+        <div class="card-block">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>닉네임</th> <th>점수</th> <th>대전</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in userList_upper %}
                             <tr>
-                                <th>닉네임</th> <th>점수</th> <th>대전</th>
+                                <td>{{ user.nickName }}</a></td>
+                                <td>{{ user.score }}</td>
+                                <td>
+                                    <form action="{{ url_for('codeMarble_Web.matching', problemIndex=problem.problemIndex, userIndex=user.userIndex) }}">
+                                        <input id="upperMatch" type="submit" value="대전" disabled="true">
+                                    </form>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for user in userList_upper %}
-                                <tr>
-                                    <td>{{ user.nickName }}</a></td>
-                                    <td>{{ user.score }}</td>
-                                    <td><a>대전</a></td>
-                                </tr>
-                            {% endfor %}
-                            {% for user in userList_lower %}
-                                <tr>
-                                    <td>{{ user.nickName }}</a></td>
-                                    <td>{{ user.score }}</td>
-                                    <td><a>대전</a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                        {% endfor %}
+                        {% for user in userList_lower %}
+                            <tr>
+                                <td>{{ user.nickName }}</a></td>
+                                <td>{{ user.score }}</td>
+                                <td>
+                                    <form action="{{ url_for('codeMarble_Web.matching', problemIndex=problem.problemIndex, userIndex=user.userIndex) }}">
+                                        <input id="lowerMatch" type="submit" value="대전" disabled="true">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <br><br><br><br><br><br>
         </div>
-        <!-- /.container-fluid -->
+        <br><br><br><br><br><br>
+    </div>
+    <!-- /.container-fluid -->
+
+    <script>
+        var setTime = parseInt("{{ remainingTime }}")
+        function msg_time() {
+			r = setTime + "초";	// 남은 시간 계산
+
+			var msg = "다음 대전까지 남은 시간은 <font color='#00008b'>" + r + "</font> 입니다.";
+
+            if (setTime < 0) {			// 시간이 종료 되었으면..
+                msg = "대전 가능!!"
+                document.all.timer.innerHTML = msg;		// div 영역에 보여줌
+                $(':input').prop('disabled', false)
+				clearInterval(tid);		// 타이머 해제
+			}
+
+			document.all.timer.innerHTML = msg;		// div 영역에 보여줌
+            $("#matchLower").unbind("click");
+
+			setTime--;					// 1초씩 감소
+		}
+
+		window.onload = function TimerStart() { tid=setInterval('msg_time()', 1000) }
+    </script>
 {% endblock -%}

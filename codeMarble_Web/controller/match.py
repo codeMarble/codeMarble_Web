@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import random
-import datetime
 
+from datetime import datetime, timedelta
 from flask import redirect, url_for, render_template, flash
+from sqlalchemy import func
 
+from codeMarble_Web.model.code import Code
+from codeMarble_Web.model.userInformationInProblem import UserInformationInProblem
 from codeMarble_Web.celeryFile import matching
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
@@ -32,14 +35,37 @@ def close_db_session(exception = None):
 def matchProblemList():
     try:
         userProblemSubquery = select_code(userIndex=session['userIndex'], isCompile=True).group_by('problemIndex').subquery()
+
+        userListSubquery = select_code(isCompile=True).subquery()
+        userListSubquery = dao.query(userListSubquery.c.codeIndex, userListSubquery.c.userIndex, userProblemSubquery.c.problemIndex).\
+                                    join(userProblemSubquery,
+                                         userProblemSubquery.c.problemIndex == userListSubquery.c.problemIndex).\
+                                    group_by(userListSubquery.c.userIndex, userProblemSubquery.c.problemIndex).subquery()
+        userCountSubquery = dao.query(userListSubquery.c.problemIndex, func.count(userListSubquery.c.problemIndex).label('count')).\
+                                group_by(userListSubquery.c.problemIndex).subquery()
+
         problems = select_problem().subquery()
-        userProblemList = dao.query(problems.c.problemName, userProblemSubquery.c.codeIndex,
-                                    userProblemSubquery.c.problemIndex).\
-                                join(userProblemSubquery,
-                                     userProblemSubquery.c.problemIndex == problems.c.problemIndex).all()
+        userProblemListSubquery = dao.query(problems.c.problemName, userProblemSubquery.c.codeIndex,
+                                            userProblemSubquery.c.problemIndex).\
+                                    join(userProblemSubquery,
+                                         userProblemSubquery.c.problemIndex == problems.c.problemIndex).subquery()
+
+        userProblemList = dao.query(userCountSubquery.c.count, userProblemListSubquery).\
+                            join(userProblemListSubquery,
+                                 userProblemListSubquery.c.problemIndex == userCountSubquery.c.problemIndex).all()
+
+
+        lastMatchTime = select_user(userIndex=session['userIndex']).first().lastMatchDate
+
+        if lastMatchTime is None:
+            remainingTime = 0
+
+        else:
+            remainingTime = ((lastMatchTime + timedelta(minutes=1)) - datetime.now()).total_seconds()
 
         return render_template('matchProblemList.html',
-                               userProblemList=userProblemList)
+                               userProblemList=userProblemList,
+                               remainingTime=remainingTime)
 
     except Exception as e:
         print e
@@ -105,11 +131,20 @@ def matchUserList(problemIndex):
 
         problem = select_problem(problemIndex=problemIndex).first()
 
+        lastMatchTime = select_user(userIndex=userIndex).first().lastMatchDate
+
+        if lastMatchTime is None:
+            remainingTime = 0
+
+        else:
+            remainingTime = ((lastMatchTime + timedelta(minutes=1)) - datetime.now()).total_seconds()
+
         return render_template('matchUserList.html',
                                userList_upper=userList_upper,
                                userList_lower=userList_lower,
                                problem=problem,
-                               score=userScore)
+                               score=userScore,
+                               remainingTime=remainingTime)
 
     except Exception as e:
         print e
@@ -152,15 +187,18 @@ def matchRank(problemIndex):
         return redirect(url_for('.main'))
 
 
-@codeMarble.route('/match/matching<int:problemIndex><int:userIndex>', methods=['GET', 'POST'])
+@codeMarble.route('/match/matching<int:problemIndex>&<int:userIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
 def matching(problemIndex, userIndex):
     try:
-        matching.delay(problemIndex, session['userIndex'], userIndex)
-
-        update_user(lastMatchDate=datetime.datetime.now())
+        print problemIndex, userIndex
+        # matching.delay(problemIndex, session['userIndex'], userIndex)
+        #
+        update_user(userIndex=session['userIndex'], lastMatchDate=datetime.now())
         dao.commit()
+
+        return redirect(url_for('.main'))
 
     except Exception as e:
         print e

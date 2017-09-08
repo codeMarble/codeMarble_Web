@@ -100,7 +100,7 @@ def submitProblem(problemIndex):
         code = request.form['getCode']
 
         temp = select_userInformationInProblem(userIndex=session['userIndex'], problemIndex=problemIndex).first()
-        print temp, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
         if temp is None:
             dao.add_all([insert_code(userIndex=session['userIndex'], problemIndex=problemIndex,
                                     languageIndex=languageIndex, code=code, date=datetime.now(), isOpen=isOpen),
@@ -149,16 +149,17 @@ def myCodeInProblem(problemIndex):
 @codeMarble.route('/problem/codeListInProblem<int:problemIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def codeListInProblem(problemIndex):
+def codeListInProblem(problemIndex):    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     try:
         codeListSubquery = select_code(problemIndex=problemIndex, isCompile=True).subquery()
 
+        codeListSubquery = dao.query(func.max(codeListSubquery.c.codeIndex).label('leastIndex'), codeListSubquery.c.userIndex,
+                                     codeListSubquery.c.problemIndex, func.max(codeListSubquery.c.date).label('least')).\
+                                group_by(codeListSubquery.c.userIndex, codeListSubquery.c.problemIndex).subquery()
         codeListSubquery = dao.query(User.nickName, codeListSubquery).\
                                 join(codeListSubquery,
-                                codeListSubquery.c.userIndex == User.userIndex).\
-                                order_by(codeListSubquery.c.date.desc()).limit(1).subquery()
+                                     codeListSubquery.c.userIndex == User.userIndex).subquery()
 
-        codeListSubquery = dao.query(codeListSubquery).group_by(codeListSubquery.c.userIndex).subquery()
         scoreListSuquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
 
         codeList = dao.query(scoreListSuquery.c.score, codeListSubquery).\

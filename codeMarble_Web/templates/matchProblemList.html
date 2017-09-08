@@ -4,25 +4,27 @@
     <div class="content-wrapper py-3">
 
             <!-- Example Tables Card -->
-                <div class="card-block">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>문제이름</th> <th>난이도</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for problemData in userProblemList %}
-                                    <tr>
-                                        <td><a href="{{ url_for('codeMarble_Web.matchUserList', problemIndex=problemData.problemIndex) }}">{{ problemData.problemName }}</a></td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <br><br><br><br><br><br>
+        <h2 style="margin-left: 20px">대전</h2>
+        <div class="card-block">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>문제이름</th> <th>참가인원</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for problemData in userProblemList %}
+                            <tr>
+                                <td><a href="{{ url_for('codeMarble_Web.matchUserList', problemIndex=problemData.problemIndex) }}">{{ problemData.problemName }}</a></td>
+                                <td>{{ problemData.count }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <!-- /.container-fluid -->
+        <br><br><br><br><br><br>
+    </div>
+    <!-- /.container-fluid -->
 {% endblock -%}

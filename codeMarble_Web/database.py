@@ -56,6 +56,10 @@ class DBManager:
             dao.add(insert_problem(problemName='temp', placementRule=1, placementOption1=1,placementOption2='1 2',
                                    existRule='1 1 1', existOption='1 1 1', actionRule=1, actionOption1=1, actionOption2=1,
                                    endingRule=1, endingOption='1', limitTime=1000, limitMemory=128, level=2))
+            dao.add(insert_problem(problemName='temp2', placementRule=1, placementOption1=1, placementOption2='1 2',
+                                   existRule='1 1 1', existOption='1 1 1', actionRule=1, actionOption1=1,
+                                   actionOption2=1,
+                                   endingRule=1, endingOption='1', limitTime=1000, limitMemory=128, level=2))
 
             dao.add(insert_language('C'))
             dao.add(insert_language('C++'))
