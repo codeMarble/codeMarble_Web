@@ -9,7 +9,6 @@ def check_invalid_access(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		try:
-			print request.endpoint, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11'
 			authority = session['authority']
 
 			if 'admin' in request.endpoint and authority != 'admin':
@@ -36,16 +35,3 @@ def check_invalid_access(f):
 		return f(*args, **kwargs)
 
 	return decorated_function
-
-
-	#     try:
-	#         authority = session['authority']
-	#
-	#         print request.endpoint, '=========================='
-	#
-     #    except Exception as e:
-	#         pass
-	#
-	# 	return f(*args, **kwargs)
-	#
-	# return decorated_function

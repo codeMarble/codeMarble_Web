@@ -5,7 +5,7 @@ app = Celery('tasks', broker='redis://localhost:6379')
 
 
 @app.task(name='task.addProblem')
-def addProblem(jsonData, problemIndex):
+def addProblem(problemIndex, jsonData):
 	pass
 
 

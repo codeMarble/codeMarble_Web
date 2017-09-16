@@ -1,0 +1,58 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+<script>
+    function checkFileExtenstion() {
+        if(addProblemForm.zipFile.value.indexOf('.zip') >= 0) {
+            $("#addProblemForm").attr('action', '/admin/registerProblem');
+        }
+        else {
+            alert('맞지 않는 파일입니다.');
+        }
+    }
+</script>
+
+
+    <div class="content-wrapper py-3">
+        <div id="subNav">
+            <a href="{{ url_for('codeMarble_Web.manageProblem') }}" style="margin-left: 20px"><strong>문제 관리</strong></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('codeMarble_Web.manageAdmin') }}">관리자 관리</a>
+        </div>
+        <br>
+
+        <!-- Example Tables Card -->
+        <form method="post" name="addProblemForm" id="addProblemForm" enctype="multipart/form-data">
+            <div class="mymargin">
+                <h4>문제 등록</h4>
+                Problem(*.zip):	<input type="file" name="zipFile" id="zipFile">
+                <button type="submit" class="btn loginBtn" onclick="checkFileExtenstion()">추가</button>
+                <br><br>
+            </div>
+        </form>
+
+        <div class="card-block">
+            <h4 style="margin-left: 30px">문제 목록</h4>
+            <div class="table-responsive" style="margin-left: 10px">
+                <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>선택</th>
+                            <th>문제이름</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%- for problem in problemList %}
+                            <tr>
+                                <td><input type="checkbox" value=""></td>
+                                <td>{{ problem.problemName }}</td>
+                            </tr>
+                        {% endfor -%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br><br><br><br><br><br>
+    </div>
+<br><br><br><br><br><br>
+{% endblock -%}

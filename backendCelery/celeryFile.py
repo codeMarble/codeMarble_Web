@@ -44,9 +44,16 @@ class SqlAlchemyTask(app.Task):
 
 extension = ['', '.c', '.cpp', '.py', '.py', '.java']
 @app.task(name='task.addProblem')
-def addProblem(jsonData, problemIndex):
-	with open(os.path.join(dataDir, '{0}.json'.format(problemIndex)), 'w', encoding='utf-8') as fp:
-		json.dump(jsonData, fp)
+def addProblem(problemIndex, jsonData):
+	try:
+		with open(os.path.join(dataDir, '{0}.json'.format(problemIndex)), 'w') as fp:
+			json.dump(jsonData, fp)
+
+		return True
+
+	except Exception as e:
+		print e
+		return False
 
 
 @app.task(name='task.compileCode', base=SqlAlchemyTask)

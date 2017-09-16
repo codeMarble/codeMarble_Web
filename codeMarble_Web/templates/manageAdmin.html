@@ -1,0 +1,65 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+<script>
+    function checkFileExtenstion() {
+        if(addProblemForm.zipFile.value.indexOf('.zip') >= 0) {
+            $("#addProblemForm").attr('action', '/admin/addProblem');
+        }
+        else {
+            alert('맞지 않는 파일입니다.');
+        }
+    }
+</script>
+
+
+    <div class="content-wrapper py-3">
+        <div id="subNav">
+            <a href="{{ url_for('codeMarble_Web.manageProblem') }}" style="margin-left: 20px">문제 관리</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{ url_for('codeMarble_Web.manageAdmin') }}"><strong>관리자 관리</strong></a>
+        </div>
+        <br>
+
+        <form action="{{ url_for('codeMarble_Web.enterSubAdmin') }}" method="post">
+            <div class="mymargin">
+                <h4>관리자 설정</h4>
+
+                <label><strong>ID</strong></label>
+                <input class="setting-form" placeholder="ID" name="userId" id="userId" style="width: 200px;">
+                <button type="submit" class="btn loginBtn">추가</button>
+                <br><br>
+            </div>
+        </form>
+        <!-- /.container-fluid -->
+
+            <!-- Example Tables Card -->
+        <form method="post" name="addProblemForm" id="addProblemForm" enctype="multipart/form-data">
+            <div class="card-block">
+                <h4 style="margin-left: 30px">관리자 목록</h4>
+                <div class="table-responsive" style="margin-left: 10px">
+                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>선택</th>
+                                <th>아이디</th>
+                                <th>닉네임</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%- for user in userList %}
+                                <tr>
+                                    <td><input type="checkbox" value=""></td>
+                                    <td>{{ user.userId }}</td>
+                                    <td>{{ user.nickName }}</td>
+                                </tr>
+                            {% endfor -%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br><br><br><br><br><br>
+        </form>
+    </div>
+<br><br><br><br><br><br>
+{% endblock -%}

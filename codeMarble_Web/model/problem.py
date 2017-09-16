@@ -18,35 +18,35 @@ class Problem(Base):
                          unique=True,
                          nullable=False)
 
-    placementRule = Column(INTEGER(unsigned=True),
+    placementRule = Column(CHAR(5),
                            nullable=False)
 
-    placementOption1 = Column(INTEGER(unsigned=True),
-                              nullable=False)
-
-    placementOption2 = Column(TEXT,
+    placementOption = Column(CHAR(20),
                               unique= False)
 
-    existRule = Column(CHAR(8),
+    existRule = Column(CHAR(20),
                        nullable=False)
 
-    existOption = Column(CHAR(8),
+    existOption = Column(CHAR(20),
                              nullable=False)
 
-    actionRule = Column(INTEGER(unsigned=True),
+    actionRule = Column(CHAR(5),
                         nullable=False)
 
-    actionOption1 = Column(INTEGER(unsigned=True),
+    actionOption = Column(CHAR(20),
                            nullable=False)
 
-    actionOption2 = Column(INTEGER(unsigned=True),
-                           nullable=False)
-
-    endingRule = Column(INTEGER(unsigned=True),
+    endingRule = Column(CHAR(5),
                         nullable=False)
 
-    endingOption = Column(CHAR(5),
+    endingOption = Column(CHAR(20),
                           nullable=False)
+
+    gameBoard = Column(TEXT,
+                       nullable=False)
+
+    dataBoard = Column(TEXT,
+                       nullable=False)
 
     limitTime = Column(INTEGER(unsigned=True),
                        nullable=False)

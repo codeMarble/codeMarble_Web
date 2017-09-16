@@ -14,7 +14,7 @@ def insert_user(userId, password, nickName, eMail, authority='user'):
                 authority=authority)
 
 
-def select_user(userIndex=None, userId=None, nickName=None):
+def select_user(userIndex=None, userId=None, nickName=None, authority=None):
     if userIndex:
         return dao.query(User).\
                     filter(User.userIndex == userIndex)
@@ -26,6 +26,10 @@ def select_user(userIndex=None, userId=None, nickName=None):
     elif nickName:
         return dao.query(User).\
                     filter(User.nickName == nickName)
+
+    elif authority:
+        return dao.query(User).\
+                    filter(User.authority == authority)
 
     else:
         dao.query(User)
