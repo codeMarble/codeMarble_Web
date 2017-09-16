@@ -164,13 +164,13 @@ def registerProblem():
                                        endingRule=str(data['endingRule']), endingOption=' '.join(str(i) for i in data['endingOption']),
                                        gameBoard=tempGameBoard, dataBoard=tempDataBoard))
 
-                shutil.move(tempDir, os.path.join(_thisPath, 'static', 'problems'))
+                dao.commit()
 
-            dao.commit()
+                shutil.move(tempDir, os.path.join(_thisPath, 'static', 'problems'))
 
             problemIndex = select_problem(problemName=fileName).first().problemIndex
 
-            result = addProblem.delay(problemIndex, json.dumps(data))
+            addProblem.delay(problemIndex, json.dumps(data))
 
             message = '문제가 등록 됐습니다.'
 

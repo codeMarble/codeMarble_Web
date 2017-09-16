@@ -19,6 +19,14 @@ if __name__ == '__main__':
 
     http_server = HTTPServer(WSGIContainer(application))
 
+    try:
+        path, _ = os.path.split(os.path.abspath(__file__))
+        os.mkdir(os.path.join(path, 'problemData'))
+
+    except Exception as e:
+	    pass
+
+
     with NullContext():
         http_server.bind(80)
         http_server.start(2)
