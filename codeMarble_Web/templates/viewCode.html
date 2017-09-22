@@ -1,0 +1,52 @@
+{%- extends "main.html" -%}
+{%- block body %}
+
+<div class="content-wrapper py-3">
+    <br>
+    <div style="margin-left: 50px">
+        <h2>{{ problem.problemName }}</h2>
+        <h5>{{ user.nickName }}&nbsp; &nbsp; 제출시간: {{ code.date }}</h5>
+    </div>
+
+    <div class="col-lg-7">
+        <pre id="editor">{{ code.code }}</pre>
+        <script src="../static/aceEditor/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    </div>
+
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- /.container-fluid -->
+
+</div>
+<!-- /.content-wrapper -->
+
+<style type="text/css" media="screen">
+    body {
+        overflow: hidden;
+    }
+
+    #editor {
+        margin-top: 20px;
+        margin-left: 30px;
+        height:500px;
+        border: 1px solid #444;
+        border-radius: 10px;
+        top: 10px;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+    }
+</style>
+
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/"+ "{{ userInfo.thema }}");
+
+    if("{{ code.language }}" == "C" || "{{ code.language }}" == "C++")
+        editor.session.setMode("ace/mode/c_cpp");
+    else if("{{ code.language }}" == "PYTHON2.7" || "{{ code.language }}" == "PYTHON3.5")
+        editor.session.setMode("ace/mode/python");
+    else if("{{ code.language }}" == "JAVA")
+        editor.session.setMode("ace/mode/java");
+</script>
+{% endblock -%}

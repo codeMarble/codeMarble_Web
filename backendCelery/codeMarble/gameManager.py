@@ -18,8 +18,8 @@ from scriptTemplate import UserRule
 
 
 class GameManager(object):
-    def __init__(self, challenger, champion, placementRule, placementOption, existRule, existOption,
-                 actionRule, actionOption, endingRule, endingOption, gameBoard, dataBoard, scriptPath=None, problemIndex='scriptTemplate'):
+    def __init__(self, challenger, champion, placementRule, placementOption, existRule, existOption, actionRule,
+                 actionOption, endingRule, endingOption, objectCount, gameBoard, dataBoard, scriptPath=None, problemIndex='scriptTemplate'):
         if type(challenger) is not UserProgram and type(champion) is not UserProgram:
             raise TypeError
 
@@ -31,8 +31,8 @@ class GameManager(object):
         self.challenger = challenger
         self.champion = champion
 
-        self.data = GameData(placementRule, placementOption, existRule, existOption, actionRule, actionOption,
-                             endingRule, endingOption, gameBoard, dataBoard)
+        self.data = GameData(objectCount, placementRule, placementOption, existRule, existOption, actionRule,
+                             actionOption, endingRule, endingOption, gameBoard, dataBoard)
 
         self.limitTime = 2000
 
@@ -49,8 +49,7 @@ class GameManager(object):
         userList = [[self.champion, 0], [self.challenger, 0]]
 
         self.compileUserCode()
-
-        for _ in range(len(self.gameBoard)*len(self.gameBoard)*2):
+        for _ in range((len(self.data.gameBoard) + 1)**2):
             message, time, isSuccess = self.execution.executeProgram(userList[flag][0].play())  # run user program
             self.data.message = message
 
@@ -59,12 +58,12 @@ class GameManager(object):
                 result = message
 
             else:
+                originalGameBoard = deepcopy(self.data.gameBoard)
+                originalDataBoard = deepcopy(self.data.dataBoard)
+
                 result = self.rules.checkPlacementRule(self.data)
 
                 if type(result) is not str:
-                    originalGameBoard = deepcopy(self.data.gameBoard)
-                    originalDataBoard = deepcopy(self.data.dataBoard)
-
                     result = self.rules.checkActionRule(self.data)
 
                     if type(result) is not str:
@@ -72,16 +71,19 @@ class GameManager(object):
 
                         if type(result) is int and result:
                             if result is 1:
-                                return 'win' if flag else 'lose'
+                                result = 'win' if flag else 'lose'
+                                break
 
                             elif result is 2:
-                                return 'lose' if flag else 'win'
+                                result = 'lose' if flag else 'win'
+                                break
 
                             else:
-                                return 'draw'
+                                result = 'draw'
+                                break
 
                 if result == SERVER_ERROR or result == GAME_ERROR:
-                    return result
+                    break
 
                 elif type(result) is str:
                     userList[flag][1] += 1
@@ -89,37 +91,41 @@ class GameManager(object):
                     self.data.dataBoard = deepcopy(originalDataBoard)
 
             if userList[flag][1] > 2:
-                return 'lose' if flag else 'win'
+                result = 'lose' if flag else 'win'
+                break
 
             # change boarad setting (champ <-> challenger)
             self.data.resetData()
             self.changePlayerNBoard(flag, result)
             flag = (not flag)
 
-        return 'draw'
+        else:
+            result = 'draw'
+
+        return result, self.positionData, self.data.gameBoard
 
 
     def changePlayerNBoard(self, flag, result):
         if flag :   # if challenger
-            for i in range(len(self.gameBoard)):
-                for k in range(len(self.gameBoard[0])):
-                    self.gameBoard[i][k] = -(self.gameBoard[i][k])
+            for i in range(len(self.data.gameBoard)):
+                for k in range(len(self.data.gameBoard[0])):
+                    self.data.gameBoard[i][k] = -(self.data.gameBoard[i][k])
 
             self.addData(result)
 
         else:   # if champ
             self.addData(result)
 
-            for i in range(len(self.gameBoard)):
-                for k in range(len(self.gameBoard[0])):
-                    self.gameBoard[i][k] = -(self.gameBoard[i][k])
+            for i in range(len(self.data.gameBoard)):
+                for k in range(len(self.data.gameBoard[0])):
+                    self.data.gameBoard[i][k] = -(self.data.gameBoard[i][k])
 
 
     def addData(self, result):
         self.positionData += str(result) + '\n'
 
         temp = ''
-        for line in self.gameBoard:
+        for line in self.data.gameBoard:
             for i in line:
                 temp += (str(i) + ' ')
 

@@ -10,17 +10,17 @@ import os
 import sys
 
 class GameData(object):
-    def __init__(self, userObjectCount, placementRuleNum, placementRuleOption, existRuleNum, existRuleOption,
-                 actionRule, actionRuleOption, endingRuleNum, endingRuleOption, gameBoard, dataBoard):
-        self.placementRule = placementRuleNum    # int
+    def __init__(self, objectCount, placementRule, placementRuleOption, existRule, existRuleOption,
+                 actionRule, actionRuleOption, endingRule, endingRuleOption, gameBoard, dataBoard):
+        self.placementRule = placementRule    # int
         self.placementOption = placementRuleOption    # [] or [[n1,n2],...]
-        self.existRule = existRuleNum    # [n1,n2,n3], n=1or2
+        self.existRule = existRule    # [n1,n2,n3], n=1or2
         self.existOption = existRuleOption    # [n1,n2,n3], 1<=n<=3
         self.actionRule = actionRule    # [int, int]
         self.actionOption = actionRuleOption    # int
-        self.endingRule = endingRuleNum    # int
+        self.endingRule = endingRule    # int
         self.endingOption = endingRuleOption    # [n1, n2]
-        self.userObjectCount = userObjectCount    # int
+        self.objectCount = objectCount    # int
 
         self.gameBoard = gameBoard    # [[n * k] * k]
         self.dataBoard = dataBoard    # [[n * k] * k]
@@ -30,7 +30,7 @@ class GameData(object):
         self.pos = None    # None
         self.postPos = None    # None
 
-        self.checkDataType()
+        # self.checkDataType()
 
 
     def resetData(self):
@@ -41,11 +41,10 @@ class GameData(object):
 
 
     def checkDataType(self):
-        intList = [self.placementRuleNum, self.placementRuleOption1,self.actionRuleNum, self.actionRuleOption1,
-                   self.actionRuleOption2, self.endingRuleNum, self.userObjectCount]
+        intList = [self.placementRule, self.actionRule, self.actionRuleOption, self.endingRule, self.objectCount]
         noneList = [self.message, self.objectNum, self.pos, self.postPos]
 
-        lst1dList = [self.existRuleNum, self.existRuleOption, self.endingRuleOption]
+        lst1dList = [self.existRule, self.existRuleOption, self.endingRuleOption]
         lst2dList = [self.placementRuleOption2]
         squareList = [self.gameBoard, self.dataBoard]
 

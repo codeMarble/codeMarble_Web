@@ -3,7 +3,7 @@
 class codeMarbleConfig(object):
     DB_URL = "mysql+pymysql://root:@localhost/codeMarble?charset=utf8"
     TMP_FOLDER = 'resource/tmp'
-    PERMANENT_SESSION_LIFETIME = 60* 60
+    PERMANENT_SESSION_LIFETIME = 60 * 60
     UPLOAD_FOLDER = '/mnt'
     CURRENT_FOLDER = '/mnt/shared/CurrentCourses'
     SESSION_COOKIE_NAME = 'codeMarble_session'

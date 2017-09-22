@@ -73,6 +73,8 @@
         margin-top: 100px;
         margin-left: 15px;
         height:500px;
+        border: 1px solid #444;
+        border-radius: 10px;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -93,7 +95,6 @@
         editor.session.setMode("ace/mode/java");
 
     function sendCode() {
-        console.log('!!!!!!!!!!!!!!!!!!!!!')
         var editor = ace.edit("editor");
         $("#getCode").attr('value', editor.getSession().getValue());
         document.codeForm.submit();

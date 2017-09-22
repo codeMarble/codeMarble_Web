@@ -31,6 +31,7 @@ class Execution(object):
 
             # if success, check running time
             if time > self.limitTime:
+                os.remove(str(parentPid) + '.txt')
                 return TIME_OVER, time, False
 
             elif result is True:
@@ -39,6 +40,7 @@ class Execution(object):
                     with open(str(parentPid) + '.txt') as fp:
                         pos = fp.readline()
 
+                    os.remove(str(parentPid) + '.txt')
                     return pos, time, True  # return next place position, running tiem, result
 
                 except Execution as e:
@@ -46,6 +48,7 @@ class Execution(object):
 
             # fail
             else:
+                os.remove(str(parentPid) + '.txt')
                 return result, time, False  # return fail reason, running time, result
 
 

@@ -23,21 +23,25 @@ class PlacementRule(object):
     def checkPlacementRule(self, data):
         try:
             interResult = self.applyPlacementRule(data)
-            destinationState = data.gameBoard[data.pos[0]][data.pos[1]]
 
-            if abs(destinationState) > 3:
-                interResult = self.applyExtraExistRule(data)
+            if interResult is True:
+                destinationState = data.gameBoard[data.pos[0]][data.pos[1]]
 
-            elif destinationState > 0:
-                interResult = self.applyAllyExistRule(data)
+                if abs(destinationState) > 3:
+                    interResult = self.applyExtraExistRule(data)
 
-            else:
-                interResult = self.applyEnemyExistRule(data)
+                elif destinationState > 0:
+                    interResult = self.applyAllyExistRule(data)
+
+                elif destinationState < 0:
+                    interResult = self.applyEnemyExistRule(data)
 
             return interResult
 
         except Exception as e:
-            return SERVER_ERROR
+	        print e, sys.exc_info()[2].tb_lineno
+
+	        return SERVER_ERROR
 
 
     def applyPlacementRule(self,data):
@@ -179,9 +183,12 @@ class PlacementRule(object):
 
 
     def splitUserOutput(self, data):
+        if data.message is None or len(data.message) is 0:
+            return False
+
         try:
             if data.placementRule is 1:
-                if data.userObjectCount is 1:
+                if data.objectCount is 1:
                     data.pos = [int(i) for i in data.message.split()]
                     data.objectNum = 1
 

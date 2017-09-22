@@ -8,7 +8,7 @@ from sqlalchemy import func
 
 from codeMarble_Web.model.code import Code
 from codeMarble_Web.model.userInformationInProblem import UserInformationInProblem
-from codeMarble_Web.celeryFile import matching
+from codeMarble_Web.celeryFile import matchingGame
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
@@ -193,8 +193,8 @@ def matchRank(problemIndex):
 def matching(problemIndex, userIndex):
     try:
         print problemIndex, userIndex
-        # matching.delay(problemIndex, session['userIndex'], userIndex)
-        #
+        matchingGame.delay(problemIndex, session['userIndex'], userIndex)
+
         update_user(userIndex=session['userIndex'], lastMatchDate=datetime.now())
         dao.commit()
 
@@ -202,6 +202,7 @@ def matching(problemIndex, userIndex):
 
     except Exception as e:
         print e
+        dao.rollback()
 
         flash('다시 시도해주세요.')
         return redirect(url_for('.main'))

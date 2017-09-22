@@ -17,7 +17,7 @@ from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, insert_userSetting
 from codeMarble_Web.utils.utilUserInformationInProblem import select_userInformationInProblem, insert_userInformationInProblem
-from codeMarble_Web.utils.utilCodeQuery import insert_code, select_code
+from codeMarble_Web.utils.utilCodeQuery import insert_code, select_code, select_recent_code
 
 
 @codeMarble.teardown_request
@@ -149,13 +149,9 @@ def myCodeInProblem(problemIndex):
 @codeMarble.route('/problem/codeListInProblem<int:problemIndex>', methods=['GET', 'POST'])
 @login_required
 @check_invalid_access
-def codeListInProblem(problemIndex):    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def codeListInProblem(problemIndex):
     try:
-        codeListSubquery = select_code(problemIndex=problemIndex, isCompile=True).subquery()
-
-        codeListSubquery = dao.query(func.max(codeListSubquery.c.codeIndex).label('leastIndex'), codeListSubquery.c.userIndex,
-                                     codeListSubquery.c.problemIndex, func.max(codeListSubquery.c.date).label('least')).\
-                                group_by(codeListSubquery.c.userIndex, codeListSubquery.c.problemIndex).subquery()
+        codeListSubquery = select_recent_code(problemIndex=problemIndex).subquery()
         codeListSubquery = dao.query(User.nickName, codeListSubquery).\
                                 join(codeListSubquery,
                                      codeListSubquery.c.userIndex == User.userIndex).subquery()
@@ -182,8 +178,27 @@ def codeListInProblem(problemIndex):    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         flash('다시 시도해주세요.')
 
 
+@codeMarble.route('/viewCode<int:codeIndex>', methods=['GET', 'POST'])
+@login_required
+@check_invalid_access
+def viewCode(codeIndex):
+    tempCode = select_code(codeIndex=codeIndex).subquery()
+    temp = select_language().subquery()
 
+    code = dao.query(temp.c.language, tempCode).\
+                join(tempCode,
+                     tempCode.c.languageIndex == temp.c.languageIndex).first()
 
+    userInfo = select_userInformationInProblem(userIndex=session['userIndex']).first()
+
+    problem = select_problem(problemIndex=code.problemIndex).first()
+    user = select_user(userIndex=session['userIndex']).first()
+
+    return render_template('viewCode.html',
+                           userInfo=userInfo,
+                           code=code,
+                           problem=problem,
+                           user=user)
 
 
 

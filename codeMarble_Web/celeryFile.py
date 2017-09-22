@@ -15,7 +15,7 @@ def compileCode(codeIndex):
 
 
 @app.task(name='task.matching')
-def matching(problemIndex, challengerIndex, championIndex):
+def matchingGame(problemIndex, challengerIndex, championIndex):
 	pass
 
 

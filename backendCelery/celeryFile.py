@@ -20,7 +20,7 @@ from codeMarble.gameManager import GameManager
 from codeMarble.userProgram import UserProgram
 from codeMarble.execution import Execution
 
-from codeMarble_Web.utils.utilCodeQuery import select_code, update_code
+from codeMarble_Web.utils.utilCodeQuery import select_code, update_code, select_recent_code
 from codeMarble_Web.utils.utilLanguageQuery import select_language
 
 
@@ -85,15 +85,17 @@ def compileCode(codeIndex):
 
 
 @app.task(name='task.matching', base=SqlAlchemyTask)
-def matching(problemIndex, challengerIndex, championIndex):
-	temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(10, 99))
+def matchingGame(problemIndex, challengerIndex, championIndex):
+	# try:
+	temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(100, 999))
 	tempPath = os.path.join(tempDir, temp)
+	os.mkdir(tempPath)
 
-	challengerCodeData = select_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
-	championCodeData = select_code(problemIndex=problemIndex, userIndex=championIndex).first()
+	challengerCodeData = select_recent_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
+	championCodeData = select_recent_code(problemIndex=problemIndex, userIndex=championIndex).first()
 
-	challengerFileName = '{0}{1}'.format(challengerCodeData.codeIndex, extension[challengerCodeData.languageIndex])
-	championFileName = '{0}{1}'.format(championCodeData.codeIndex, extension[championCodeData.languageIndex])
+	challengerFileName = '{0}{1}'.format(challengerIndex, extension[challengerCodeData.languageIndex])
+	championFileName = '{0}{1}'.format(championIndex, extension[championCodeData.languageIndex])
 
 	challengerCodePath = os.path.join(tempPath, challengerFileName)
 	championCodePath = os.path.join(tempPath, championFileName)
@@ -107,37 +109,26 @@ def matching(problemIndex, challengerIndex, championIndex):
 	with open(championCodePath, 'w') as fp:
 		fp.write(championCodeData.code)
 
-	with open(os.path.join(dataDir ,'{0}.json')) as fp:
+	with open(os.path.join(dataDir, '{0}.json'.format(problemIndex))) as fp:
 		data = json.load(fp)
 
 	challenger = UserProgram(language=challengerLanguage, savePath=tempPath, fileName=challengerFileName)
 	champion = UserProgram(language=championLanguage, savePath=tempPath, fileName=championFileName)
 
-	gameManager = GameManager(challenger=challenger, champion=champion, placementRule=data['placementRule'],
+	gameManager = GameManager(challenger=challenger, champion=champion, placementRule=data["placementRule"],
 	                          placementOption=data['placementOption'], existRule=data['existRule'], existOption=data['existOption'],
 	                          actionRule=data['actionRule'], actionOption=data['actionOption'], endingRule=data['endingRule'],
-	                          endingOption=data['endingOption'], gameBoard=data['gameBoard'], dataBoard=data['dataBoard'])
+	                          endingOption=data['endingOption'], gameBoard=data['gameBoard'], dataBoard=data['dataBoard'],
+	                          objectCount=data['objectCount'])
 
 	result = gameManager.playGame()
+	print result, '============'
 
-	shutil.rmtree(tempPath)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	# shutil.rmtree(tempPath)
+	#
+	# except Exception as e:
+	# 	print e, '!!!!!!!!!!!!!!!!'
+	# 	pass
 
 
 
