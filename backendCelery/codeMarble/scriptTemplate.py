@@ -3,4 +3,7 @@ from actionRule import ActionRule
 from endingRule import EndingRule
 
 class UserRule(PlacementRule, ActionRule, EndingRule):
-    pass
+    def __init__(self):
+        PlacementRule.__init__(self)
+        ActionRule.__init__(self)
+        EndingRule.__init__(self)

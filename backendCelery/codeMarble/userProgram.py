@@ -15,9 +15,11 @@ import random
 class UserProgram(object):
     def __init__(self, language, savePath, fileName):
         # parameter setting
+        self.savePath = savePath
         self.language = language
-        self.filePath = os.path.join(savePath, fileName)
-        self.executionPath = os.path.join(savePath, "%s_%s" %(str(random.randint(10, 99)), str(time.time())[2:5]))
+        self.inputPath = os.path.join(self.savePath, 'input.txt')
+        self.filePath = os.path.join(self.savePath, fileName)
+        self.executionPath = os.path.join(self.savePath, "%s_%s" %(str(random.randint(100, 999)), str(time.time())[2:5]))
 
 
     def compile(self):
@@ -38,10 +40,10 @@ class UserProgram(object):
 
 
     def play(self):
-        playMessage = {'C': [self.executionPath, self.executionPath, '<'],
-                       'C++': [self.executionPath, self.executionPath, '<'],
-                       'PYTHON2': ['/usr/bin/python', '/usr/bin/python', self.executionPath, '<'],
-                       'PYTHON3': ['/usr/bin/python3', '/usr/bin/python3', self.executionPath, '<']}
+        playMessage = {'C': [self.executionPath, self.executionPath, '<', self.inputPath],
+                       'C++': [self.executionPath, self.executionPath, '<', self.inputPath],
+                       'PYTHON2': ['/usr/bin/python', '/usr/bin/python', self.executionPath, '<', self.inputPath],
+                       'PYTHON3': ['/usr/bin/python3', '/usr/bin/python3', self.executionPath, '<', self.inputPath]}
 
          # run program with execution object & return result
         return playMessage[self.language]

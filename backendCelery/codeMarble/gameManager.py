@@ -50,8 +50,11 @@ class GameManager(object):
 
         self.compileUserCode()
         for _ in range((len(self.data.gameBoard) + 1)**2):
-            message, time, isSuccess = self.execution.executeProgram(userList[flag][0].play())  # run user program
+            self.makeInputData()
+
+            message, time, isSuccess = self.execution.executeProgram(userList[flag][0].play(), userList[flag][0].savePath)  # run user program
             self.data.message = message
+            print message
 
             if not isSuccess:
                 userList[flag][1] += 1
@@ -62,14 +65,17 @@ class GameManager(object):
                 originalDataBoard = deepcopy(self.data.dataBoard)
 
                 result = self.rules.checkPlacementRule(self.data)
+                print result, '11111'
 
                 if type(result) is not str:
                     result = self.rules.checkActionRule(self.data)
+                    print result, '22222'
 
                     if type(result) is not str:
                         result = self.rules.checkEndingRule(self.data)
+                        print result, '33333'
 
-                        if type(result) is int and result:
+                        if type(result) is int:
                             if result is 1:
                                 result = 'win' if flag else 'lose'
                                 break
@@ -78,7 +84,7 @@ class GameManager(object):
                                 result = 'lose' if flag else 'win'
                                 break
 
-                            else:
+                            elif result is 3:
                                 result = 'draw'
                                 break
 
@@ -96,13 +102,13 @@ class GameManager(object):
 
             # change boarad setting (champ <-> challenger)
             self.data.resetData()
-            self.changePlayerNBoard(flag, result)
+            self.changePlayerNBoard(flag, result if result else message)
             flag = (not flag)
 
         else:
             result = 'draw'
 
-        return result, self.positionData, self.data.gameBoard
+        return result, self.positionData, self.boardData
 
 
     def changePlayerNBoard(self, flag, result):
@@ -122,7 +128,7 @@ class GameManager(object):
 
 
     def addData(self, result):
-        self.positionData += str(result) + '\n'
+        self.positionData += str(result).strip() + '\n'
 
         temp = ''
         for line in self.data.gameBoard:
@@ -131,50 +137,27 @@ class GameManager(object):
 
             temp += '\n'
 
+        self.boardData += temp
+
 
     def compileUserCode(self):
-        self.execution.executeProgram(self.challenger.compile())
-        self.execution.executeProgram(self.champion.compile())
+        self.execution.executeProgram(self.challenger.compile(), self.challenger.savePath)
+        self.execution.executeProgram(self.champion.compile(), self.champion.savePath)
 
 
-if __name__ == '__main__':
-    import json
-    import argparse
+    def makeInputData(self):
+        try:
+            with open(self.challenger.inputPath, 'w') as fp:
+                temp = ''
+                for line in self.data.gameBoard:
+                    for i in line:
+                        temp += (str(i) + ' ')
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--path', type=str, default=os.getcwd(), help='input file(code&rule) directory')
-    parser.add_argument('--script', type=str, default='scriptTemplate', help='input script file name')
-    parser.add_argument('--rule', type=str, default='rule', help='input rule file name')
-    parser.add_argument('--player1', type=str, default='p1', help='input champion code file name')
-    parser.add_argument('--player2', type=str, default='p2', help='input challenger code file name')
+                    temp += '\n'
+                fp.write(temp)
 
-    parsed, unparsed = parser.parse_known_args()
-
-    if len(unparsed) > 0:
-        print("check your argument. if you want help, use 'codemarble --help'.")
-
-    fileInDir = os.listdir(parsed.path)
-    fileName = [parsed.script, parsed.rule, parsed.player1, parsed.player2]
-
-    for i in fileInDir:
-        for k in fileName:
-            if k in i:
-                break
-    else:
-        print('you inputted wrong data.')
-        os.exit(0)
-
-    with open(os.path.join(parsed.path, parsed.script+'.grd')) as fp:
-        ruleData = fp.read()
-
-    ruleData = json.load(ruleData)
-
-
-
-
-
-
-
+        except Exception as e:
+            print e
 
 
 

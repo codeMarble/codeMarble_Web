@@ -70,7 +70,7 @@ def compileCode(codeIndex):
 
 	try:
 		user = UserProgram(language=language, savePath=tempDir, fileName=fileName)
-		_, _, result = execution.executeProgram(user.compile())
+		_, _, result = execution.executeProgram(user.compile(), user.savePath)
 
 		os.remove(codePath)
 
@@ -93,6 +93,9 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 
 	challengerCodeData = select_recent_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
 	championCodeData = select_recent_code(problemIndex=problemIndex, userIndex=championIndex).first()
+
+	challengerCodeData = select_code(codeIndex=challengerCodeData.leastIndex).first()
+	championCodeData = select_code(codeIndex=championCodeData.leastIndex).first()
 
 	challengerFileName = '{0}{1}'.format(challengerIndex, extension[challengerCodeData.languageIndex])
 	championFileName = '{0}{1}'.format(championIndex, extension[championCodeData.languageIndex])

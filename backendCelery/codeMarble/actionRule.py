@@ -20,10 +20,10 @@ class ActionRule(object):
     # actionRuleOption2(0:othello, n:size)
     def checkActionRule(self, data):
         try:
-            if data.actionRule[0] is 1:
+            if data.actionRule is 1:
                 return self.removeObject(data)
 
-            elif data.actionRule[0] is 2:
+            elif data.actionRule is 2:
                 return self.changeObject(data)
 
             else:
@@ -37,9 +37,6 @@ class ActionRule(object):
     # actionRuleOption1, actionRuleOption2, gameBoard, dataBoard, pos
     def removeObject(self, data):
         try:
-            if data.actionOption > len(data.gameBoard):
-                return GAME_ERROR
-
             if 1 <= data.actionOption[0] <= 3: # remove size or othello
                 if data.actionOption[1] == 0: # othello
                     return self.actionObjectByOthello(data.gameBoard, data.pos, 0)
@@ -47,7 +44,7 @@ class ActionRule(object):
                 else: # size
                     return self.actionObjectBySize(data.gameBoard, data.pos, data.actionOption, 0)
 
-            elif data.actionRule[1] == 4:  # remove go rule
+            elif data.actionOption[0] == 4:  # remove go rule
                 return self.actionObjectByGo(data.gameBoard, data.pos, 0)
 
             else:
@@ -70,11 +67,11 @@ class ActionRule(object):
 
         return True
 
-    def actionObjectBySize(self, board, pos, actionRuleOption, value):
+    def actionObjectBySize(self, board, pos, actionOption, value):
         pi, pj = pos
-        directions = self.getDirection(actionRuleOption[1])
+        directions = self.getDirection(actionOption[0])
 
-        for i in range(1, actionRuleOption[1] + 1):
+        for i in range(1, actionOption[1] + 1):
             for d in directions:
                 try:
                     board[pi + d[0] * i][pj + d[1] * i] = value
@@ -105,18 +102,15 @@ class ActionRule(object):
 
         return True
 
-    def getDirection(self, actionRuleOption1):
-        if actionRuleOption1 is 1:
+    def getDirection(self, actionRuleOption):
+        if actionRuleOption is 1:
             dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
 
-        elif actionRuleOption1 is 2:
+        elif actionRuleOption is 2:
             dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
 
-        elif actionRuleOption1 is 3:
+        elif actionRuleOption is 3:
             dirs = [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, -1], [-1, 1], [1, -1], [1, 1]]
-
-        elif actionRuleOption1 is 4:
-            dirs = [[-1, 0], [1, 0], [0, 1], [0, -1]]
 
         else:
             return GAME_ERROR
@@ -126,16 +120,13 @@ class ActionRule(object):
     # actionRuleNum, actionRuleOption1, actionRuleOption2, gameBoard, dataBoard, pos
     def changeObject(self, data):
         try:
-            if data.actionOption > len(data.gameBoard):
-                return GAME_ERROR
-
-            if 1 <= data.actionOption[0] <= 3:  # remove size or othello
-                if data.actionOption[1] == 0:  # othello
+            if 1 <= data.actionOption[0] <= 3:  # if direction
+                if data.actionOption[1] == 0:  # by othello
                     return self.actionObjectByOthello(data.gameBoard, data.pos, data.gameBoard[data.pos[0]][data.pos[1]])
-                else:  # size
+                else:  # by size
                     return self.actionObjectBySize(data.gameBoard, data.pos, data.actionOption, data.gameBoard[data.pos[0]][data.pos[1]])
 
-            elif data.actionRule[1] == 4:  # remove go rule
+            elif data.actionOption[0] == 4:  # if go rule
                 return self.actionObjectByGo(data.gameBoard, data.pos, data.gameBoard[data.pos[0]][data.pos[1]])
 
             else:

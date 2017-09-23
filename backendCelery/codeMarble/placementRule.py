@@ -36,6 +36,9 @@ class PlacementRule(object):
                 elif destinationState < 0:
                     interResult = self.applyEnemyExistRule(data)
 
+                else:
+                    data.gameBoard[data.pos[0]][data.pos[1]] = data.objectNum
+
             return interResult
 
         except Exception as e:
@@ -52,7 +55,7 @@ class PlacementRule(object):
 
         try:
             row, col = data.pos
-            if row < 0 or row >= matrixSize or col < 0 or col >= matrixSize:  # check placement position is in gameBoard
+            if (row < 0 or row >= matrixSize) or (col < 0 or col >= matrixSize):  # check placement position is in gameBoard
                 return OUT_OF_RANGE + '(%d,%d)' % (row, col)
 
         except Exception as e:
@@ -64,10 +67,10 @@ class PlacementRule(object):
             direct2 = [[1, 1], [-1, 1], [-1, -1], [1, -1]]
 
 
-            if data.placementOption[data.objectNum - 1] is 0:
+            if data.placementOption[data.objectNum - 1][0] is 0:
                 return True
 
-            elif data.placementOption[data.objectNum - 1] < 3:
+            elif data.placementOption[data.objectNum - 1][0] < 3:
                 direct = direct1 if data.placementOption is 1 else direct2
 
             else:
@@ -207,7 +210,10 @@ class PlacementRule(object):
             else:
                 return False
 
+            return True
+
         except Exception as e:
+            print e, sys.exc_info()[2].tb_lineno
             return False
 
 

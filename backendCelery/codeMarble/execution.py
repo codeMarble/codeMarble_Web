@@ -17,13 +17,13 @@ class Execution(object):
         self.limitTime = limitTime
 
 
-    def executeProgram(self, command):
+    def executeProgram(self, command, path):
         parentPid = os.getpid()
         pid = os.fork()
 
         # pid == 0 : user program process, pid != 0 : matchingProgram process(user program process check)
         if pid is 0:
-            self.__runProgram(command, parentPid)
+            self.__runProgram(command, parentPid, path)
 
         else:
             # trace user program & returned result,running time
@@ -31,33 +31,39 @@ class Execution(object):
 
             # if success, check running time
             if time > self.limitTime:
-                os.remove(str(parentPid) + '.txt')
+                os.remove(os.path.join(path, str(parentPid) + '.txt'))
                 return TIME_OVER, time, False
 
             elif result is True:
                 try:
                     # get user program's next place position
-                    with open(str(parentPid) + '.txt') as fp:
+                    with open(os.path.join(path, str(parentPid) + '.txt')) as fp:
                         pos = fp.readline()
 
-                    os.remove(str(parentPid) + '.txt')
+                    os.remove(os.path.join(path, str(parentPid) + '.txt'))
                     return pos, time, True  # return next place position, running tiem, result
 
                 except Execution as e:
+                    print e, '!!!!!!111'
                     return SERVER_ERROR, time, False
 
             # fail
             else:
-                os.remove(str(parentPid) + '.txt')
+                os.remove(os.path.join(path, str(parentPid) + '.txt'))
                 return result, time, False  # return fail reason, running time, result
 
 
-    def __runProgram(self, command, pid):
+    def __runProgram(self, command, pid, path):
         os.nice(19) # program priority setting
 
         # redirect stdout to text file
-        redirectionSTDOUT = os.open(str(pid) + '.txt', os.O_RDWR | os.O_CREAT)
+
+        redirectionSTDOUT = os.open(os.path.join(path, str(pid) + '.txt'), os.O_RDWR | os.O_CREAT)
         os.dup2(redirectionSTDOUT, 1)
+
+        if '<' in command:
+            redirectionSTDIN = os.open(os.path.join(path, 'input.txt'), os.O_RDONLY)
+            os.dup2(redirectionSTDIN, 0)
 
         # cpu using time limit
         soft, hard = resource.getrlimit(resource.RLIMIT_CPU)
