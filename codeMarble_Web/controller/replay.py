@@ -36,7 +36,7 @@ def replayMyList(isChallenge):
 		problem = select_problem().subquery()
 		totalUser = select_user().subquery()
 
-		if isChallenge is 1:
+		if isChallenge:
 			# if user is challenger
 			replayData = select_dataOfMatch(challengerIndex=session['userIndex']).subquery()
 			joinedquery = dao.query(user.c.nickName.label('challengerNickName'), user.c.userId.label('challengerId'),
@@ -56,7 +56,8 @@ def replayMyList(isChallenge):
 
 		else:
 			# if user is champion
-			replayData = select_dataOfMatch(chapionIndex=session['userIndex']).subquery()
+			print isChallenge
+			replayData = select_dataOfMatch(championIndex=session['userIndex']).subquery()
 			joinedquery = dao.query(user.c.nickName.label('championNickName'), user.c.userId.label('championId'),
 			                        replayData.c.dataOfMatchIndex, replayData.c.problemIndex,
 			                        replayData.c.challengerIndex, replayData.c.championIndex, replayData.c.result). \
@@ -67,13 +68,9 @@ def replayMyList(isChallenge):
 			userReplayData = dao.query(totalUser.c.nickName.label('challengerNickName'),
 			                           totalUser.c.userId.label('challengerId'), joinedquery).\
 								join(joinedquery,
-			                         joinedquery.c.championIndex == totalUser.c.userIndex).\
+			                         joinedquery.c.challengerIndex == totalUser.c.userIndex).\
 								subquery()
 
-
-		userReplayData = dao.query(problem.c.problemName, userReplayData).\
-							join(userReplayData,
-		                         userReplayData.c.problemIndex == problem.c.problemIndex).all()
 
 		userReplayData = dao.query(problem.c.problemName, userReplayData).\
 							join(userReplayData,
@@ -143,11 +140,33 @@ def allList():
 def playResult(dataOfMatchIndex):
 	try:
 		replayData = select_dataOfMatch(dataOfMatchIndex=dataOfMatchIndex).first()
+		problemData = select_problem(problemIndex=replayData.problemIndex).first()
 
-		return render_template('xxx.html',
-		                       replayData=replayData)
+		positionData = ['null null'] + replayData.positionData.strip().split('\n')
+
+		boardData = []
+		tempBoardData = replayData.boardData.strip().split('\n')
+
+		positionSize = problemData.boardSize + problemData.placementPoint
+
+		for i in range(0, len(tempBoardData), positionSize):
+			temp = []
+			for j in range(i, i + positionSize):
+				temp.append([int(k) for k in tempBoardData[j].strip(' ').split(' ')])
+
+			# boardData.append(temp)
+
+			print positionData
+			print i, len(positionData), positionSize, len(tempBoardData)
+
+
+		return render_template('replay.html',
+		                       positionData=positionData,
+		                       boardData=boardData)
 
 	except Exception as e:
+		print e
+
 		flash('다시 시도해주세요.')
 		return redirect(url_for('.main'))
 

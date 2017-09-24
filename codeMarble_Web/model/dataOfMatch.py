@@ -22,14 +22,14 @@ class DataOfMatch(Base):
                           nullable=False)
 
     championIndex = Column(INTEGER(unsigned=True),
-                             autoincrement=False,
-                             nullable=False)
+                           autoincrement=False,
+                           nullable=False)
 
     result = Column(ENUM('win', 'lose', 'draw', '...ing...', 'server error'),
-                       default= '...ing...')
+                    default='...ing...',)
 
     positionData = Column(TEXT,
-                          unique= False)
+                          unique=False)
 
     boardData = Column(TEXT,
-                       unique= False)
+                       unique=False)

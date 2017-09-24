@@ -152,10 +152,12 @@ def registerProblem():
                     tempPlacementOption = tempPlacementOption + (' '.join(str(j) for j in data['placementOption'][i])) + '\n'
 
                 for i in range(len(data['gameBoard'])):
-                    tempGameBoard = tempGameBoard + (' '.join(str(j) for j in data['gameBoard'][i])) + '\n'
-                    tempDataBoard = tempDataBoard + (' '.join(str(j) for j in data['dataBoard'][i])) + '\n'
+                    tempGameBoard += ' '.join(str(j) for j in data['gameBoard'][i]) + '\n'
+                    tempDataBoard += ' '.join(str(j) for j in data['dataBoard'][i]) + '\n'
 
                 dao.add(insert_problem(problemName=fileName, placementRule=str(data['placementRule']),
+                                       boardSize=data['boardSize'],
+                                       placementPoint=data['placementPoint'],
                                        placementOption=tempPlacementOption,
                                        existRule=' '.join(str(i) for i in data['existRule']),
                                        existOption=' '.join(str(i) for i in data['existOption']),
@@ -164,9 +166,9 @@ def registerProblem():
                                        endingRule=str(data['endingRule']), endingOption=' '.join(str(i) for i in data['endingOption']),
                                        gameBoard=tempGameBoard, dataBoard=tempDataBoard))
 
-                dao.commit()
-
                 shutil.move(tempDir, os.path.join(_thisPath, 'static', 'problems'))
+
+                dao.commit()
 
             problemIndex = select_problem(problemName=fileName).first().problemIndex
 
@@ -175,7 +177,7 @@ def registerProblem():
             message = '문제가 등록 됐습니다.'
 
         except Exception as e:
-            print e
+            print e, 1111111111111
 
             message = '다시 시도하세요.'
 

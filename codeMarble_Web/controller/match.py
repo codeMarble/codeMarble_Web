@@ -14,6 +14,7 @@ from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilCodeQuery import select_code
 from codeMarble_Web.utils.utilProblemQuery import select_problem
+from codeMarble_Web.utils.utilDataOfMatch import insert_dataOfMatch, select_dataOfMatch
 from codeMarble_Web.utils.utilUserInformationInProblem import select_userInformationInProblem
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
@@ -192,11 +193,11 @@ def matchRank(problemIndex):
 @check_invalid_access
 def matching(problemIndex, userIndex):
     try:
-        print problemIndex, userIndex
-        matchingGame.delay(problemIndex, session['userIndex'], userIndex)
-
+        dao.add(insert_dataOfMatch(problemIndex=problemIndex, challengerIndex=session['userIndex'], championIndex=userIndex))
         update_user(userIndex=session['userIndex'], lastMatchDate=datetime.now())
         dao.commit()
+
+        matchingGame.delay(problemIndex, session['userIndex'], userIndex)
 
         return redirect(url_for('.main'))
 

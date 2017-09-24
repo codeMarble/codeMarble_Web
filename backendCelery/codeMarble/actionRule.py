@@ -27,7 +27,7 @@ class ActionRule(object):
                 return self.changeObject(data)
 
             else:
-                return GAME_ERROR
+                return SERVER_ERROR
 
         except Exception as e:
             return SERVER_ERROR
@@ -74,7 +74,8 @@ class ActionRule(object):
         for i in range(1, actionOption[1] + 1):
             for d in directions:
                 try:
-                    board[pi + d[0] * i][pj + d[1] * i] = value
+                    if (0 <= pi + d[0] * i < len(board)) and (0 <= pj + d[1] * i < len(board)):
+                        board[pi + d[0] * i][pj + d[1] * i] *= -1
                 except Exception as e:
                     continue
 
@@ -113,7 +114,7 @@ class ActionRule(object):
             dirs = [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, -1], [-1, 1], [1, -1], [1, 1]]
 
         else:
-            return GAME_ERROR
+            return SERVER_ERROR
 
         return dirs
 

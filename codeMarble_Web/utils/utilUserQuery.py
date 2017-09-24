@@ -5,7 +5,6 @@ from codeMarble_Web.model.user import User
 
 
 def insert_user(userId, password, nickName, eMail, authority='user'):
-    print userId, password, nickName, eMail, authority
     return User(userId=userId,
                 password=password,
                 nickName=nickName,
@@ -15,24 +14,15 @@ def insert_user(userId, password, nickName, eMail, authority='user'):
 
 
 def select_user(userIndex=None, userId=None, nickName=None, authority=None):
-    if userIndex:
-        return dao.query(User).\
-                    filter(User.userIndex == userIndex)
-
-    elif userId:
-        return dao.query(User).\
-                    filter(User.userId ==userId)
-
-    elif nickName:
-        return dao.query(User).\
-                    filter(User.nickName == nickName)
-
-    elif authority:
-        return dao.query(User).\
-                    filter(User.authority == authority)
-
-    else:
-        dao.query(User)
+    return dao.query(User).\
+                filter(and_(User.userIndex == userIndex if userIndex
+                            else User.userIndex != userIndex,
+                            User.userId == userId if userId
+                            else User.userId != userId,
+                            User.nickName == nickName if nickName
+                            else User.nickName != nickName,
+                            User.authority == authority if authority
+                            else User.authority != authority))
 
 
 def update_user(userIndex, password=None, nickName=None, eMail=None, lastMatchDate=None, authority=None):

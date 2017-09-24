@@ -43,72 +43,77 @@ class GameManager(object):
         self.rules = UserRule()
         self.execution = Execution()
 
+        self.addData('  ')
+
 
     def playGame(self):
-        flag = False    # Flase : champ turn, True: challenger turn
-        userList = [[self.champion, 0], [self.challenger, 0]]
+        try:
+            flag = False    # Flase : champ turn, True: challenger turn
+            userList = [[self.champion, 0], [self.challenger, 0]]
 
-        self.compileUserCode()
-        for _ in range((len(self.data.gameBoard) + 1)**2):
-            self.makeInputData()
+            self.compileUserCode()
+            for _ in range((len(self.data.gameBoard) + 1)**2):
+                self.makeInputData()
 
-            message, time, isSuccess = self.execution.executeProgram(userList[flag][0].play(), userList[flag][0].savePath)  # run user program
-            self.data.message = message
-            print message
+                message, time, isSuccess = self.execution.executeProgram(userList[flag][0].play(), userList[flag][0].savePath)  # run user program
+                self.data.message = message
 
-            if not isSuccess:
-                userList[flag][1] += 1
-                result = message
+                if not isSuccess:
+                    userList[flag][1] += 1
+                    result = message
 
-            else:
-                originalGameBoard = deepcopy(self.data.gameBoard)
-                originalDataBoard = deepcopy(self.data.dataBoard)
+                else:
+                    originalGameBoard = deepcopy(self.data.gameBoard)
+                    originalDataBoard = deepcopy(self.data.dataBoard)
 
-                result = self.rules.checkPlacementRule(self.data)
-                print result, '11111'
+                    interResult = self.rules.checkPlacementRule(self.data)
 
-                if type(result) is not str:
-                    result = self.rules.checkActionRule(self.data)
-                    print result, '22222'
+                    if interResult is True:
+                        interResult = self.rules.checkActionRule(self.data)
 
-                    if type(result) is not str:
-                        result = self.rules.checkEndingRule(self.data)
-                        print result, '33333'
+                        if interResult is True:
+                            interResult = self.rules.checkEndingRule(self.data)
 
-                        if type(result) is int:
-                            if result is 1:
-                                result = 'win' if flag else 'lose'
+                            if 0 < interResult < 4:
+                                if interResult is 1:
+                                    result = 'win' if flag else 'lose'
+
+                                elif interResult is 2:
+                                    result = 'lose' if flag else 'win'
+
+                                elif interResult is 3:
+                                    result = 'draw'
+
+                                self.addData(message)
                                 break
 
-                            elif result is 2:
-                                result = 'lose' if flag else 'win'
-                                break
+                    if interResult == SERVER_ERROR:
+                        result = interResult
+                        break
 
-                            elif result is 3:
-                                result = 'draw'
-                                break
+                    elif type(interResult) is str:
+                        result = interResult
+                        userList[flag][1] += 1
+                        self.data.gameBoard = deepcopy(originalGameBoard)
+                        self.data.dataBoard = deepcopy(originalDataBoard)
 
-                if result == SERVER_ERROR or result == GAME_ERROR:
+                if userList[flag][1] > 2:
+                    result = 'lose' if flag else 'win'
                     break
 
-                elif type(result) is str:
-                    userList[flag][1] += 1
-                    self.data.gameBoard = deepcopy(originalGameBoard)
-                    self.data.dataBoard = deepcopy(originalDataBoard)
+                # change boarad setting (champ <-> challenger)
+                self.data.resetData()
+                self.changePlayerNBoard(flag, message)
+                flag = (not flag)
 
-            if userList[flag][1] > 2:
-                result = 'lose' if flag else 'win'
-                break
+            else:
+                result = 'draw'
 
-            # change boarad setting (champ <-> challenger)
-            self.data.resetData()
-            self.changePlayerNBoard(flag, result if result else message)
-            flag = (not flag)
+            return result, self.positionData, self.boardData
 
-        else:
-            result = 'draw'
-
-        return result, self.positionData, self.boardData
+        except Exception as e:
+            print e
+            return SERVER_ERROR, self.positionData, self.boardData
 
 
     def changePlayerNBoard(self, flag, result):
@@ -146,31 +151,11 @@ class GameManager(object):
 
 
     def makeInputData(self):
-        try:
-            with open(self.challenger.inputPath, 'w') as fp:
-                temp = ''
-                for line in self.data.gameBoard:
-                    for i in line:
-                        temp += (str(i) + ' ')
+        with open(self.challenger.inputPath, 'w') as fp:
+            temp = ''
+            for line in self.data.gameBoard:
+                for i in line:
+                    temp += (str(i) + ' ')
 
-                    temp += '\n'
-                fp.write(temp)
-
-        except Exception as e:
-            print e
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                temp += '\n'
+            fp.write(temp)

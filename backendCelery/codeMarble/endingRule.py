@@ -30,7 +30,7 @@ class EndingRule(object):
         elif data.endingRule is 3:
             return self.checkCountObject(data)
         else:
-            return GAME_ERROR
+            return SERVER_ERROR
 
     def checkRemoveObject(self, data):
         pivotObject, pivotCnt = data.endingOption
@@ -51,7 +51,7 @@ class EndingRule(object):
         elif gomokuDirection is 3:
             directions = [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, 1], [1, 1], [1, -1], [-1, -1]]
         else:
-            return GAME_ERROR
+            return SERVER_ERROR
 
         # me, you, draw, pass
         for direction in directions:

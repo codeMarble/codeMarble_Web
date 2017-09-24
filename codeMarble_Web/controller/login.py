@@ -35,6 +35,7 @@ def check_user(request_form):
         password = get_request_value(form=request_form, name='password')
 
         user = select_user(userId=userId).first()
+        print user, 1111
 
         if check_password_hash(user.password, TripleDES.encrypt(str(password))):
             session['userIndex'] = user.userIndex
@@ -49,6 +50,7 @@ def check_user(request_form):
             return 'wrong id or password'
 
     except Exception as e:
+        print e
         return 'wrong id or password'
 
 

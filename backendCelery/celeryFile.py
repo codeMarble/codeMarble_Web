@@ -21,6 +21,7 @@ from codeMarble.userProgram import UserProgram
 from codeMarble.execution import Execution
 
 from codeMarble_Web.utils.utilCodeQuery import select_code, update_code, select_recent_code
+from codeMarble_Web.utils.utilDataOfMatch import update_dataOfMatch_result, select_dataOfMatch
 from codeMarble_Web.utils.utilLanguageQuery import select_language
 
 
@@ -45,6 +46,7 @@ class SqlAlchemyTask(app.Task):
 extension = ['', '.c', '.cpp', '.py', '.py', '.java']
 @app.task(name='task.addProblem')
 def addProblem(problemIndex, jsonData):
+	jsonData = json.loads(jsonData)
 	try:
 		with open(os.path.join(dataDir, '{0}.json'.format(problemIndex)), 'w') as fp:
 			json.dump(jsonData, fp)
@@ -65,10 +67,10 @@ def compileCode(codeIndex):
 	language = select_language(languageIndex=codeData.languageIndex).first().language
 	execution = Execution()
 
-	with open(codePath, 'w') as fp:
-		fp.write(codeData.code)
-
 	try:
+		with open(codePath, 'w') as fp:
+			fp.write(codeData.code)
+
 		user = UserProgram(language=language, savePath=tempDir, fileName=fileName)
 		_, _, result = execution.executeProgram(user.compile(), user.savePath)
 
@@ -82,57 +84,68 @@ def compileCode(codeIndex):
 
 	except Exception as e:
 		print e
+		dao.rollback()
 
 
 @app.task(name='task.matching', base=SqlAlchemyTask)
 def matchingGame(problemIndex, challengerIndex, championIndex):
-	# try:
-	temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(100, 999))
-	tempPath = os.path.join(tempDir, temp)
-	os.mkdir(tempPath)
+	try:
+		temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(100, 999))
+		tempPath = os.path.join(tempDir, temp)
+		os.mkdir(tempPath)
 
-	challengerCodeData = select_recent_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
-	championCodeData = select_recent_code(problemIndex=problemIndex, userIndex=championIndex).first()
+		challengerCodeData = select_recent_code(problemIndex=problemIndex, userIndex=challengerIndex).first()
+		championCodeData = select_recent_code(problemIndex=problemIndex, userIndex=championIndex).first()
 
-	challengerCodeData = select_code(codeIndex=challengerCodeData.leastIndex).first()
-	championCodeData = select_code(codeIndex=championCodeData.leastIndex).first()
+		challengerCodeData = select_code(codeIndex=challengerCodeData.leastIndex).first()
+		championCodeData = select_code(codeIndex=championCodeData.leastIndex).first()
 
-	challengerFileName = '{0}{1}'.format(challengerIndex, extension[challengerCodeData.languageIndex])
-	championFileName = '{0}{1}'.format(championIndex, extension[championCodeData.languageIndex])
+		challengerFileName = '{0}{1}'.format(challengerIndex, extension[challengerCodeData.languageIndex])
+		championFileName = '{0}{1}'.format(championIndex, extension[championCodeData.languageIndex])
 
-	challengerCodePath = os.path.join(tempPath, challengerFileName)
-	championCodePath = os.path.join(tempPath, championFileName)
+		challengerCodePath = os.path.join(tempPath, challengerFileName)
+		championCodePath = os.path.join(tempPath, championFileName)
 
-	challengerLanguage = select_language(languageIndex=challengerCodeData.languageIndex).first().language
-	championLanguage = select_language(languageIndex=championCodeData.languageIndex).first().language
+		challengerLanguage = select_language(languageIndex=challengerCodeData.languageIndex).first().language
+		championLanguage = select_language(languageIndex=championCodeData.languageIndex).first().language
 
-	with open(challengerCodePath, 'w') as fp:
-		fp.write(challengerCodeData.code)
+		with open(challengerCodePath, 'w') as fp:
+			fp.write(challengerCodeData.code)
 
-	with open(championCodePath, 'w') as fp:
-		fp.write(championCodeData.code)
+		with open(championCodePath, 'w') as fp:
+			fp.write(championCodeData.code)
 
-	with open(os.path.join(dataDir, '{0}.json'.format(problemIndex))) as fp:
-		data = json.load(fp)
+		with open(os.path.join(dataDir, '{0}.json'.format(problemIndex))) as fp:
+			data = json.load(fp)
 
-	challenger = UserProgram(language=challengerLanguage, savePath=tempPath, fileName=challengerFileName)
-	champion = UserProgram(language=championLanguage, savePath=tempPath, fileName=championFileName)
+		challenger = UserProgram(language=challengerLanguage, savePath=tempPath, fileName=challengerFileName)
+		champion = UserProgram(language=championLanguage, savePath=tempPath, fileName=championFileName)
 
-	gameManager = GameManager(challenger=challenger, champion=champion, placementRule=data["placementRule"],
-	                          placementOption=data['placementOption'], existRule=data['existRule'], existOption=data['existOption'],
-	                          actionRule=data['actionRule'], actionOption=data['actionOption'], endingRule=data['endingRule'],
-	                          endingOption=data['endingOption'], gameBoard=data['gameBoard'], dataBoard=data['dataBoard'],
-	                          objectCount=data['objectCount'])
+		gameManager = GameManager(challenger=challenger, champion=champion, placementRule=data["placementRule"],
+		                          placementOption=data['placementOption'], existRule=data['existRule'], existOption=data['existOption'],
+		                          actionRule=data['actionRule'], actionOption=data['actionOption'], endingRule=data['endingRule'],
+		                          endingOption=data['endingOption'], gameBoard=data['gameBoard'], dataBoard=data['dataBoard'],
+		                          objectCount=data['objectCount'])
 
-	result = gameManager.playGame()
-	print result, '============'
+		result, positionData, boardData = gameManager.playGame()
 
-	# shutil.rmtree(tempPath)
-	#
-	# except Exception as e:
-	# 	print e, '!!!!!!!!!!!!!!!!'
-	# 	pass
+		shutil.rmtree(tempPath)
 
+		matchIndex = select_dataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,
+		                                championIndex=championIndex).all()[-1].dataOfMatchIndex
+
+		update_dataOfMatch_result(dataOfMatchIndex=matchIndex, result=result, positionData=positionData, boardData=boardData)
+
+		dao.commit()
+		print matchIndex, result
+
+	except Exception as e:
+		print e,matchIndex
+		dao.rollback()
+
+		update_dataOfMatch_result(dataOfMatchIndex=matchIndex, result='server error')
+
+		dao.commit()
 
 
 

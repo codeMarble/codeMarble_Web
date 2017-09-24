@@ -7,9 +7,9 @@ from codeMarble_Web.model.user import User
 from codeMarble_Web.model.dataOfMatch import DataOfMatch
 from codeMarble_Web.database import dao
 
-def insert_dataOfMatch(problemIndex, challengerIndex, championIndex, positionData, boardData):
-    return DataOfMatch(ProblemIndex=problemIndex, challengerIndex=challengerIndex,championIndex=championIndex,
-                        result = '...ing...', positionData=positionData, boardData=boardData)
+def insert_dataOfMatch(problemIndex, challengerIndex, championIndex, positionData=None, boardData=None):
+    return DataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,championIndex=championIndex,
+                       result = '...ing...', positionData=positionData, boardData=boardData)
 
 
 def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=None, dataOfMatchIndex=None):
@@ -23,17 +23,12 @@ def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=No
                             DataOfMatch.challengerIndex == challengerIndex if challengerIndex
                             else DataOfMatch.challengerIndex != challengerIndex,
                             DataOfMatch.championIndex == championIndex if championIndex
-                            else DataOfMatch.championIndex == championIndex))
+                            else DataOfMatch.championIndex != championIndex))
 
 
-def update_dataOfMatch_result(problemIndex, challengerIndex, championIndex, result, dataOfMatchIndex=None):
-    if dataOfMatchIndex:
-        return dao.query(DataOfMatch).\
-                    filter(DataOfMatch.dataOfMatchIndex == dataOfMatchIndex).\
-                    update(dict(result=result))
-
+def update_dataOfMatch_result(dataOfMatchIndex, result, positionData, boardData):
     return dao.query(DataOfMatch).\
-                filter(and_(DataOfMatch.problemIndex==problemIndex,
-                            DataOfMatch.challengerIndex==challengerIndex,
-                            DataOfMatch.championIndex==championIndex)).\
-                update(dict(result=result))
+                filter(DataOfMatch.dataOfMatchIndex == dataOfMatchIndex).\
+                update(dict(result=result,
+                            positionData=positionData,
+                            boardData=boardData))

@@ -18,6 +18,12 @@ class Problem(Base):
                          unique=True,
                          nullable=False)
 
+    boardSize = Column(INTEGER(unsigned=True),
+                       nullable=False)
+
+    placementPoint = Column(INTEGER(unsigned=True),
+                            nullable=False)
+
     placementRule = Column(CHAR(5),
                            nullable=False)
 

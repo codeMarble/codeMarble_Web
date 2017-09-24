@@ -28,10 +28,13 @@
                         <tbody>
                             {% for data in userReplayData %}
                             <tr>
-                                <td>data.problemName</td>
-                                <td>{%- if isChallenge %} data.championNickName {%- else %} data.challengerNickName {% endif -%}</td>
-                                <td><button type="button" class="btn btn-sm btn-success" onclick="location.href='/directreplay.html'">리플레이</a></button></td>
-                                <td></td>
+                                <td>{{ data.problemName }}</td>
+                                <td>{%- if isChallenge %} {{ data.championNickName }} {%- else %} {{ data.challengerNickName }} {% endif -%}</td>
+                                <td>{%- if data.result == 'win' or data.result == 'lose' or data.result == 'draw' %}
+                                    <a type="button" class="btn btn-sm btn-success" href="{{ url_for('codeMarble_Web.playResult', dataOfMatchIndex=data.dataOfMatchIndex) }}">리플레이</a>
+                                    {% endif -%}
+                                </td>
+                                <td>{%- if isChallenge %} {{ data.result }} {%- else %} {%- if data.result == 'win' %} lose {%- elif data.result == 'lose' %} win {%- else %} {{ data.result }} {% endif -%} {% endif -%}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

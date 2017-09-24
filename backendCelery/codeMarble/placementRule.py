@@ -113,7 +113,7 @@ class PlacementRule(object):
                     return MISS_POSITION + '(%d,%d)'%(row, col)
 
                 else:
-                    return GAME_ERROR
+                    return SERVER_ERROR
 
             else:  # check each object's move path and size
                 if rowMovingSize != data.placementOption[data.objectNum - 1][1] or \
@@ -159,7 +159,7 @@ class PlacementRule(object):
                 data.gameBoard[data.pastPos[0]][data.pastPos[1]] = 0
 
         else:
-            return GAME_ERROR
+            return SERVER_ERROR
 
         return True
 
@@ -180,7 +180,7 @@ class PlacementRule(object):
                 data.gameBoard[data.pastPos[0]][data.pastPos[1]] = 0
 
         else:
-            return GAME_ERROR
+            return SERVER_ERROR
 
         return True
 
