@@ -15,64 +15,7 @@
       var z = -1;
 
       var messageArr = {{ positionData|tojson }};
-      var arr = new Array(
-        [
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,3,0,0,0],
-          [0,0,0,0,0,0,2,0,0],
-          [0,0,0,0,0,0,0,1,0],
-          [0,0,0,0,0,0,0,0,0]
-        ],
-        [
-          [0,0,0,0,0,0,0,0,0],
-          [0,1,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,3,0,0,0],
-          [0,0,0,0,0,0,2,0,0],
-          [0,0,0,0,0,0,0,1,0],
-          [0,0,0,0,0,0,0,0,0]
-        ],
-        [
-          [0,0,0,0,0,0,0,0,0],
-          [0,1,0,0,0,0,0,0,0],
-          [0,0,-1,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,3,0,0,0],
-          [0,0,0,0,0,0,2,0,0],
-          [0,0,0,0,0,0,0,1,0],
-          [0,0,0,0,0,0,0,0,0]
-        ],
-        [
-          [0,0,0,0,0,0,0,0,0],
-          [0,1,0,0,0,0,0,0,0],
-          [0,0,-1,0,0,0,0,0,0],
-          [0,0,0,1,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,3,0,0,0],
-          [0,0,0,0,0,0,2,0,0],
-          [0,0,0,0,0,0,0,1,0],
-          [0,0,0,0,0,0,0,0,0]
-        ],
-        [
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3],
-          [-3,-3,-3,-3,-3,-3,-3,-3,-3]
-        ]
-      );
+      var arr = {{ boardData|tojson }};
 
       function showMessage(i) {
         if(i%2!=0)
@@ -149,14 +92,16 @@
         var zz = z;
 
         pointEffect.onload = function() {
-          calc(messageArr[zz], zz);
-          ctx.drawImage(pointEffect, x*69.5, y*69.5);
+          if(zz != 0){
+            calc(messageArr[zz], zz);
+            ctx.drawImage(pointEffect, x*69.5, y*69.5);
+          }
         }
 
         r1.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='1')
+              if(arr[zz][i][j]==1)
                   ctx.drawImage(r1, 25+70*j, 25+70*i);
             }
           }
@@ -165,7 +110,7 @@
         r2.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='2')
+              if(arr[zz][i][j]==2)
                   ctx.drawImage(r2, 25+69.5*j, 25+70*i);
             }
           }
@@ -174,7 +119,7 @@
         r3.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='3')
+              if(arr[zz][i][j]==3)
                   ctx.drawImage(r3, 25+69.5*j, 25+70*i);
             }
           }
@@ -183,7 +128,7 @@
         b1.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='-1')
+              if(arr[zz][i][j]==-1)
                   ctx.drawImage(b1, 25+70*j, 25+70*i);
             }
           }
@@ -192,7 +137,7 @@
         b2.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='-2')
+              if(arr[zz][i][j]==-2)
                   ctx.drawImage(b2, 25+69.5*j, 25+70*i);
             }
           }
@@ -201,7 +146,7 @@
         b3.onload = function() {
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
-              if(arr[zz][i][j]=='-3')
+              if(arr[zz][i][j]==-3)
                   ctx.drawImage(b3, 25+69.5*j, 25+70*i);
             }
           }
@@ -211,8 +156,8 @@
       function calc(teststr)
       {
         var strSplit = teststr.split( ' ' );
-        x=strSplit[0]*1;
-        y=strSplit[1]*1;
+        y=strSplit[0]*1;
+        x=strSplit[1]*1;
           console.log(messageArr);
         console.log(x + '+' +y);
       }
@@ -227,14 +172,6 @@
 
     <div class="content-wrapper py-3">
 
-        <div id="subNav">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="">문제가가가가가</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/problem/submit">코드 제출</a>
-            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/problem/solvingUsers"><strong>이 문제를 푼 사람</strong></a>
-        </div>
         <br><br>
 
                 <canvas id="canvas" width="650" height="650" style="position: absolute; top:110px; left: 580px"></canvas>
@@ -246,7 +183,7 @@
                         <i class="fa fa-fw fa-user-circle-o"></i>
                     </div>
                     <div class="mr-5">
-                        도전받은사람<br><strong>남규현</strong>
+                        도전받은사람<br><strong>{{ champion.nickName }}</strong>
                     </div>
                 </div>
                 <span class="card-footer clearfix small z-1">
@@ -262,7 +199,7 @@
                         <i class="fa fa-fw fa-user-circle-o"></i>
                     </div>
                     <div class="mr-5">
-                        도전한사람<br><strong>황석진</strong>
+                        도전한사람<br><strong>{{ challenger.nickName }}</strong>
                     </div>
                 </div>
                 <span class="card-footer clearfix small z-1">

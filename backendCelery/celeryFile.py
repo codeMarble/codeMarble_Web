@@ -20,6 +20,7 @@ from codeMarble.gameManager import GameManager
 from codeMarble.userProgram import UserProgram
 from codeMarble.execution import Execution
 
+from codeMarble_Web.utils.utilUserInformationInProblem import select_userInformationInProblem, update_userInformationInProblem
 from codeMarble_Web.utils.utilCodeQuery import select_code, update_code, select_recent_code
 from codeMarble_Web.utils.utilDataOfMatch import update_dataOfMatch_result, select_dataOfMatch
 from codeMarble_Web.utils.utilLanguageQuery import select_language
@@ -131,8 +132,25 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 
 		shutil.rmtree(tempPath)
 
+		challengerScoreData = select_userInformationInProblem(userIndex=challengerIndex, problemIndex=problemIndex).first()
+		championScoreData = select_userInformationInProblem(userIndex=championIndex, problemIndex=problemIndex).first()
+
+		diffScore = abs(challengerScoreData.score - championScoreData.score)
+		diffScore = diffScore if diffScore <= 300 else 300
+
+		if result == 'win':
+			addScoreForChallenger = 10 + int(diffScore*0.11) if diffScore > 15 else 10
+			addScoreForChampion = -(addScoreForChallenger // 3)
+
+		elif result == 'lose' and challengerScoreData.score > 0:
+			addScoreForChallenger = -16 + int(diffScore*0.05) if diffScore > 15 else -16
+			addScoreForChampion = abs(addScoreForChallenger)
+
 		matchIndex = select_dataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,
 		                                championIndex=championIndex).all()[-1].dataOfMatchIndex
+
+		update_userInformationInProblem(userIndex=challengerIndex, problemIndex=problemIndex, score=addScoreForChallenger)
+		update_userInformationInProblem(userIndex=championIndex, problemIndex=problemIndex, score=addScoreForChampion)
 
 		update_dataOfMatch_result(dataOfMatchIndex=matchIndex, result=result, positionData=positionData, boardData=boardData)
 

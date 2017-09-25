@@ -74,7 +74,7 @@ class ActionRule(object):
         for i in range(1, actionOption[1] + 1):
             for d in directions:
                 try:
-                    if (0 <= pi + d[0] * i < len(board)) and (0 <= pj + d[1] * i < len(board)):
+                    if ((0 <= pi + d[0] * i < len(board)) and (0 <= pj + d[1] * i < len(board))) and board[pi + d[0] * i][pj + d[1] * i] < 0:
                         board[pi + d[0] * i][pj + d[1] * i] *= -1
                 except Exception as e:
                     continue

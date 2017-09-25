@@ -75,6 +75,7 @@ class GameManager(object):
                             interResult = self.rules.checkEndingRule(self.data)
 
                             if 0 < interResult < 4:
+                                print interResult, flag
                                 if interResult is 1:
                                     result = 'win' if flag else 'lose'
 
@@ -84,7 +85,7 @@ class GameManager(object):
                                 elif interResult is 3:
                                     result = 'draw'
 
-                                self.addData(message)
+                                self.changePlayerNBoard(flag, message)
                                 break
 
                     if interResult == SERVER_ERROR:
@@ -118,18 +119,19 @@ class GameManager(object):
 
     def changePlayerNBoard(self, flag, result):
         if flag :   # if challenger
+            self.addData(result)
+
             for i in range(len(self.data.gameBoard)):
                 for k in range(len(self.data.gameBoard[0])):
-                    self.data.gameBoard[i][k] = -(self.data.gameBoard[i][k])
+                    self.data.gameBoard[i][k] *= -1
 
-            self.addData(result)
 
         else:   # if champ
-            self.addData(result)
-
             for i in range(len(self.data.gameBoard)):
                 for k in range(len(self.data.gameBoard[0])):
-                    self.data.gameBoard[i][k] = -(self.data.gameBoard[i][k])
+                    self.data.gameBoard[i][k] *= -1
+
+            self.addData(result)
 
 
     def addData(self, result):

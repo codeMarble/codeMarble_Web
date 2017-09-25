@@ -20,7 +20,7 @@ def update_userInformationInProblem(userIndex, problemIndex, score):
     return dao.query(UserInformationInProblem).\
         filter(and_(UserInformationInProblem.userIndex==userIndex,
                     UserInformationInProblem.problemIndex==problemIndex)).\
-        update(dict(score = score))
+        update(dict(score=UserInformationInProblem.score + score))
 
 def get_total_score_each_users(userIndex=None):
     return dao.query(UserInformationInProblem.userIndex,

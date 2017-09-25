@@ -93,7 +93,7 @@ def matchUserList(problemIndex):
         for i in range(50):
             userList_upper_subquery = dao.query(userListSubquery).\
                                         filter(and_(userListSubquery.c.score < userScore + i*20,
-                                                    userListSubquery.c.score >= userScore,
+                                                    userListSubquery.c.score > userScore,
                                                     userListSubquery.c.userIndex != userIndex)).subquery()
 
             userList_upper = dao.query(User.nickName, userList_upper_subquery). \
@@ -138,7 +138,7 @@ def matchUserList(problemIndex):
             remainingTime = 0
 
         else:
-            remainingTime = 0#((lastMatchTime + timedelta(minutes=1)) - datetime.now()).total_seconds()
+            remainingTime = ((lastMatchTime + timedelta(minutes=1)) - datetime.now()).total_seconds()
 
         return render_template('matchUserList.html',
                                userList_upper=userList_upper,

@@ -30,7 +30,7 @@
                             <tr>
                                 <td>{{ data.problemName }}</td>
                                 <td>{%- if isChallenge %} {{ data.championNickName }} {%- else %} {{ data.challengerNickName }} {% endif -%}</td>
-                                <td>{%- if data.result == 'win' or data.result == 'lose' or data.result == 'draw' %}
+                                <td>{%- if data.result != '...ing...' and data.result != 'server error' %}
                                     <a type="button" class="btn btn-sm btn-success" href="{{ url_for('codeMarble_Web.playResult', dataOfMatchIndex=data.dataOfMatchIndex) }}">리플레이</a>
                                     {% endif -%}
                                 </td>
