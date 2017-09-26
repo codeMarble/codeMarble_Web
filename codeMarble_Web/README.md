@@ -1,4 +1,4 @@
-###When you upload problem archive file, the problem folder should be
+###문제등록시  
 ```
 <problem name>
 	L <problem name>.txt
