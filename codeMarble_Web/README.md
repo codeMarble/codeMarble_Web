@@ -1,9 +1,9 @@
 <H2>문제 등록시 주의사항
 
 '''
-<problem name.zip>
-        L <problem name.pdf>
-        L <problem name.json>
+<H4><problem name.zip>
+<H4>        L <problem name.pdf>
+<H4>        L <problem name.json>
 '''
   
 
