@@ -17,8 +17,7 @@
 <H3>사용방법
 <H4>1. 설치방법 및 실행
 <H6> 1. sudo권한으로 make파일을 실행한다.
-<H6> 2. systemctl start mariadb
-<H6> 3. python runserver.py
+<H6> 2. python runserver.py
 
 <H4>2. 관리자 사용방법
 
