@@ -1,4 +1,4 @@
-###문제등록시  
+### 문제등록시 주의사항 
 ```
 <problem name>
 	L <problem name>.txt
