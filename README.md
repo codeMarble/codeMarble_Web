@@ -30,7 +30,7 @@
 <H6>centOS를 비롯한 모든 리눅스OS, Windows에서는 Docker를 사용하면 가능합니다.
 
 <H4>2. 최소사양
-<H6>CPU 2.0GHz 3core, RAM 2GB, HDD 8GB
+<H6>CPU 3core, RAM 2GB, HDD 8GB
 
 <H4>3. 권장사양
-<H6>CPU 2.7GHz 4core, RAM 3GB, HDD 10GB 이상
+<H6>CPU 4core, RAM 3GB, HDD 10GB 이상
