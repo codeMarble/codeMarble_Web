@@ -1,9 +1,8 @@
 ### 문제등록시 주의사항 
 ```
-<problem name>
-	L <problem name>.txt
-	L <problem name>.pdf(optional)
-	L <problem name>_SOLUTION | <problem name>_CHECKER
+<problem name>.zip
+	L <problem name>.pdf
+	L <problem name>.json
 ```
 Following is each items' description.
 #### `1. <problem name>.txt`
