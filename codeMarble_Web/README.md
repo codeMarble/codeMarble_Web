@@ -4,18 +4,10 @@
 	L <problem name>.pdf
 	L <problem name>.json
 ```
-Following is each items' description.
-#### `1. <problem name>.txt`
-  It contains <problem>'s meta information.<br>
-  e.g. for problem "Hello World"<br>
-  Hello World.txt contains
-  ```
-  Name=Hello World, Difficulty=1, SolutionCheckType=Solution, LimitedTime=3000, LimittedMemory=128
- ```
-  You can set the problem's difficulty with integer(<10).<br>
-  If the problem judges user's code with static output.txt file, then SolutionCheckType should be Solution. <br>
-  If solution can be dynamic, then Checker is possible.<br>
-  Give LimittedTime(ms) and LimittedMemory(MB).
+
+#### `1. <problem name>.zip`
+  problem name.zip파일에는 문제 설명이 나와있는 problem name.pdf, 게임 규칙이 나와있는 problem name.json이 포함되어야 한다.
+  .zip, .pdf, .json의 파일이름은 동일해야 한다.
 
 #### `2. <problem name>.pdf`
   It contains problem's descriptions. Problem's few input/output cases can be attached. This will show up on problem page, unless you don't contain this file.
