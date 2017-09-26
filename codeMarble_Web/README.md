@@ -7,6 +7,7 @@
 
 #### `1. <problem name>.zip`
   problem name.zip파일에는 문제 설명이 나와있는 problem name.pdf, 게임 규칙이 나와있는 problem name.json이 포함되어야 한다.
+  
   .zip, .pdf, .json의 파일이름은 동일해야 한다.
 
 #### `2. <problem name>.pdf`
