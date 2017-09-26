@@ -3,7 +3,7 @@
 
 <H4>(problem name.zip)
 <H4>        L (problem name.pdf)
-<H4>        L (problem name.json)
+<H4>        L (problem name.json)
 
   
 
