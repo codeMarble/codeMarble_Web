@@ -88,23 +88,26 @@ class GameManager(object):
                                 self.changePlayerNBoard(flag, message)
                                 break
 
-                    if interResult == SERVER_ERROR:
+                    elif interResult == SERVER_ERROR:
                         result = interResult
+                        self.changePlayerNBoard(flag, interResult)
                         break
 
                     elif type(interResult) is str:
-                        result = interResult
+                        message = interResult
                         userList[flag][1] += 1
                         self.data.gameBoard = deepcopy(originalGameBoard)
                         self.data.dataBoard = deepcopy(originalDataBoard)
 
                 if userList[flag][1] > 2:
                     result = 'lose' if flag else 'win'
+                    self.changePlayerNBoard(flag, message)
                     break
 
                 # change boarad setting (champ <-> challenger)
                 self.data.resetData()
                 self.changePlayerNBoard(flag, message)
+
                 flag = (not flag)
 
             else:
