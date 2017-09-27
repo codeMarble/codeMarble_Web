@@ -17,10 +17,12 @@
 <H3>사용방법
 <H4>1. 설치방법 및 실행
 <H6> 1. sudo권한으로 make파일을 실행한다.
-<H6> 2. systemctl start mariadb
-<H6> 3. python runserver.py
+<H6> 2. python runserver.py
 
 <H4>2. 관리자 사용방법
+<H6> 1. 초기 ID/Password는 master이다.
+<H6> 2. .../admin을 쳐서 페이지에 접근한다.
+<H6> 3. 부관리자 등록은 ID로 등록해야 하며, 부관리자의 모든 사용자의 코드를 확인할 수 있는 권한을 가진다.
 
 <H4>3. 일반 사용자 사용방법
 <H6>세부 사용방법은 웹사이트에 About탭에 나와 있습니다.
@@ -31,7 +33,7 @@
 <H6>centOS를 비롯한 모든 리눅스OS, Windows에서는 Docker를 사용하면 가능합니다.
 
 <H4>2. 최소사양
-<H6>CPU 2.0GHz 3core, RAM 2GB, HDD 8GB
+<H6>CPU 3core, RAM 2GB, HDD 8GB
 
 <H4>3. 권장사양
-<H6>CPU 2.7GHz 4core, RAM 3GB, HDD 10GB 이상
+<H6>CPU 4core, RAM 3GB, HDD 10GB 이상
