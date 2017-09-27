@@ -91,6 +91,9 @@ def compileCode(codeIndex):
 @app.task(name='task.matching', base=SqlAlchemyTask)
 def matchingGame(problemIndex, challengerIndex, championIndex):
 	try:
+		matchIndex = select_dataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,
+		                                championIndex=championIndex).all()[-1].dataOfMatchIndex
+
 		temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(100, 999))
 		tempPath = os.path.join(tempDir, temp)
 		os.mkdir(tempPath)
@@ -146,9 +149,6 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 			addScoreForChallenger = -16 + int(diffScore*0.05) if diffScore > 15 else -16
 			addScoreForChampion = abs(addScoreForChallenger)
 
-		matchIndex = select_dataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,
-		                                championIndex=championIndex).all()[-1].dataOfMatchIndex
-
 		update_userInformationInProblem(userIndex=challengerIndex, problemIndex=problemIndex, score=addScoreForChallenger)
 		update_userInformationInProblem(userIndex=championIndex, problemIndex=problemIndex, score=addScoreForChampion)
 
@@ -158,7 +158,7 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 		print matchIndex, result
 
 	except Exception as e:
-		print e,matchIndex
+		print e, sys.exc_info()[2].tb_lineno
 		dao.rollback()
 
 		update_dataOfMatch_result(dataOfMatchIndex=matchIndex, result='server error')
