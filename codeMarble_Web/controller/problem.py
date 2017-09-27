@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from flask import request, redirect, session, url_for, render_template, flash
 
 from codeMarble_Web.database import dao
@@ -113,8 +114,10 @@ def submitProblem(problemIndex):
 
         compileCode.delay(codeIndex=select_code(userIndex=session['userIndex'], problemIndex=problemIndex).all()[-1].codeIndex)
 
+        time.sleep(0.5)
         flash('정상적으로 제출됐습니다.')
-        return redirect(url_for('.main'))
+        return redirect(url_for('.myCodeInProblem',
+                                problemIndex=problemIndex))
 
     except Exception as e:
         print e
@@ -139,8 +142,7 @@ def myCodeInProblem(problemIndex):
                                problemName=problemName)
 
     except Exception as e:
-        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
-
+        print e
         dao.rollback()
 
         flash('다시 시도해주세요.')
@@ -155,6 +157,11 @@ def codeListInProblem(problemIndex):
         codeListSubquery = dao.query(User.nickName, codeListSubquery).\
                                 join(codeListSubquery,
                                      codeListSubquery.c.userIndex == User.userIndex).subquery()
+
+        temp = select_code(problemIndex=problemIndex).subquery()
+        codeListSubquery = dao.query(codeListSubquery, temp.c.isOpen).\
+                                join(temp,
+                                     temp.c.codeIndex == codeListSubquery.c.leastIndex).subquery()
 
         scoreListSuquery = select_userInformationInProblem(problemIndex=problemIndex).subquery()
 
@@ -171,7 +178,7 @@ def codeListInProblem(problemIndex):
                                problemName=problemName)
 
     except Exception as e:
-        print e, '!!!!!!!!!!!!!!!!!!!!!!!!!!'
+        print e
 
         dao.rollback()
 

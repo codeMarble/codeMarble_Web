@@ -47,7 +47,7 @@ def select_recent_code(problemIndex, userIndex=None):
 
     else:
         return dao.query(func.max(codeListSubquery.c.codeIndex).label('leastIndex'), codeListSubquery.c.userIndex,
-                         codeListSubquery.c.problemIndex, codeListSubquery.c.isOpen, func.max(codeListSubquery.c.date).label('least')).\
+                         codeListSubquery.c.problemIndex, func.max(codeListSubquery.c.date).label('least')).\
                     group_by(codeListSubquery.c.userIndex, codeListSubquery.c.problemIndex)
 
 

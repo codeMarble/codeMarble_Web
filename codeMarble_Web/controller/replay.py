@@ -10,9 +10,6 @@ from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
-from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
-from codeMarble_Web.utils.utilUserSettingQuery import select_userSetting, get_user_information, update_userSetting
-from codeMarble_Web.utils.utilLanguageQuery import select_language
 from codeMarble_Web.utils.utilProblemQuery import select_problem
 from codeMarble_Web.utils.utilDataOfMatch import select_dataOfMatch
 
@@ -87,7 +84,7 @@ def replayMyList(isChallenge):
 		                       isChallenge=isChallenge)
 
 	except Exception as e:
-		print e, type(e)
+		print e
 
 		flash('다시 시도해주세요.')
 		return redirect(url_for('.main'))

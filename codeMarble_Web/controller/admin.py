@@ -6,26 +6,17 @@ import shutil
 import zipfile
 
 from flask import request, redirect, session, url_for, render_template, flash
-from datetime import datetime, date, timedelta
 
 from codeMarble_Web.celeryFile import addProblem
 from codeMarble_Web.database import dao
 
 from codeMarble_Web.codeMarble_blueprint import *
-from codeMarble_Web.codeMarble_py3des import TripleDES
-
-from werkzeug.security import check_password_hash
 
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utilBoardQuery import *
 from codeMarble_Web.utils.utilProblemQuery import select_problem, insert_problem
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
-
-from codeMarble_Web.resource.sessionResources import *
-from codeMarble_Web.resource.htmlResource import *
-from codeMarble_Web.resource.setResources import *
-from codeMarble_Web.resource.routeResources import *
 
 
 @codeMarble.teardown_request
@@ -82,7 +73,6 @@ def enterSubAdmin():
             return redirect(url_for('.manageAdmin'))
 
         except AttributeError as e:
-            print '???????????????????????????????'
             print e
             dao.rollback()
 
@@ -177,7 +167,7 @@ def registerProblem():
             message = '문제가 등록 됐습니다.'
 
         except Exception as e:
-            print e, 1111111111111
+            print e
 
             message = '다시 시도하세요.'
 

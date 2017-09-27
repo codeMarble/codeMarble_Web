@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import random
+import random, time
 
 from datetime import datetime, timedelta
 from flask import redirect, url_for, render_template, flash
 from sqlalchemy import func
 
-from codeMarble_Web.model.code import Code
-from codeMarble_Web.model.userInformationInProblem import UserInformationInProblem
 from codeMarble_Web.celeryFile import matchingGame
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
 from codeMarble_Web.utils.utilCodeQuery import select_code
 from codeMarble_Web.utils.utilProblemQuery import select_problem
-from codeMarble_Web.utils.utilDataOfMatch import insert_dataOfMatch, select_dataOfMatch
+from codeMarble_Web.utils.utilDataOfMatch import insert_dataOfMatch
 from codeMarble_Web.utils.utilUserInformationInProblem import select_userInformationInProblem
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
@@ -182,7 +180,7 @@ def matchRank(problemIndex):
                                problem=problem)
 
     except Exception as e:
-        print e, '!!!!!!!!!!!!!!!!!'
+        print e
 
         flash('다시 시도해주세요.')
         return redirect(url_for('.main'))
@@ -198,8 +196,9 @@ def matching(problemIndex, userIndex):
         dao.commit()
 
         matchingGame.delay(problemIndex, session['userIndex'], userIndex)
-
-        return redirect(url_for('.main'))
+        time.sleep(0.2)
+        return redirect(url_for('.replayMyList',
+                                isChallenge=True))
 
     except Exception as e:
         print e

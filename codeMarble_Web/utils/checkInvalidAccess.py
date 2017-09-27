@@ -10,7 +10,7 @@ def check_invalid_access(f):
 	def decorated_function(*args, **kwargs):
 		try:
 			authority = session['authority']
-
+			print request.endpoint
 			if 'admin' in request.endpoint and authority != 'admin':
 				flash('접근 권한이 없는 계정입니다.')
 				return redirect(url_for('.main'))
@@ -18,7 +18,7 @@ def check_invalid_access(f):
 			elif 'about' in request.endpoint:
 				pass
 
-			elif '' and authority != 'semiAdmin': # view code that other user's
+			elif 'viewCode' and authority != 'semiAdmin': # view code that other user's
 				pass
 
 			else:
@@ -26,7 +26,8 @@ def check_invalid_access(f):
 					pass
 
 				else:
-					pass # nonononononononono
+					flash('접근 권한이 없는 계정입니다.')
+					return redirect(url_for('.main'))
 
 
 		except Exception as e:

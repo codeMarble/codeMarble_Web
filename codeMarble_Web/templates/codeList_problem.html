@@ -25,8 +25,11 @@
                                     <tr>
                                         <td>{{ i + 1 }}</td>
                                         <td>{{ codeList[i].nickName }}</a></td>
-                                        <td>{{ codeList[i].score }}, {{ codeList[i].least }}</td>
-                                        <td>{%- if codeList[i].isOpen %} <a href="{{ url_for('codeMarble_Web.viewCode', codeIndex=codeList[i].leastIndex) }}">확인</a>{% endif -%}</td>
+                                        <td>{{ codeList[i].score }}</td>
+                                        <td>{%- if codeList[i].isOpen or session['authority'] == 'semiAdmin' %}
+                                            <a href="{{ url_for('codeMarble_Web.viewCode', codeIndex=codeList[i].leastIndex) }}">확인</a>
+                                            {% endif -%}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
