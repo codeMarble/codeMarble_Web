@@ -43,7 +43,7 @@ class GameManager(object):
         self.rules = UserRule()
         self.execution = Execution()
 
-        self.addData('  ')
+        self.changePlayerNBoard(True, '  ')
 
 
     def playGame(self):

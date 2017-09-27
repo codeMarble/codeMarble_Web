@@ -94,7 +94,7 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 		matchIndex = select_dataOfMatch(problemIndex=problemIndex, challengerIndex=challengerIndex,
 		                                championIndex=championIndex).all()[-1].dataOfMatchIndex
 
-		temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(100, 999))
+		temp = '{0}{1}{2}{3}'.format(problemIndex, challengerIndex, championIndex, random.randint(1000, 9999))
 		tempPath = os.path.join(tempDir, temp)
 		os.mkdir(tempPath)
 
