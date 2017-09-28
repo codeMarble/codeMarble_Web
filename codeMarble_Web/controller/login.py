@@ -59,21 +59,28 @@ def check_user(request_form):
 
 @codeMarble.route('/', methods=['GET', 'POST'])
 def main():
-    topUsers = get_total_score_each_users().subquery()
-    topProblems = get_topProblem().subquery()
-    users = select_user().subquery()
-    problems = select_problem().subquery()
+    try:
+        problems = select_problem().subquery()
+        topProblems = get_topProblem().subquery()
 
-    topUsers = dao.query(users, topUsers).\
-                    join(topUsers,
-                         topUsers.c.userIndex == users.c.userIndex).\
-                    order_by(topUsers.c.totalScore.desc()).all()
-    topProblems = dao.query(problems, topProblems).\
-                        join(topProblems,
-                             topProblems.c.problemIndex == problems.c.problemIndex).\
-                        order_by(topProblems.c.submitCount.desc()).all()
-    print topProblems
-    print topUsers
+        topProblems = dao.query(problems, topProblems).\
+                            join(topProblems,
+                                 topProblems.c.problemIndex == problems.c.problemIndex).\
+                            order_by(topProblems.c.submitCount.desc()).all()
+    except AttributeError as e:
+        topProblems = []
+
+    try:
+        users = select_user().subquery()
+        topUsers = get_total_score_each_users().subquery()
+
+        topUsers = dao.query(users, topUsers).\
+                        join(topUsers,
+                             topUsers.c.userIndex == users.c.userIndex).\
+                        order_by(topUsers.c.totalScore.desc()).all()
+    except AttributeError as e:
+        topUsers = []
+
     try:
         user = select_user(userIndex=session['userIndex'])
         return render_template('main.html',
