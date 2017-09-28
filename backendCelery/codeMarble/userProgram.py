@@ -27,7 +27,7 @@ class UserProgram(object):
                           'C++': ['/usr/bin/g++', '/usr/bin/g++', '-std=c++11', '-o']}
 
         # python is not compiled
-        if 'python' in self.language:
+        if 'PYTHON' in self.language:
             pass
 
         else:

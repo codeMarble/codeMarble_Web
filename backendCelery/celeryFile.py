@@ -62,6 +62,10 @@ def addProblem(problemIndex, jsonData):
 @app.task(name='task.compileCode', base=SqlAlchemyTask)
 def compileCode(codeIndex):
 	codeData = select_code(codeIndex=codeIndex).first()
+
+	if 2 < codeData.languageIndex < 5:
+		return
+
 	fileName = '{0}{1}'.format(codeIndex, extension[codeData.languageIndex])
 
 	codePath = os.path.join(tempDir, fileName)
