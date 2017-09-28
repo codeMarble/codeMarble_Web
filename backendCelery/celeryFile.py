@@ -64,6 +64,9 @@ def compileCode(codeIndex):
 	codeData = select_code(codeIndex=codeIndex).first()
 
 	if 2 < codeData.languageIndex < 5:
+		update_code(codeIndex=codeIndex, isCompile=True)
+		dao.commit()
+
 		return
 
 	fileName = '{0}{1}'.format(codeIndex, extension[codeData.languageIndex])
