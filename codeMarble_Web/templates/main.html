@@ -113,11 +113,12 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;인기있는 문제입니다<br>
     <div style="margin-top:-100px; margin-left: 400px; color: white;">
         {%- for problem in topProblems %}
-            <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
-                <br><br><br><br><br><br><br><br><br>
-                <h2>&nbsp;{{ problem.problemName }}</h2><br>
-                &nbsp;&nbsp;&nbsp;내용내용내용내용<br>&nbsp;&nbsp;&nbsp;> 자세히보기
-            </div>
+            <a href="{{ url_for('codeMarble_Web.problem', problemIndex=problem.problemIndex) }}" style="color:#FFFFFF">
+                <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
+                    <br><br><br><br><br><br><br><br><br>
+                    <h2>&nbsp;{{ problem.problemName }}</h2><br>
+                </div>
+            </a>
         {% endfor -%}
     </div>
 
@@ -128,7 +129,7 @@
         {%- for i in range(topUsers|length) %}
             <div style="background-color: #888888; margin-right: 20px; height: 280px; float: left; width: 280px;">
                 <br><br><br><br><br><br><br><br>
-                <h2>&nbsp;<strong>{{ i + 1 }}</strong> {{ topUsers[i].nickName }}({{ topUsers[i].totalScore }})</h2>&nbsp;&nbsp;&nbsp;> 회원정보보기
+                <h2>&nbsp;<strong>{{ i + 1 }}</strong> {{ topUsers[i].nickName }}({{ topUsers[i].totalScore }})</h2>
             </div>
         {% endfor -%}
     </div>

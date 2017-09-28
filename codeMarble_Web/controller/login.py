@@ -68,6 +68,7 @@ def main():
                                  topProblems.c.problemIndex == problems.c.problemIndex).\
                             order_by(topProblems.c.submitCount.desc()).all()
     except AttributeError as e:
+        print e
         topProblems = []
 
     try:
@@ -79,19 +80,20 @@ def main():
                              topUsers.c.userIndex == users.c.userIndex).\
                         order_by(topUsers.c.totalScore.desc()).all()
     except AttributeError as e:
+        print e
         topUsers = []
 
     try:
         user = select_user(userIndex=session['userIndex'])
         return render_template('main.html',
                                topUsers=topUsers[:3] if len(topUsers) > 3 else topUsers,
-                               topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
+                               topProblems=topProblems[:3] if len(topProblems) > 3 else topProblems,
                                user=user)
 
     except Exception as e:
         return render_template('main.html',
                                topUsers=topUsers[:3] if len(topUsers) > 3 else topUsers,
-                               topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
+                               topProblems=topProblems[:3] if len(topProblems) > 3 else topProblems,
                                user=None)
 
 
