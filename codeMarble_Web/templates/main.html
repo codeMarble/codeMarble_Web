@@ -100,7 +100,7 @@
 			</div>
 		</div>
 		{% endif -%}
-    F{% endwith -%}
+    {% endwith -%}
 
     {%- block body %}
     <div class="content-wrapper py-3">
@@ -119,43 +119,29 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;가장 많은 사람이 풀고 있는<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;인기있는 문제입니다<br>
     <div style="margin-top:-100px; margin-left: 400px; color: white;">
-        <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br><br>
-            <h2>&nbsp;문제제목</h2><br>
-            &nbsp;&nbsp;&nbsp;내용내용내용내용<br>&nbsp;&nbsp;&nbsp;> 자세히보기
-        </div>
-        <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br><br>
-            <h2>&nbsp;다른문제</h2><br>
-            &nbsp;&nbsp;&nbsp;내용내용내용내용<br>&nbsp;&nbsp;&nbsp;> 자세히보기
-        </div>
-        <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br><br>
-            <h2>&nbsp;또다른거</h2><br>
-            &nbsp;&nbsp;&nbsp;내용내용내용내용<br>&nbsp;&nbsp;&nbsp;> 자세히보기
-        </div>
+        {%- for problem in topProblems %}
+            <div style="background-color: #888888; margin-right: 20px; height: 350px; float: left; width: 280px;">
+                <br><br><br><br><br><br><br><br><br>
+                <h2>&nbsp;{{ problem.problemName }}</h2><br>
+                &nbsp;&nbsp;&nbsp;내용내용내용내용<br>&nbsp;&nbsp;&nbsp;> 자세히보기
+            </div>
+        {% endfor -%}
     </div>
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <hr align="left" style="border: solid 1px; color: gray; width: 300px;">
     <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;금주 랭킹</h4>
     <div style="margin-top:-50px; margin-left: 400px; color: white;">
-        <div style="background-color: #888888; margin-right: 20px; height: 280px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br>
-            <h2>&nbsp;<strong>1등</strong> 황석진</h2>&nbsp;&nbsp;&nbsp;> 회원정보보기
-        </div>
-        <div style="background-color: #888888; margin-right: 20px; height: 280px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br>
-            <h2>&nbsp;<strong>2등</strong> 류동기</h2>&nbsp;&nbsp;&nbsp;> 회원정보보기
-        </div>
-        <div style="background-color: #888888; margin-right: 20px; height: 280px; float: left; width: 280px;">
-            <br><br><br><br><br><br><br><br>
-            <h2>&nbsp;<strong>3등</strong> 남규현</h2>&nbsp;&nbsp;&nbsp;> 회원정보보기
-        </div>
+        {%- for i in range(topUsers|length) %}
+            <div style="background-color: #888888; margin-right: 20px; height: 280px; float: left; width: 280px;">
+                <br><br><br><br><br><br><br><br>
+                <h2>&nbsp;<strong>{{ i + 1 }}</strong> {{ topUsers[i].nickName }}({{ topUsers[i].totalScore }})</h2>&nbsp;&nbsp;&nbsp;> 회원정보보기
+            </div>
+        {% endfor -%}
     </div>
 
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        </div>
+    </div>
         <!-- /.container-fluid -->
 
     </div>

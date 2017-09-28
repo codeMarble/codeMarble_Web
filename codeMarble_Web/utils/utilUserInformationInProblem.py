@@ -23,16 +23,15 @@ def update_userInformationInProblem(userIndex, problemIndex, score):
         update(dict(score=UserInformationInProblem.score + score))
 
 def get_total_score_each_users(userIndex=None):
-    return dao.query(UserInformationInProblem.userIndex,
+    return  dao.query(UserInformationInProblem.userIndex,
                      func.sum(UserInformationInProblem.score).label('totalScore')).\
                 filter(UserInformationInProblem.userIndex == userIndex if userIndex
                         else UserInformationInProblem.userIndex != userIndex).\
-                group_by(UserInformationInProblem.userIndex)
+                group_by(UserInformationInProblem.userIndex).subquery()
+
 
 def get_topProblem():
-    tempquery = dao.query(UserInformationInProblem.problemIndex,
+    return dao.query(UserInformationInProblem.problemIndex,
                           func.count(UserInformationInProblem.problemIndex).label('submitCount')).\
                     group_by(UserInformationInProblem.problemIndex).\
                     subquery()
-
-    return dao.query(tempquery).order_by(tempquery.c.submitCount.desc())

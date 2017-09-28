@@ -8,12 +8,16 @@ from codeMarble_Web.database import dao
 from codeMarble_Web.codeMarble_blueprint import *
 from codeMarble_Web.codeMarble_py3des import TripleDES
 
+from codeMarble_Web.model.user import User
+from codeMarble_Web.model.problem import Problem
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from codeMarble_Web.utils.utilUserQuery import *
 from codeMarble_Web.utils.utils import *
 from codeMarble_Web.utils.checkInvalidAccess import check_invalid_access
 from codeMarble_Web.utils.loginRequired import login_required
+from codeMarble_Web.utils.utilProblemQuery import select_problem
 from codeMarble_Web.utils.utilUserInformationInProblem import get_total_score_each_users, get_topProblem
 from codeMarble_Web.utils.utilUserSettingQuery import insert_userSetting, select_userSetting, get_user_information, update_userSetting
 from codeMarble_Web.utils.utilLanguageQuery import select_language
@@ -55,19 +59,31 @@ def check_user(request_form):
 
 @codeMarble.route('/', methods=['GET', 'POST'])
 def main():
-    topUsers = get_total_score_each_users().all()
-    topProblems = get_topProblem().all()
+    topUsers = get_total_score_each_users().subquery()
+    topProblems = get_topProblem().subquery()
+    users = select_user().subquery()
+    problems = select_problem().subquery()
 
+    topUsers = dao.query(users, topUsers).\
+                    join(topUsers,
+                         topUsers.c.userIndex == users.c.userIndex).\
+                    order_by(topUsers.c.totalScore.desc()).all()
+    topProblems = dao.query(problems, topProblems).\
+                        join(topProblems,
+                             topProblems.c.problemIndex == problems.c.problemIndex).\
+                        order_by(topProblems.c.submitCount.desc()).all()
+    print topProblems
+    print topUsers
     try:
         user = select_user(userIndex=session['userIndex'])
         return render_template('main.html',
-                               topUsers=topUsers[:3] if len(topUsers) < 3 else topUsers,
+                               topUsers=topUsers[:3] if len(topUsers) > 3 else topUsers,
                                topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
                                user=user)
 
     except Exception as e:
         return render_template('main.html',
-                               topUsers=topUsers[:3] if len(topUsers) < 3 else topUsers,
+                               topUsers=topUsers[:3] if len(topUsers) > 3 else topUsers,
                                topProblems=topProblems[:3] if len(topProblems) < 3 else topProblems,
                                user=None)
 
