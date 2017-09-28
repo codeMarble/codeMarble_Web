@@ -16,8 +16,12 @@
 
 <H3>사용방법
 <H4>1. 설치방법 및 실행
-<H6> 1. sudo권한으로 make파일을 실행한다.
-<H6> 2. python runserver.py
+<H6> 1. 필요 라이브러리를 설치
+<H7> {flask, tornado, sqlalchemy, sqlalchemy-utils, pymysql, ptrace}
+<H6> 2. Redis 설치/실행
+<H6> 3. sudo 접근 권한 해제
+<H6> 3. python runserver.py
+<H6> * 추후 make 파일 및 docker 지원 예정
 
 <H4>2. 관리자 사용방법
 <H6> 1. 초기 ID/Password는 master이다.
