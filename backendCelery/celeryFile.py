@@ -63,32 +63,31 @@ def addProblem(problemIndex, jsonData):
 def compileCode(codeIndex):
 	codeData = select_code(codeIndex=codeIndex).first()
 
-	if 2 < codeData.languageIndex < 5:
-		update_code(codeIndex=codeIndex, isCompile=True)
-		dao.commit()
-
-		return
-
-	fileName = '{0}{1}'.format(codeIndex, extension[codeData.languageIndex])
-
-	codePath = os.path.join(tempDir, fileName)
-	language = select_language(languageIndex=codeData.languageIndex).first().language
-	execution = Execution()
-
 	try:
-		with open(codePath, 'w') as fp:
-			fp.write(codeData.code)
-
-		user = UserProgram(language=language, savePath=tempDir, fileName=fileName)
-		_, _, result = execution.executeProgram(user.compile(), user.savePath)
-
-		os.remove(codePath)
-
-		if result is True:
-			os.remove(user.executionPath)
+		if 2 < codeData.languageIndex < 5:
 			update_code(codeIndex=codeIndex, isCompile=True)
-
 			dao.commit()
+
+		else:
+			fileName = '{0}{1}'.format(codeIndex, extension[codeData.languageIndex])
+
+			codePath = os.path.join(tempDir, fileName)
+			language = select_language(languageIndex=codeData.languageIndex).first().language
+			execution = Execution()
+
+			with open(codePath, 'w') as fp:
+				fp.write(codeData.code)
+
+			user = UserProgram(language=language, savePath=tempDir, fileName=fileName)
+			_, _, result = execution.executeProgram(user.compile(), user.savePath)
+
+			os.remove(codePath)
+
+			if result is True:
+				os.remove(user.executionPath)
+				update_code(codeIndex=codeIndex, isCompile=True)
+
+				dao.commit()
 
 	except Exception as e:
 		print e
