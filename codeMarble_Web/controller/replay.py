@@ -138,6 +138,7 @@ def playResult(dataOfMatchIndex):
 		replayData = select_dataOfMatch(dataOfMatchIndex=dataOfMatchIndex).first()
 		problemData = select_problem(problemIndex=replayData.problemIndex).first()
 
+
 		positionData = ['     '] + replayData.positionData.strip().split('\n')
 
 		boardData = []
@@ -155,11 +156,13 @@ def playResult(dataOfMatchIndex):
 
 			boardData.append(temp)
 
+
 		return render_template('replay.html',
 		                       positionData=positionData,
 		                       boardData=boardData,
 		                       challenger=challenger,
-		                       champion=champion)
+		                       champion=champion,
+		                       positionSize=positionSize)
 
 	except Exception as e:
 		print e

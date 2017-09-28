@@ -13,14 +13,15 @@
       var x = 0;
       var y = 0;
       var z = -1;
-
+      var dic = {9: 25, 8: 57};
+      var posIndex = {{ positionSize }};
       var messageArr = {{ positionData|tojson }};
       var arr = {{ boardData|tojson }};
+      var interval;
 
       function showMessage(i) {
         if(i%2!=0)
         {
-            console.log(messageArr);
           document.getElementById("user1").value=messageArr[i];
           document.getElementById("user2").value=' ';
         }
@@ -94,7 +95,8 @@
         pointEffect.onload = function() {
           if(zz != 0){
             calc(messageArr[zz], zz);
-            ctx.drawImage(pointEffect, x*69.5, y*69.5);
+              console.log(posIndex);
+            ctx.drawImage(pointEffect, (dic[posIndex] - 25) + x*69.5, (dic[posIndex] - 25) + y*69.5);
           }
         }
 
@@ -102,7 +104,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==1)
-                  ctx.drawImage(r1, 25+70*j, 25+70*i);
+                  ctx.drawImage(r1, dic[posIndex]+70*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -111,7 +113,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==2)
-                  ctx.drawImage(r2, 25+69.5*j, 25+70*i);
+                  ctx.drawImage(r2, dic[posIndex]+69.5*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -120,7 +122,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==3)
-                  ctx.drawImage(r3, 25+69.5*j, 25+70*i);
+                  ctx.drawImage(r3, dic[posIndex]+69.5*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -129,7 +131,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==-1)
-                  ctx.drawImage(b1, 25+70*j, 25+70*i);
+                  ctx.drawImage(b1, dic[posIndex]+70*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -138,7 +140,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==-2)
-                  ctx.drawImage(b2, 25+69.5*j, 25+70*i);
+                  ctx.drawImage(b2, dic[posIndex]+69.5*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -147,7 +149,7 @@
           for (var i = 0; i < arr[zz].length; i++) {
             for (var j = 0; j < arr[zz][i].length; j++) {
               if(arr[zz][i][j]==-3)
-                  ctx.drawImage(b3, 25+69.5*j, 25+70*i);
+                  ctx.drawImage(b3, dic[posIndex]+69.5*j, dic[posIndex]+70*i);
             }
           }
         }
@@ -166,6 +168,14 @@
       {
         ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.beginPath();
+      }
+
+      function automode() {
+          interval=setInterval("changeNextBoard()",1500);
+      }
+
+      function automodestop() {
+          clearInterval(interval);
       }
 
    </script>
@@ -213,10 +223,10 @@
 
             <input type="button" class="btn btn btn-default" value="처음으로" onclick='clearCanvas()'/>
             <span id="AutoPlay">
-                <input type="button" class="btn btn btn-success" value="자동" onclick='changeGameBoard2()'>
+                <input type="button" class="btn btn btn-success" value="자동" onclick='automode()'>
             </span>
             <span id="Play">
-                <input type="button" class="btn btn btn-success" value="수동" onclick='changeGameBoard2()'>
+                <input type="button" class="btn btn btn-success" value="수동" onclick='automodestop()'>
                 <input type="button" class="btn btn btn-warning" value="이전" onclick='changePrevBoard()'>
                 <input type="button" class="btn btn btn-warning" value="다음" onclick='changeNextBoard()'>
             </span>
