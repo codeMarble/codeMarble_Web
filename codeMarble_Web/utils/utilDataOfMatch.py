@@ -26,7 +26,7 @@ def select_dataOfMatch(problemIndex=None, challengerIndex=None, championIndex=No
                             else DataOfMatch.championIndex != championIndex))
 
 
-def update_dataOfMatch_result(dataOfMatchIndex, result, positionData, boardData):
+def update_dataOfMatch_result(dataOfMatchIndex, result, positionData=None, boardData=None):
     return dao.query(DataOfMatch).\
                 filter(DataOfMatch.dataOfMatchIndex == dataOfMatchIndex).\
                 update(dict(result=result,

@@ -146,6 +146,7 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 
 		diffScore = abs(challengerScoreData.score - championScoreData.score)
 		diffScore = diffScore if diffScore <= 300 else 300
+		addScoreForChallenger, addScoreForChampion = 0, 0
 
 		if result == 'win':
 			addScoreForChallenger = 10 + int(diffScore*0.11) if diffScore > 15 else 10
@@ -154,6 +155,7 @@ def matchingGame(problemIndex, challengerIndex, championIndex):
 		elif result == 'lose' and challengerScoreData.score > 0:
 			addScoreForChallenger = -16 + int(diffScore*0.05) if diffScore > 15 else -16
 			addScoreForChampion = abs(addScoreForChallenger)
+
 
 		update_userInformationInProblem(userIndex=challengerIndex, problemIndex=problemIndex, score=addScoreForChallenger)
 		update_userInformationInProblem(userIndex=championIndex, problemIndex=problemIndex, score=addScoreForChampion)

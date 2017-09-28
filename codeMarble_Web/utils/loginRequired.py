@@ -18,7 +18,7 @@ def login_required(f):
                 idx = 0
 
             if not (session.sid == session_key and session.__contains__(USER_ID)):
-                print 'test!!'
+                print 'test!!', session.sid, session_key, session.__contains__(USER_ID)
                 session.clear()
 
                 flash('로그인 후 사용 가능한 메뉴입니다.')
