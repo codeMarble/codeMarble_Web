@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import sys, os
-from tornado.wsgi import WSGIContainer
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, Application
-from tornado.stack_context import NullContext
-
-from codeMarble_Web import create_app
-
-reload(sys).setdefaultencoding('utf-8')
-
-application = create_app()
+thisPath, _ = os.path.split(os.path.abspath(__file__))
 
 if __name__ == '__main__':
+    from tornado.wsgi import WSGIContainer
+    from tornado.httpserver import HTTPServer
+    from tornado.ioloop import IOLoop
+    from tornado.web import RequestHandler, Application
+    from tornado.stack_context import NullContext
+
+    from codeMarble_Web import create_app
+
+    reload(sys).setdefaultencoding('utf-8')
+    application = create_app()
 
     print "fbehdrl123"
 
@@ -28,7 +28,8 @@ if __name__ == '__main__':
 
 
     with NullContext():
-        http_server.bind(80)
-        http_server.start(2)
+        from codeMarble_Web.codeMarble_config import configs
+        http_server.bind(int(configs['webPort']))
+        http_server.start(int(configs['processCount']))
 
     IOLoop.instance().start()

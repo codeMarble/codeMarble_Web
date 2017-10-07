@@ -1,7 +1,8 @@
 from celery import Celery
+from codeMarble_config import configs
 
 
-app = Celery('tasks', broker='redis://localhost:6379')
+app = Celery('tasks', broker='redis://{0}:{1}'.format(configs['redisIP'], configs['redisPort']))
 
 
 @app.task(name='task.addProblem')

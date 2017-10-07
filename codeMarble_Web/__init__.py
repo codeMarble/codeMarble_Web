@@ -1,18 +1,20 @@
 import os
+from runServer import thisPath
 from flask import Flask, render_template, request, url_for
+
 
 app = Flask(__name__)
 
 def create_app(config_filepath = "resource/config.cfg"):
+    from codeMarble_config import *
     try:
-        dataDir = os.path.join(os.getcwd(), 'codeMarble_Web', 'static','problems')
+        dataDir = os.path.join(thisPath, 'codeMarble_Web', 'static', 'problems')
         print dataDir
         os.mkdir(dataDir)
     except Exception as e:
         print e
         pass
 
-    from codeMarble_config import *
     app.config.from_object(codeMarbleConfig)
     app.config.from_pyfile(config_filepath, silent=True)
 
