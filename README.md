@@ -34,6 +34,7 @@
 <H3>권장 시스템 사양
 <H4>1. 운영체제
 <H6>centOS를 비롯한 모든 리눅스OS, Windows에서는 Docker를 사용하면 가능합니다.
+<H7> 현재 installs파일은 redhat계열만 지원합니다.
 
 <H4>2. 최소사양
 <H6>CPU 3core, RAM 2GB, HDD 8GB
