@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
 
     with NullContext():
-        from codeMarble_Web.codeMarble_config import configs
+        from codeMarble_Web.codeMarble_propertyParser import configs
         http_server.bind(int(configs['webPort']))
         http_server.start(int(configs['processCount']))
 

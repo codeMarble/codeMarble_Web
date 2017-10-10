@@ -51,7 +51,9 @@ class GameManager(object):
             flag = False    # Flase : champ turn, True: challenger turn
             userList = [[self.champion, 0], [self.challenger, 0]]
 
-            self.compileUserCode()
+            if not self.compileUserCode():
+                return SERVER_ERROR, self.positionData, self.boardData
+
             for _ in range((len(self.data.gameBoard) + 1)**2):
                 self.makeInputData()
 
@@ -151,8 +153,17 @@ class GameManager(object):
 
 
     def compileUserCode(self):
-        self.execution.executeProgram(self.challenger.compile(), self.challenger.savePath)
-        self.execution.executeProgram(self.champion.compile(), self.champion.savePath)
+        try:
+            self.execution.executeProgram(self.challenger.compile(), self.challenger.savePath)
+        except KeyError as e:
+            return False
+
+        try:
+            self.execution.executeProgram(self.champion.compile(), self.champion.savePath)
+        except KeyError as e:
+            return False
+
+        return True
 
 
     def makeInputData(self):

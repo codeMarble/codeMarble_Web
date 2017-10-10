@@ -1,27 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
 from runServer import thisPath
+from codeMarble_Web.codeMarble_propertyParser import configs, propertyParser
 
-configs = {'DBuser': 'root',
-           'DBpassword': '',
-           'DBIP': 'localhost',
-           'redisIP': 'localhost',
-           'redisPort': 6379,
-           'webPort': 9410,
-           'processCount': 2}
-
-with open(os.path.join(thisPath, 'codeMarble.properties')) as fp:
-    lines = fp.readlines()
-
-    for line in lines:
-        pos = line.find('#') if line.find('#') != -1 else len(line)
-        line = line[:pos+1]
-
-        if len(line) > 1:
-            name, setting = [i.strip() for i in line.split('=')]
-            configs[name] = setting
 
 class codeMarbleConfig(object):
+    propertyParser()
+
     DB_URL = "mysql+pymysql://{0}:{1}@{2}/codeMarble?charset=utf8".format(configs['DBuser'], configs['DBpassword'], configs['DBIP'])
     TMP_FOLDER = 'resource/tmp'
     PERMANENT_SESSION_LIFETIME = 60 * 60
