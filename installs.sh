@@ -11,7 +11,7 @@ yum_makecache() {
 }
 
 if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ]; then
-  if [ "$(id -u)" != "0" ]; then
+  if [ "$(id -u)" == "0" ]; then
     yum clean all
     yum -y install epel-release
     yum_makecache
