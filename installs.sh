@@ -14,6 +14,10 @@ if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ]; then
   yum clean all
   yum -y install epel-release
   yum_makecache
+  yum -y install gcc gcc-c++ kernel-devel
+  yum_makecache
+  yum -y install python-devel
+  yum_makecache
 
   if [ -z "$(yum list installed | grep mariadb)" ]; then
     echo 'Install mariaDB'
