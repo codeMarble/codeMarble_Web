@@ -17,10 +17,10 @@ def login_required(f):
             except:
                 idx = 0
 
-            if not (session.sid == session_key and session.__contains__(USER_ID)):
-                print 'test!!', session.sid, session_key, session.__contains__(USER_ID)
-                session.clear()
-
+            # if not (session.sid == session_key and session.__contains__(USER_ID)):
+            #     print 'test!!', session.sid, session_key, session.__contains__(USER_ID)
+            #     session.clear()
+            if session_key is None:
                 flash('로그인 후 사용 가능한 메뉴입니다.')
                 return redirect(url_for('.login'))
 

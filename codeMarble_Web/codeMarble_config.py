@@ -5,8 +5,6 @@ from codeMarble_Web.codeMarble_propertyParser import configs, propertyParser
 
 
 class codeMarbleConfig(object):
-    propertyParser()
-
     DB_URL = "mysql+pymysql://{0}:{1}@{2}/codeMarble?charset=utf8".format(configs['DBuser'], configs['DBpassword'], configs['DBIP'])
     TMP_FOLDER = 'resource/tmp'
     PERMANENT_SESSION_LIFETIME = 60 * 60

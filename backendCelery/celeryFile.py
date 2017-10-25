@@ -9,11 +9,13 @@ sys.path.insert(0, os.path.split(thisPath)[0])
 
 
 from celery import Celery
+from codeMarble_Web.codeMarble_propertyParser import configs, propertyParser
 from codeMarble_Web.database import DBManager
 
+propertyParser()
 
-app = Celery('tasks', broker='redis://localhost:6379')
-DBManager.init('mysql+pymysql://root:@localhost/codeMarble?charset=utf8')
+app = Celery('tasks', broker='redis://{0}:{1}'.format(configs['redisIP'], configs['redisPort']))
+DBManager.init("mysql+pymysql://{0}:{1}@{2}/codeMarble?charset=utf8".format(configs['DBuser'], configs['DBpassword'], configs['DBIP']))
 
 
 from codeMarble.gameManager import GameManager

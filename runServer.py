@@ -11,11 +11,12 @@ if __name__ == '__main__':
     from tornado.stack_context import NullContext
 
     from codeMarble_Web import create_app
+    from codeMarble_Web.codeMarble_propertyParser import configs, propertyParser
+    propertyParser()
 
     reload(sys).setdefaultencoding('utf-8')
     application = create_app()
 
-    print "fbehdrl123"
 
     http_server = HTTPServer(WSGIContainer(application))
 
@@ -28,7 +29,6 @@ if __name__ == '__main__':
 
 
     with NullContext():
-        from codeMarble_Web.codeMarble_propertyParser import configs
         http_server.bind(int(configs['webPort']))
         http_server.start(int(configs['processCount']))
 

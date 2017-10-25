@@ -44,6 +44,7 @@
                                 <th>선택</th>
                                 <th>아이디</th>
                                 <th>닉네임</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,6 +53,9 @@
                                     <td><input type="checkbox" value=""></td>
                                     <td>{{ user.userId }}</td>
                                     <td>{{ user.nickName }}</td>
+                                    <td>
+                                        <a type="button" class="btn btn-sm btn-success" href="{{ url_for('codeMarble_Web.deleteSubAdmin', userIndex=user.userIndex) }}">삭제</a>
+                                    </td>
                                 </tr>
                             {% endfor -%}
                         </tbody>

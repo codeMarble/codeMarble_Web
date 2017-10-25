@@ -87,25 +87,23 @@ def enterSubAdmin():
             return redirect(url_for('.main'))
 
 
-@codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['POST'])
+@codeMarble.route('/admin/deleteSubAdmin<int:userIndex>', methods=['GET','POST'])
 @login_required
 @check_invalid_access
 def deleteSubAdmin(userIndex):
-    if request.method == 'POST':
-        try:
-            update_user(userIndex, authority='user')
+    try:
+        update_user(userIndex, authority='user')
 
-            dao.commit()
+        dao.commit()
 
-        except Exception as e:
-            print e
-            dao.rollback()
+    except Exception as e:
+        print e
+        dao.rollback()
 
-            flash('다시 시도해주세요.')
-            return redirect(url_for('.main'))
-
-
+        flash('다시 시도해주세요.')
         return redirect(url_for('.main'))
+
+    return redirect(url_for('.manageAdmin'))
 
 
 @codeMarble.route('/admin/registerProblem', methods=['POST'])

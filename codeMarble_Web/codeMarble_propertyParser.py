@@ -12,14 +12,15 @@ configs = {'DBuser': 'root',
 
 def propertyParser():
 	with open(os.path.join(thisPath, 'codeMarble.properties')) as fp:
-	    lines = fp.readlines()
+		lines = fp.readlines()
+		for line in lines:
+			pos = line.find('#')
 
-	    for line in lines:
-	        pos = line.find('#')
+			if pos >= 0:
+				line = line[:pos]
+			elif pos == -1:
+				pass
 
-	        if pos > 0:
-	            line = line[:pos]
-
-	            if len(line) > 1:
-	                name, setting = [i.strip() for i in line.split('=')]
-	                configs[name] = setting
+			if len(line) > 3:
+				name, setting = (i.strip() for i in line.split('='))
+				configs[name] = setting
