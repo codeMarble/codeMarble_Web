@@ -14,6 +14,9 @@ def check_invalid_access(f):
 			if 'admin' in request.endpoint and authority != 'admin':
 				flash('접근 권한이 없는 계정입니다.')
 				return redirect(url_for('.main'))
+			
+			elif authority == 'semiAdmin':
+				pass
 
 			elif 'about' in request.endpoint:
 				pass
