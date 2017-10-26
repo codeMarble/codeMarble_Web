@@ -20,7 +20,7 @@
 <H6> 2. installs.sh 파일 실행
 <H6> 3. backendCelery에서 celery실행 (celery -A celeryFile worker --loglevel=info)
 <H6> 4. python runserver.py (관리자 권한)
-<H6> * 추후 docker 이미지 지원 예정
+<H6> * 추후 docker 이미지 지원 예정 (문제 발생 시 DB와 properties파일 설정을 확인)
 
 <H4>2. 관리자 사용방법
 <H6> 1. 초기 ID/Password는 master이다.
