@@ -16,10 +16,11 @@
 
 <H3>사용방법
 <H4>1. 설치방법 및 실행
-<H6> 1. Redis 설치/실행
-<H6> 2. installs.sh 파일 실행
-<H6> 3. backendCelery에서 celery실행 (celery -A celeryFile worker --loglevel=info)
-<H6> 4. python runserver.py (관리자 권한)
+<H6> 1. codeMarble_Web clone
+<H6> 2. Redis 설치/실행
+<H6> 3. installs.sh 파일 실행
+<H6> 4. backendCelery에서 celery실행 (celery -A celeryFile worker --loglevel=info)
+<H6> 5. python runserver.py (관리자 권한)
 <H6> * 추후 docker 이미지 지원 예정 (문제 발생 시 DB와 properties파일 설정을 확인)
 
 <H4>2. 관리자 사용방법
